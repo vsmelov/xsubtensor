@@ -1,103 +1,103 @@
-# Local subnet, miner, and validator (Bittensor)
+# Локальный сабнет, майнер и валидатор (Bittensor)
 
-This guide ties together **Subtensor** (the chain in this repo) and **subnet application code** (Python miner/validator, usually from the official template). It is aimed at running **one custom subnet** with **one miner** and **one validator** on your machine, e.g. as a stepping stone toward an **LLM text-to-text** subnet.
+Здесь связаны воедино **Subtensor** (цепочка из этого репозитория) и **прикладной код сабнета** (Python: майнер/валидатор, обычно из официального шаблона). Цель — поднять **один пользовательский сабнет** с **одним майнером** и **одним валидатором** на своей машине, в том числе как старт к сабнету под **LLM text-to-text**.
 
-> Official tutorials (same flow, more detail): [Deploy locally](https://docs.bittensor.com/local-build/deploy), [Provision wallets](https://docs.bittensor.com/local-build/provision-wallets), [Create a subnet (locally)](https://docs.bittensor.com/local-build/create-subnet), [Mine & validate on localnet](https://docs.bittensor.com/local-build/mine-validate).
+> Официальные туториалы (тот же сценарий, больше деталей): [локальный деплой](https://docs.bittensor.com/local-build/deploy), [кошельки](https://docs.bittensor.com/local-build/provision-wallets), [создание сабнета локально](https://docs.bittensor.com/local-build/create-subnet), [майнинг и валидация на localnet](https://docs.bittensor.com/local-build/mine-validate).
 
-## How the pieces fit
+## Как устроены части системы
 
-| Piece | Role |
-| ----- | ---- |
-| **Subtensor** (Docker `docker-compose.localnet.yml` in this repo) | Blockchain: subnets, registrations, stakes, weights, emissions. |
-| **`btcli`** | CLI to create subnets, register neurons, stake, inspect state. |
-| **`subnet-template`** ([opentensor/subnet-template](https://github.com/opentensor/subnet-template)) | Minimal **Python** miner + validator + `protocol.py`; you replace the dummy logic with your task (e.g. LLM). |
-| **Bittensor SDK** (`pip install bittensor`) | Library used by miner/validator to talk to chain and Axon. |
+| Компонент | Роль |
+| --------- | ---- |
+| **Subtensor** (Docker `docker-compose.localnet.yml` в этом репо) | Блокчейн: сабнеты, регистрации, стейки, веса, эмиссии. |
+| **`btcli`** | CLI: создать сабнет, зарегистрировать нейроны, застейкать, смотреть состояние. |
+| **`subnet-template`** ([opentensor/subnet-template](https://github.com/opentensor/subnet-template)) | Минимальный **Python**: майнер + валидатор + `protocol.py`; заглушку меняете на свою задачу (например LLM). |
+| **Bittensor SDK** (`pip install bittensor`) | Библиотека для связи майнера/валидатора с цепочкой и Axon. |
 
-Subtensor does **not** run your LLM. Your **miner** serves the model; your **validator** queries miners and **sets weights** on-chain based on whatever scoring you implement.
+Subtensor **не** запускает вашу LLM. **Майнер** отдаёт модель; **валидатор** опрашивает майнеров и **выставляет веса** в сети по вашей логике скоринга.
 
-## Prerequisites
+## Что нужно заранее
 
-1. **Local chain running** — follow [`RUN_LOCAL.md`](RUN_LOCAL.md) (`docker compose … up -d`).  
-2. **WebSocket RPC reachable** — e.g. `ws://127.0.0.1:9944` (Alice) or `ws://127.0.0.1:9945` (Bob); same logical chain. Quick check: [`scripts/rpc-smoke`](scripts/rpc-smoke/README.md) (`npm run check`).  
-3. **`btcli`** installed and on `PATH` (ships with current Bittensor tooling; see [docs](https://docs.bittensor.com/getting-started/installation)).  
-4. **Python 3.10+** for the subnet repo.  
-5. **Wallets** — at least three roles on paper: **subnet owner / creator**, **miner**, **validator** (docs often use names like `sn-creator`, `test-miner`, `test-validator`). Create coldkeys/hotkeys with `btcli wallet create` as in [provision wallets](https://docs.bittensor.com/local-build/provision-wallets).  
-6. **TAO on creator + miners/validators** — fund them from the dev account `//Alice` (see [`RUN_LOCAL.md`](RUN_LOCAL.md) and genesis balances in `node/src/chain_spec/localnet.rs`). Subnet creation has a **dynamic burn / lock cost**; keep extra TAO for registrations and validator stake.
+1. **Локальная цепочка запущена** — см. [`RUN_LOCAL.md`](RUN_LOCAL.md) (`docker compose … up -d`).  
+2. **Доступен WebSocket RPC** — например `ws://127.0.0.1:9944` (Alice) или `ws://127.0.0.1:9945` (Bob); это одна и та же логическая цепь. Быстрая проверка: [`scripts/rpc-smoke`](scripts/rpc-smoke/README.md) (`npm run check`).  
+3. Установлен **`btcli`** и он в `PATH` (идёт в составе актуального стека Bittensor; см. [установку](https://docs.bittensor.com/getting-started/installation)).  
+4. **Python 3.10+** для репозитория сабнета.  
+5. **Кошельки** — по смыслу три роли: **владелец/создатель сабнета**, **майнер**, **валидатор** (в доках часто `sn-creator`, `test-miner`, `test-validator`). Coldkey/hotkey создаются через `btcli wallet create`, как в [provision wallets](https://docs.bittensor.com/local-build/provision-wallets).  
+6. **TAO у создателя и у майнера/валидатора** — пополнить с дев-аккаунта `//Alice` (см. [`RUN_LOCAL.md`](RUN_LOCAL.md) и балансы в `node/src/chain_spec/localnet.rs`). Создание сабнета стоит **динамического burn/lock**; запаситесь TAO на регистрации и стейк валидатора.
 
-### Fast blocks (Docker localnet default)
+### Fast blocks (по умолчанию в Docker localnet)
 
-Official docs recommend **`--no-mev-protection`** on several `btcli` commands when the node runs with **fast blocks**. Add it if your `btcli` version supports it and you see related errors.
+В официальной доке для режима **fast blocks** к ряду команд `btcli` рекомендуют **`--no-mev-protection`**. Добавьте флаг, если ваша версия `btcli` его поддерживает и вы видите связанные ошибки.
 
-### One `WS` URL everywhere
+### Один и тот же URL WebSocket везде
 
-Pick one endpoint and use it for all `btcli` calls, e.g.:
+Выберите один endpoint и используйте его во всех вызовах `btcli`, например:
 
 ```text
 ws://127.0.0.1:9944
 ```
 
-Some docs use `9945`; either works if the container maps both (see `docker-compose.localnet.yml`).
+В некоторых гайдах указан `9945`; оба подойдут, если в compose проброшены оба порта (см. `docker-compose.localnet.yml`).
 
-## Step 1 — Create the subnet on-chain
+## Шаг 1 — Создать сабнет в цепочке
 
-Run as the **creator** wallet (replace names and URL):
+От имени кошелька **создателя** (подставьте свои имена и URL):
 
 ```powershell
 btcli subnet create --subnet-name my-llm-subnet --wallet.name sn-creator --wallet.hotkey default --network ws://127.0.0.1:9944
 ```
 
-Confirm the burn/lock prompt. List subnets and note the new **netuid**:
+Подтвердите запрос на burn/lock. Посмотрите список сабнетов и запомните новый **netuid**:
 
 ```powershell
 btcli subnet list --network ws://127.0.0.1:9944
 ```
 
-## Step 2 — Start emissions
+## Шаг 2 — Запустить эмиссии
 
-Replace `NETUID` with your subnet’s id:
+Подставьте вместо `NETUID` идентификатор вашего сабнета:
 
 ```powershell
 btcli subnet start --netuid NETUID --wallet.name sn-creator --network ws://127.0.0.1:9944
 ```
 
-Without this, you will not get the usual emission / staking behaviour described in the [create-subnet](https://docs.bittensor.com/local-build/create-subnet) docs.
+Без этого не будет обычного поведения эмиссий/стейкинга из [доки create-subnet](https://docs.bittensor.com/local-build/create-subnet).
 
-## Step 3 — Register miner and validator hotkeys
+## Шаг 3 — Зарегистрировать hotkey майнера и валидатора
 
-Register **each** hotkey on **your** `NETUID`:
+Зарегистрируйте **каждый** hotkey на **вашем** `NETUID`:
 
 ```powershell
 btcli subnets register --netuid NETUID --wallet-name test-miner --hotkey default --network ws://127.0.0.1:9944
 btcli subnets register --netuid NETUID --wallet-name test-validator --hotkey default --network ws://127.0.0.1:9944
 ```
 
-(Adjust `--wallet-name` / `--hotkey` to match what you created.)
+(Подстройте `--wallet-name` / `--hotkey` под созданные кошельки.)
 
-Inspect neurons:
+Просмотр нейронов:
 
 ```powershell
 btcli subnet show --netuid NETUID --network ws://127.0.0.1:9944
 ```
 
-## Step 4 — Validator permit (stake on validator)
+## Шаг 4 — Разрешение валидатора (validator permit, стейк)
 
-Validators need a **validator permit** (see [validators overview](https://docs.bittensor.com/validators)). On localnet this is usually done by **staking TAO** to the validator hotkey:
+Валидаторам нужен **validator permit** (см. [обзор валидаторов](https://docs.bittensor.com/validators)). На localnet обычно делают **стейк TAO** на hotkey валидатора:
 
 ```powershell
 btcli stake add --netuid NETUID --wallet-name test-validator --hotkey default --partial --network ws://127.0.0.1:9944
 ```
 
-Check overview; a `*` under **VPERMIT** (or equivalent) means the validator is permitted:
+Проверьте обзор: звёздочка `*` в колонке **VPERMIT** (или аналоге) значит, что валидатор допущен:
 
 ```powershell
 btcli wallet overview --wallet.name test-validator --network ws://127.0.0.1:9944
 ```
 
-If permit does not appear immediately, wait until the end of a **tempo** (subnet round), as in the [mine-validate](https://docs.bittensor.com/local-build/mine-validate) doc.
+Если permit сразу не появился, дождитесь конца **tempo** (раунда сабнета), как в [mine-validate](https://docs.bittensor.com/local-build/mine-validate).
 
-## Step 5 — Subnet template (miner + validator processes)
+## Шаг 5 — Шаблон сабнета (процессы майнера и валидатора)
 
-Clone the official template (or your fork):
+Клонируйте официальный шаблон (или свой форк):
 
 ```powershell
 git clone https://github.com/opentensor/subnet-template.git
@@ -107,56 +107,56 @@ python -m venv .venv
 pip install bittensor
 ```
 
-### Pointing the SDK at your node
+### Указать SDK на вашу ноду
 
-The template often uses `--subtensor.network local`, which assumes default local endpoints. If your stack expects an explicit URL, use the flag your `btcli` / SDK version documents (commonly **`--subtensor.chain_endpoint ws://127.0.0.1:9944`**) on **both** `miner.py` and `validator.py`.
+В шаблоне часто используют `--subtensor.network local` с дефолтными локальными endpoint’ами. Если нужен явный URL, добавьте флаг из документации вашей версии `btcli`/SDK (часто **`--subtensor.chain_endpoint ws://127.0.0.1:9944`**) и для **`miner.py`**, и для **`validator.py`**.
 
-### Run miner (separate terminal)
+### Запуск майнера (отдельный терминал)
 
-Exposes an **Axon** (default example port **8901**; change if busy):
+Поднимает **Axon** (в примере порт **8901**; смените, если занят):
 
 ```powershell
 python miner.py --wallet.name test-miner --wallet.hotkey default --netuid NETUID --axon.port 8901 --subtensor.network local --logging.info
 ```
 
-### Run validator (another terminal)
+### Запуск валидатора (другой терминал)
 
 ```powershell
 python validator.py --wallet.name test-validator --wallet.hotkey default --netuid NETUID --subtensor.network local --logging.info
 ```
 
-You should see the dummy protocol traffic (template multiplies numbers by two) and, after weights are set, changing **incentive / dividends** in:
+Должен пойти трафик заглушечного протокола (в шаблоне числа умножаются на два); после выставления весов в выводе `subnet show` меняются **incentive / dividends**:
 
 ```powershell
 btcli subnet show --netuid NETUID --network ws://127.0.0.1:9944
 ```
 
-## Toward an LLM text-to-text subnet
+## Путь к сабнету LLM text-to-text
 
-The template is **intentionally trivial** (`Dummy` synapse in `protocol.py`). For **text in → text out**:
+Шаблон **намеренно простой** (класс `Dummy` в `protocol.py`). Для сценария **текст на входе → текст на выходе**:
 
-1. **Define a synapse** in `protocol.py` (e.g. fields `prompt: str`, `response: str`, optional `model_id`, max lengths). Inherit from the Bittensor synapse type the SDK expects (see template and [Bittensor docs](https://docs.bittensor.com/)).  
-2. **Miner** (`miner.py`): in the forward handler, run your **text generation** (local HF `transformers`, vLLM, HTTP call to an API, etc.), fill `response`, return. Mind **latency**, **GPU**, and **timeouts** validators will use.  
-3. **Validator** (`validator.py`): send prompts (fixed set, sampled, or from a dataset), collect responses, **score** them (e.g. reference-based metrics, reward model, length penalties, refusal checks). Map scores to **weights** for registered UIDs (see template’s weight logic).  
-4. **Operational**: open firewall rules for **Axon port**, use **distinct ports** if multiple miners on one host, log and rate-limit.  
-5. **Production**: mainnet/testnet have different economics, registration costs, and subnet hyperparameters — re-read [Create a Subnet](https://docs.bittensor.com/subnets/create-a-subnet) for non-local deploys.
+1. **Опишите synapse** в `protocol.py` (например поля `prompt: str`, `response: str`, опционально `model_id`, ограничения длины). Наследуйтесь от типа synapse, который ожидает SDK (см. шаблон и [документацию Bittensor](https://docs.bittensor.com/)).  
+2. **Майнер** (`miner.py`): в обработчике forward запускайте **генерацию текста** (локально HF `transformers`, vLLM, HTTP к API и т.д.), заполните `response`, верните результат. Учитывайте **латентность**, **GPU** и **таймауты**, которые задаст валидатор.  
+3. **Валидатор** (`validator.py`): шлите промпты (фиксированный набор, сэмплы, датасет), собирайте ответы, **оценивайте** (метрики с эталоном, reward model, штраф за длину, проверки отказа). Сопоставьте скоры с **весами** по зарегистрированным UID (логика весов в шаблоне).  
+4. **Эксплуатация**: откройте порт **Axon** в файрволе, для нескольких майнеров на одном хосте — **разные порты**, логируйте и ограничивайте частоту.  
+5. **Продакшен**: на mainnet/testnet другие экономика, стоимость регистрации и гиперпараметры сабнета — перечитайте [Create a Subnet](https://docs.bittensor.com/subnets/create-a-subnet) для не-локального деплоя.
 
-There is no single “LLM subnet” in this **subtensor** repo; your **Python repo** is the product. Search the ecosystem for open subnets similar to your task for inspiration (naming and APIs change over time).
+Отдельного «LLM-сабнета» в репозитории **subtensor** нет; продукт — ваш **Python-репозиторий**. Ищите в экосистеме открытые сабнеты, близкие по задаче (названия и API со временем меняются).
 
-## Troubleshooting (common)
+## Типичные проблемы
 
-| Symptom | What to check |
+| Симптом | Что проверить |
 | ------- | ------------- |
-| `1006` / cannot connect | Chain down or wrong `ws://` host/port; [`scripts/rpc-smoke`](scripts/rpc-smoke/README.md). |
-| Insufficient balance for subnet create / register | Transfer TAO from Alice to the signing coldkey ([provision wallets](https://docs.bittensor.com/local-build/provision-wallets)). |
-| Miner “not registered” | `btcli subnets register` on correct `NETUID` and endpoint. |
-| `NeuronNoValidatorPermit` | Stake more on validator hotkey; wait for tempo ([mine-validate](https://docs.bittensor.com/local-build/mine-validate)). |
-| `WeightVecLengthIsLow` | Often “no reachable miners” or weight vector too sparse; ensure miner Axon is up and validator can dial your IP/port. |
-| SubWallet / HTTPS-only wallets | Local `ws://` is for **btcli / SDK / Polkadot JS**; wallets that require **wss** need a TLS proxy (see discussion in [`RUN_LOCAL.md`](RUN_LOCAL.md) context). |
+| `1006` / нет соединения | Цепочка не запущена или неверный `ws://` хост/порт; [`scripts/rpc-smoke`](scripts/rpc-smoke/README.md). |
+| Недостаточно средств на create/register | Перевести TAO с Alice на coldkey подписанта ([provision wallets](https://docs.bittensor.com/local-build/provision-wallets)). |
+| Майнер «not registered» | Выполнить `btcli subnets register` для нужного `NETUID` и endpoint. |
+| `NeuronNoValidatorPermit` | Больше стейка на hotkey валидатора; дождаться tempo ([mine-validate](https://docs.bittensor.com/local-build/mine-validate)). |
+| `WeightVecLengthIsLow` | Часто «майнеры недоступны» или слишком разреженный вектор весов; убедитесь, что Axon майнера поднят и валидатор достучится до IP/порта. |
+| SubWallet / кошельки только с HTTPS | Локальный `ws://` — для **btcli / SDK / Polkadot JS**; для **wss** нужен TLS-прокси (см. обсуждение в [`RUN_LOCAL.md`](RUN_LOCAL.md)). |
 
-## Reference links
+## Ссылки
 
 - [opentensor/subnet-template](https://github.com/opentensor/subnet-template)  
-- [Create a subnet (locally)](https://docs.bittensor.com/local-build/create-subnet)  
-- [Mining and validating on localnet](https://docs.bittensor.com/local-build/mine-validate)  
-- [Run Subtensor locally](RUN_LOCAL.md) (this fork)
+- [Создание сабнета (локально)](https://docs.bittensor.com/local-build/create-subnet)  
+- [Майнинг и валидация на localnet](https://docs.bittensor.com/local-build/mine-validate)  
+- [Запуск Subtensor локально](RUN_LOCAL.md) (этот форк)
