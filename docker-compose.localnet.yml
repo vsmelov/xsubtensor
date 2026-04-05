@@ -14,10 +14,6 @@ services:
   alice:
     <<: *common
     container_name: subtensor-alice
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: subtensor-local
     ports:
       - "9944:9944"
       - "30334:30334"
