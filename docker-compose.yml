@@ -8,7 +8,8 @@ volumes:
 
 services:
   common: &common
-    image: ghcr.io/opentensor/subtensor:latest
+    # CI publishes per-arch tags (see .github/workflows/docker.yml). On Apple Silicon use latest-arm64.
+    image: ghcr.io/opentensor/subtensor:latest-amd64
     cpu_count: 4
     mem_limit: 40000000000
     memswap_limit: 80000000000

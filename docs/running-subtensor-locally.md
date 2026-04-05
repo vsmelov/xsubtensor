@@ -8,14 +8,12 @@ For General information on running Subtensors, see
 Running a localnet in docker compose is the easiest way to quickly iterate on
 chain state, like building on the evm.
 
-1. install docker and docker compose, along with cloning this repository.
+1. Install Docker and Compose, and clone this repository.
 
-1. build the images from source on the desired branch using
-   `docker compose -f docker-compose.localnet.yml build`. Note this will take
-   quite a while.
+1. **Pre-built images (no Rust compile):** see [RUN_LOCAL.md](../RUN_LOCAL.md) — log in to `ghcr.io`, then
+   `docker compose -f docker-compose.localnet.yml pull` and `up -d`.
 
-1. Run the docker compose file via
-   `docker compose -f docker-compose.localnet.yml up -d`
+1. **Build from source:** use [`Dockerfile`](../Dockerfile) target `subtensor-local` or [`Dockerfile-localnet`](../Dockerfile-localnet), or add a `build:` section back to `docker-compose.localnet.yml` if you maintain your own compose overlay.
 
 Now you should have a full local validator running. To test your connection, you
 can use the following script to check `//Alice`'s balance. Alice is a sudo

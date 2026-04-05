@@ -1,62 +1,23 @@
+# Pre-built localnet: one container runs Alice + Bob (scripts/localnet.sh).
+# Published as ghcr.io/opentensor/subtensor-localnet — see .github/workflows/docker-localnet.yml
 volumes:
-  subtensor-alice:
-  subtensor-bob:
+  subtensor-localnet-alice:
+  subtensor-localnet-bob:
 
 services:
-  common: &common
-    image: ghcr.io/opentensor/subtensor:latest-local
+  localnet:
+    image: ghcr.io/opentensor/subtensor-localnet:latest
+    container_name: subtensor-localnet
     cpu_count: 4
     mem_limit: 40000000000
     memswap_limit: 80000000000
-    environment:
-      - CARGO_HOME=/var/www/node-subtensor/.cargo
-
-  alice:
-    <<: *common
-    container_name: subtensor-alice
     ports:
       - "9944:9944"
-      - "30334:30334"
-    expose:
-      - 9944
-      - 30334
-    volumes:
-      - subtensor-alice:/tmp/blockchain
-    command:
-      - --base-path=/tmp/blockchain
-      - --chain=/localnet.json
-      - --rpc-external
-      - --rpc-methods=unsafe
-      - --alice
-      - --port=30334
-      - --rpc-port=9944
-      - --validator
-      - --rpc-cors=all
-      - --allow-private-ipv4
-      - --discover-local
-      - --unsafe-force-node-key-generation
-
-  bob:
-    <<: *common
-    container_name: subtensor-bob
-    expose:
-      - 9945
-      - 30335
-    ports:
       - "9945:9945"
+      - "30334:30334"
       - "30335:30335"
     volumes:
-      - subtensor-bob:/tmp/blockchain
-    command:
-      - --base-path=/tmp/blockchain
-      - --chain=/localnet.json
-      - --rpc-external
-      - --rpc-methods=unsafe
-      - --bob
-      - --port=30335
-      - --rpc-port=9945
-      - --validator
-      - --rpc-cors=all
-      - --allow-private-ipv4
-      - --discover-local
-      - --unsafe-force-node-key-generation
+      - subtensor-localnet-alice:/tmp/alice
+      - subtensor-localnet-bob:/tmp/bob
+    # True = fast blocks (default). Use ["False"] for non-fast-blocks binary.
+    command: ["True"]
