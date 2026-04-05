@@ -1,0 +1,13 @@
+{
+  "name": "subtensor-rpc-smoke",
+  "private": true,
+  "type": "module",
+  "description": "Quick WebSocket / RPC checks against a local Subtensor node",
+  "scripts": {
+    "check": "node check.mjs",
+    "new-heads": "node new-heads.mjs"
+  },
+  "dependencies": {
+    "@polkadot/api": "^15.1.1"
+  }
+}

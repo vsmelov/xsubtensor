@@ -56,6 +56,22 @@ Add `--tail 200` to `docker logs` if you only want recent output.
 
 Example: `ws://127.0.0.1:9944`. Sudo account: `//Alice`.
 
+### RPC smoke tests (Polkadot JS API)
+
+From repo root:
+
+```powershell
+cd scripts/rpc-smoke
+npm install
+npm run check
+```
+
+This connects to **`ws://127.0.0.1:9944`**, times out after 15s if the node is down (avoids hanging like some UIs), prints chain name, head block, and **`//Alice`** free balance. To watch a few new blocks: `npm run new-heads`. Details and env vars: [`scripts/rpc-smoke/README.md`](scripts/rpc-smoke/README.md).
+
+### TAO on local testnet
+
+There is **no faucet**: TAO comes from **genesis**. Well-known dev accounts (`//Alice`, `//Bob`, `//Charlie`, etc.) are pre-funded (see `node/src/chain_spec/localnet.rs` — e.g. **1,000,000 TAO** for Alice/Bob/Charlie at **9 decimals**). Use `//Alice` only on local dev chains. For CLI flows, see [Provision wallets (local)](https://docs.learnbittensor.org/local-build/provision-wallets/).
+
 **Fast blocks:** default is `command: ["True"]`. For the non-fast-blocks binary, set `command: ["False"]` on the `localnet` service.
 
 Stop:
