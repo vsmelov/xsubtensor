@@ -29,6 +29,28 @@ docker compose -f docker-compose.localnet.yml pull
 docker compose -f docker-compose.localnet.yml up -d
 ```
 
+### Logs (localnet)
+
+Stream logs from both nodes in one container (service name `localnet`):
+
+```powershell
+docker compose -f docker-compose.localnet.yml logs -f
+```
+
+Last *N* lines, then exit:
+
+```powershell
+docker compose -f docker-compose.localnet.yml logs --tail 200 localnet
+```
+
+By container name (set in compose as `subtensor-localnet`):
+
+```powershell
+docker logs -f subtensor-localnet
+```
+
+Add `--tail 200` to `docker logs` if you only want recent output.
+
 - **Alice** — `9944` (WebSocket/RPC), p2p `30334`.
 - **Bob** — `9945`, p2p `30335`.
 
@@ -77,6 +99,20 @@ Stop:
 
 ```powershell
 docker compose -f docker-compose.yml down
+```
+
+### Logs (mainnet / testnet compose)
+
+Follow logs for one service, for example `testnet-lite`:
+
+```powershell
+docker compose -f docker-compose.yml logs -f testnet-lite
+```
+
+Or by container name, e.g. `subtensor-testnet-lite`:
+
+```powershell
+docker logs -f subtensor-testnet-lite
 ```
 
 ## What you are *not* getting
