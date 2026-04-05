@@ -1,0 +1,3 @@
+[submodule "subnet-math"]
+	path = subnet-math
+	url = https://github.com/opentensor/subnet-template.git

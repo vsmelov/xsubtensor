@@ -8,6 +8,7 @@
     "new-heads": "node new-heads.mjs"
   },
   "dependencies": {
-    "@polkadot/api": "^15.1.1"
+    "@polkadot/api": "^15.1.1",
+    "ws": "^8.20.0"
   }
 }

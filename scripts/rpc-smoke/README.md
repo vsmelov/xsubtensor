@@ -40,6 +40,18 @@ npm run new-heads
 - **`1006` / abnormal closure / ECONNREFUSED** — nothing listening on the URL, wrong port, or Docker container not running / ports not mapped.
 - Your app and these scripts must use the **same** `WS_URL` as a running node (see [`RUN_LOCAL.md`](../../RUN_LOCAL.md)).
 
+### Windows + Docker Desktop: `1006` while the node is running
+
+TCP to `127.0.0.1:9944` can succeed but **WebSocket from the Windows host** still fails (`1006`, `socket hang up`). The chain may be healthy **inside** the Docker network.
+
+**Check from a sibling container** (replace network name if your compose project differs; default here is `xsubtensor_default`):
+
+```powershell
+docker run --rm --network xsubtensor_default -v "${PWD}:/app" -w /app node:22-alpine sh -c "npm i ws@8 --silent && node ws-docker-probe.mjs"
+```
+
+Expect `OPEN ws://subtensor-localnet:9944`. See [`SETUP_LOG_SUBNET_MATH.md`](../../SETUP_LOG_SUBNET_MATH.md) for a full write-up and frontend workarounds (run the dev server in Docker on the same network, WSL, etc.).
+
 ## TAO on local testnet (no faucet)
 
 Local **Bittensor** chainspec pre-funds well-known dev seeds (see `node/src/chain_spec/localnet.rs` in this repo):

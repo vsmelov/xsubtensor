@@ -137,6 +137,7 @@ Pre-built images match **published** Opentensor tags, not arbitrary commits in y
 
 ## More reading
 
+- [SETUP_LOG_SUBNET_MATH.md](SETUP_LOG_SUBNET_MATH.md) — лог настройки `subnet-math`, submodule, диагностика WebSocket на Windows + Docker
 - [RUN_LOCAL_SUBNET.md](RUN_LOCAL_SUBNET.md) — локальный сабнет, майнер и валидатор
 - [docs/running-subtensor-locally.md](docs/running-subtensor-locally.md)
 - [Bittensor docs — Subtensor nodes](https://docs.bittensor.com/subtensor-nodes)
