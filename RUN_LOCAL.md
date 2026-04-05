@@ -137,6 +137,7 @@ Pre-built images match **published** Opentensor tags, not arbitrary commits in y
 
 ## More reading
 
+- [RUN_LOCAL_SUBNET.md](RUN_LOCAL_SUBNET.md) — create a subnet and run miner/validator against this local chain
 - [docs/running-subtensor-locally.md](docs/running-subtensor-locally.md)
 - [Bittensor docs — Subtensor nodes](https://docs.bittensor.com/subtensor-nodes)
 - Packages: [subtensor](https://github.com/opentensor/subtensor/pkgs/container/subtensor), [subtensor-localnet](https://github.com/opentensor/subtensor/pkgs/container/subtensor-localnet)
