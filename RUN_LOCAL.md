@@ -56,6 +56,32 @@ Add `--tail 200` to `docker logs` if you only want recent output.
 
 Example: `ws://127.0.0.1:9944`. Sudo account: `//Alice`.
 
+### Windows + Docker: WebSocket `1006` on `ws://127.0.0.1:9944`
+
+Docker Desktop on Windows sometimes breaks **host → published port** for **WebSocket**, while **TCP** to the same port still looks “open”. The node in the container is often fine; the fragile part is **Win32 browser/Node → `localhost:9944`**.
+
+#### 0) Environment checklist (do this before chasing code)
+
+1. **VPN — выключить полностью** (NordVPN / Outline / Amnezia и т.д.), не только «переподключить». Туннели часто ломают маршрут к `127.0.0.1` или к виртуальным свитчам Docker. Проверка: `cd scripts/rpc-smoke && npm run check`. Потом VPN можно снова включить, если без него WS заработал — значит, нужен split tunnel или исключение для Docker.
+2. **Перезапуск стека:** выйти из Docker Desktop → снова запустить; в PowerShell **`wsl --shutdown`**, затем снова открыть Docker (если backend WSL2).
+3. **Файрвол:** убедиться, что **Docker Desktop** не в блоке «публичные сети» без правила (иногда помогает «разрешить» для частной сети или временно отключить проверку для теста).
+4. Попробовать **`ws://127.0.0.1:9944`** и **`ws://localhost:9944`** — иногда отличается (IPv4/IPv6).
+
+#### 1) Надёжные обходы (без «лечения» Docker)
+
+- **Запускать фронт / Node в Docker** в той же сети, что `localnet`, RPC: **`ws://localnet:9944`** — не использует проброс WS на хост.
+- **Или** запускать **`npm run dev` / браузер из WSL2** и смотреть `ws://127.0.0.1:9944` оттуда — часто стабильнее, чем Win32.
+
+#### 2) Опционально: WSS через Caddy (profile `wss`)
+
+Отдельный контейнер слушает **`wss://127.0.0.1:3443`**, внутри сети проксирует на **`ws://localnet:9944`**. Нужен для кошельков, которые принимают только `wss://`. Локальный сертификат (`tls internal`) — см. [Caddy local HTTPS](https://caddyserver.com/docs/automatic-https#local-https). Если TLS к прокси ругается, используй п.1.
+
+```powershell
+docker compose -f docker-compose.localnet.yml --profile wss up -d
+```
+
+Файл конфига: [`support/Caddyfile.subtensor-rpc-wss`](support/Caddyfile.subtensor-rpc-wss).
+
 ### RPC smoke tests (Polkadot JS API)
 
 From repo root:
