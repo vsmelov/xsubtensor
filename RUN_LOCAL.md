@@ -60,6 +60,18 @@ Example: `ws://127.0.0.1:9944`. Sudo account: `//Alice`.
 
 Docker Desktop on Windows sometimes breaks **host → published port** for **WebSocket**, while **TCP** to the same port still looks “open”. The node in the container is often fine; the fragile part is **Win32 browser/Node → `localhost:9944`**.
 
+**Prove the chain is OK (no VPS):** run the smoke test **inside** the compose network (uses `ws://localnet:9944`, not the host port):
+
+```powershell
+cd <path-to-this-repo>
+docker compose -f docker-compose.localnet.yml up -d
+docker compose -f docker-compose.localnet.yml --profile tools run --rm rpc-smoke-check
+```
+
+You should see `OK — WebSocket RPC is reachable` and `//Alice` balance. If this works but the host still fails, the issue is **host↔Docker WS**, not Subtensor.
+
+**Compose change:** RPC ports are published as **`127.0.0.1:9944`** (loopback only). On some setups this behaves better than binding all interfaces. If you need LAN access, override ports in a [compose override](https://docs.docker.com/compose/how-tos/multiple-compose-files/merge/) file.
+
 #### 0) Environment checklist (do this before chasing code)
 
 1. **VPN — выключить полностью** (NordVPN / Outline / Amnezia и т.д.), не только «переподключить». Туннели часто ломают маршрут к `127.0.0.1` или к виртуальным свитчам Docker. Проверка: `cd scripts/rpc-smoke && npm run check`. Потом VPN можно снова включить, если без него WS заработал — значит, нужен split tunnel или исключение для Docker.

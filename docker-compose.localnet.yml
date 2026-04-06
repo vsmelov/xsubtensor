@@ -3,6 +3,7 @@
 volumes:
   subtensor-localnet-alice:
   subtensor-localnet-bob:
+  rpc-smoke-node-modules:
 
 services:
   localnet:
@@ -11,13 +12,45 @@ services:
     cpu_count: 4
     mem_limit: 40000000000
     memswap_limit: 80000000000
+    # Bind to loopback only — on some Windows + Docker Desktop setups this behaves better than 0.0.0.0 for WS.
     ports:
-      - "9944:9944"
-      - "9945:9945"
-      - "30334:30334"
-      - "30335:30335"
+      - "127.0.0.1:9944:9944"
+      - "127.0.0.1:9945:9945"
+      - "127.0.0.1:30334:30334"
+      - "127.0.0.1:30335:30335"
     volumes:
       - subtensor-localnet-alice:/tmp/alice
       - subtensor-localnet-bob:/tmp/bob
     # True = fast blocks (default). Use ["False"] for non-fast-blocks binary.
     command: ["True"]
+
+  # Windows Docker Desktop: raw ws://127.0.0.1:9944 from the host often breaks (1006).
+  # This proxy speaks WSS on 3443 on the host; chain traffic is still plain WS inside the network.
+  # Start: docker compose -f docker-compose.localnet.yml --profile wss up -d
+  rpc-wss-proxy:
+    profiles: ["wss"]
+    image: caddy:2.8-alpine
+    container_name: subtensor-rpc-wss
+    depends_on:
+      - localnet
+    ports:
+      - "127.0.0.1:3443:3443"
+    volumes:
+      - ./support/Caddyfile.subtensor-rpc-wss:/etc/caddy/Caddyfile:ro
+
+  # One-shot RPC check INSIDE the compose network (bypasses broken host→container WebSocket on Windows).
+  # Requires: Docker running. From repo root:
+  #   docker compose -f docker-compose.localnet.yml --profile tools run --rm rpc-smoke-check
+  rpc-smoke-check:
+    profiles: ["tools"]
+    image: node:22-bookworm-slim
+    working_dir: /app
+    depends_on:
+      - localnet
+    environment:
+      WS_URL: ws://localnet:9944
+      TIMEOUT_MS: "20000"
+    volumes:
+      - ./scripts/rpc-smoke:/app
+      - rpc-smoke-node-modules:/app/node_modules
+    command: ["sh", "-c", "npm install --silent && node check.mjs"]
