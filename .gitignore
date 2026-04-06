@@ -6,6 +6,7 @@
 
 **/*.lock
 !evm-tests/yarn.lock
+!services/faucet/package-lock.json
 
 *.ipynb
 
@@ -50,3 +51,4 @@ scripts/specs/local.json
 
 # Node deps for dev helpers
 scripts/rpc-smoke/node_modules/
+services/faucet/node_modules/

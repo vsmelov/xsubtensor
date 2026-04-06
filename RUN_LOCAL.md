@@ -30,6 +30,8 @@ If you still see `denied` after logging in, try a fresh token, or run `docker lo
 
 Uses [`docker-compose.localnet.yml`](docker-compose.localnet.yml). Image: **`ghcr.io/opentensor/subtensor-localnet:latest`** (published by [docker-localnet workflow](.github/workflows/docker-localnet.yml)). The container runs [`scripts/localnet.sh`](scripts/localnet.sh) with prebuilt binaries — same RPC ports as before.
 
+Optional **HTTP faucet** (transfers signed as `//Alice`, bind only `127.0.0.1:8090`): see [`FAUCET_LOCAL.md`](FAUCET_LOCAL.md) (`docker compose --profile faucet up -d`).
+
 ```powershell
 cd <path-to-this-repo>
 

@@ -54,3 +54,21 @@ services:
       - ./scripts/rpc-smoke:/app
       - rpc-smoke-node-modules:/app/node_modules
     command: ["sh", "-c", "npm install --silent && node check.mjs"]
+
+  # Dev-only HTTP faucet (signs with //Alice). Host: http://127.0.0.1:8090
+  # Start: docker compose -f docker-compose.localnet.yml --profile faucet up -d
+  faucet:
+    profiles: ["faucet"]
+    build:
+      context: ./services/faucet
+      dockerfile: Dockerfile
+    container_name: subtensor-faucet
+    depends_on:
+      - localnet
+    ports:
+      - "127.0.0.1:8090:8090"
+    environment:
+      PORT: "8090"
+      WS_URL: ws://localnet:9944
+      FAUCET_SEED: //Alice
+      FAUCET_MAX_TAO_PER_TRANSFER: "1000000"
