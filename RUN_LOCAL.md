@@ -1,5 +1,13 @@
 # Running Subtensor locally (pre-built images only)
 
+## RPC (WebSocket) — что подставлять в Konnex и скрипты
+
+**Endpoint по умолчанию:** `ws://127.0.0.1:9944` (нода Alice в локальном `localnet`; тот же URL используют `scripts/rpc-smoke` и примеры ниже).
+
+**Почему мы поменяли «дефолт» публикации порта:** в [`docker-compose.localnet.yml`](docker-compose.localnet.yml) RPC/WebSocket проброшен не на `0.0.0.0`, а на **`127.0.0.1:9944`** (только loopback на вашей машине). На **Windows с Docker Desktop** полный бинд и WebSocket с хоста на опубликованный порт часто дают обрывы соединения (типично код **`1006`** / `Abnormal Closure`), при том что сама нода в контейнере жива. Привязка только к `127.0.0.1` в таких сетапах чаще даёт стабильный доступ к RPC **с того же ПК**. Если нужен доступ с других машин в сети — добавьте свой [compose override](https://docs.docker.com/compose/how-tos/multiple-compose-files/merge/) с нужным `ports`.
+
+---
+
 Compose files pull images from GitHub Container Registry (`ghcr.io/opentensor/...`).
 
 ## Log in to GHCR first
