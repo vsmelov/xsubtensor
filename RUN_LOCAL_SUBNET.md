@@ -4,6 +4,19 @@
 
 > Официальные туториалы (тот же сценарий, больше деталей): [локальный деплой](https://docs.bittensor.com/local-build/deploy), [кошельки](https://docs.bittensor.com/local-build/provision-wallets), [создание сабнета локально](https://docs.bittensor.com/local-build/create-subnet), [майнинг и валидация на localnet](https://docs.bittensor.com/local-build/mine-validate).
 
+## Согласованность версий (xsubtensor / нода ↔ Python)
+
+Здесь смешиваются **две разные «версии»**, их нельзя путать:
+
+| Что | Где живёт | Что означает |
+| --- | --- | --- |
+| **Subtensor (нода)** | Этот репозиторий `xsubtensor`, Docker `ghcr.io/.../subtensor-localnet`, бинарник в контейнере | Версия **runtime** Substrate / паллет; доступ снаружи — **WebSocket RPC** (`ws://127.0.0.1:9944`). |
+| **Bittensor SDK + `btcli`** | `pip install bittensor` (и CLI из того же стека, см. [installation](https://docs.bittensor.com/getting-started/installation)) | **Python-клиент** к той же цепочке по RPC. Его нужно держать в **одной мажорной линии** с тем, что описано в актуальной доке Bittensor (сейчас это ветка **10.x**). |
+
+**Почему раньше было «не консистентно»:** в субмодуле `subnet-math` в `requirements.txt` по ошибке **не было строки `bittensor`** (остались только вспомогательные пакеты вроде `torch` / `pytest`). Шаблон Opentensor задаёт зависимость явно — см. [`subnet-template/requirements.txt`](https://github.com/opentensor/subnet-template/blob/main/requirements.txt). Без этого виртуальное окружение могло тянуть **случайную** версию SDK или вообще обходиться без неё, пока вы не установите пакет вручную — отсюда расхождение с нодой и с `btcli`.
+
+**Практическое правило:** после `git submodule update` в каталоге `subnet-math` выполните `pip install -r requirements.txt` (или `pip install -e .`) и убедитесь, что `python -c "import bittensor as bt; print(bt.__version__)"` показывает **10.x**, в одной линии с вашим `btcli`. Микропатчи (`10.2.0` vs `10.2.1`) обычно совместимы с одной и той же localnet-нодой; **переход 9.x ↔ 10.x** — уже ломает API вызовов к цепочке.
+
 ## Как устроены части системы
 
 | Компонент | Роль |
