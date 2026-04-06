@@ -133,11 +133,11 @@ URL в `.gitmodules` по-прежнему указывает на **`github.com
 
 ## 4. Дальнейшие шаги для вас (сабнет + 1 майнер + 1 валидатор)
 
-Кратко (детали — [`RUN_LOCAL_SUBNET.md`](RUN_LOCAL_SUBNET.md)):
+Кратко (детали — [`SUBNET_MATH_LOCALNET.md`](SUBNET_MATH_LOCALNET.md)):
 
 1. Локальный Subtensor уже из [`RUN_LOCAL.md`](RUN_LOCAL.md).
 2. Кошельки: создатель сабнета, майнер, валидатор; пополнение с `//Alice`.
-3. `btcli subnet create` → `btcli subnet start --netuid …`.
+3. Неинтерактивное `btcli subnet create` (все поля identity + `--no-prompt`) и `subnet start` — см. [**SUBNET_MATH_LOCALNET.md**](SUBNET_MATH_LOCALNET.md) §4 и скрипты `scripts/subnet-create-localnet.cmd` / `subnet-start-localnet.cmd`.
 4. `btcli subnets register` для майнера и валидатора на этот `netuid`.
 5. `btcli stake add` на валидатор (validator permit).
 6. В **`subnet-math`**: venv, `pip install -r requirements.txt`.

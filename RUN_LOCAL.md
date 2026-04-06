@@ -28,7 +28,9 @@ If you still see `denied` after logging in, try a fresh token, or run `docker lo
 
 ## Local testnet (Alice + Bob in one container)
 
-Uses [`docker-compose.localnet.yml`](docker-compose.localnet.yml). Image: **`ghcr.io/opentensor/subtensor-localnet:latest`** (published by [docker-localnet workflow](.github/workflows/docker-localnet.yml)). The container runs [`scripts/localnet.sh`](scripts/localnet.sh) with prebuilt binaries — same RPC ports as before.
+Uses [`docker-compose.localnet.yml`](docker-compose.localnet.yml). Default image: **`ghcr.io/opentensor/subtensor-localnet:v3.1.5`** ([package versions](https://github.com/opentensor/subtensor/pkgs/container/subtensor-localnet)) — same June 2025 line as SDK 9.7.x local work; override with env **`LOCALNET_IMAGE`** (e.g. `...:latest`). The container runs [`scripts/localnet.sh`](scripts/localnet.sh); RPC ports unchanged.
+
+When you **change** the localnet image tag or hit runtime/state errors, reset chain data: `docker compose -f docker-compose.localnet.yml down -v` (only localnet volumes; host `~/.bittensor` is separate). Then re-register subnets / neurons.
 
 Optional **HTTP faucet** (transfers signed as `//Alice`, bind only `127.0.0.1:8090`): see [`FAUCET_LOCAL.md`](FAUCET_LOCAL.md) (`docker compose --profile faucet up -d`).
 
@@ -186,7 +188,10 @@ Pre-built images match **published** Opentensor tags, not arbitrary commits in y
 ## More reading
 
 - [SETUP_LOG_SUBNET_MATH.md](SETUP_LOG_SUBNET_MATH.md) — лог настройки `subnet-math`, submodule, диагностика WebSocket на Windows + Docker
-- [RUN_LOCAL_SUBNET.md](RUN_LOCAL_SUBNET.md) — локальный сабнет, майнер и валидатор
+- [SUBNET_MATH_LOCALNET.md](SUBNET_MATH_LOCALNET.md) — subnet-math на localnet: шаги вручную, `.env.subnet-math`, `btcli`, compose; **§4** — полный набор identity-флагов для `subnet create` (без залипания на prompts), фоновые `scripts/subnet-create-localnet.cmd` / `subnet-start-localnet.cmd` и логи `subnet-create.log` / `subnet-start.log`
+- [REQUEST_NET_GRAPH.md](REQUEST_NET_GRAPH.md) — JSON-RPC метаграфов/нейронов, `GET /v1/network-snapshot` (faucet), pretty-примеры [`docs/network-snapshot.example.json`](docs/network-snapshot.example.json) / [`docs/network-snapshot.full.example.json`](docs/network-snapshot.full.example.json)
+- [REQUEST_TO_SUBNET.md](REQUEST_TO_SUBNET.md) — HTTP probe: dendrite MathSynapse, детальный JSON по майнерам и reward; прокси `POST /v1/subnet-math-probe` на faucet
+- [SUBNET_MATH_OPERATIONS.md](SUBNET_MATH_OPERATIONS.md) — логи, `MATH_SCOREBOARD`, запрос к майнеру (`query_miner.py`), метаграф
 - [docs/running-subtensor-locally.md](docs/running-subtensor-locally.md)
 - [Bittensor docs — Subtensor nodes](https://docs.bittensor.com/subtensor-nodes)
 - Packages: [subtensor](https://github.com/opentensor/subtensor/pkgs/container/subtensor), [subtensor-localnet](https://github.com/opentensor/subtensor/pkgs/container/subtensor-localnet)

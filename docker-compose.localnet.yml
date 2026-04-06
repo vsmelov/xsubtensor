@@ -1,5 +1,13 @@
 # Pre-built localnet: one container runs Alice + Bob (scripts/localnet.sh).
-# Published as ghcr.io/opentensor/subtensor-localnet — see .github/workflows/docker-localnet.yml
+# Default tag v3.1.5 (published 2025-06-30) — aligns with merge-base era / bittensor SDK ~9.7; see
+# https://github.com/opentensor/subtensor/pkgs/container/subtensor-localnet
+# Override: LOCALNET_IMAGE=ghcr.io/opentensor/subtensor-localnet:latest (or own build).
+# After changing the image tag, reset chain volumes: docker compose ... down -v
+#
+# Явное имя проекта: сеть xsubtensor_default совпадает с SUBTENSOR_DOCKER_NETWORK в .env.subnet-math
+# и отделено от стека subnet-math (docker-compose.subnet-math.yml с name: subnet-math).
+name: xsubtensor
+
 volumes:
   subtensor-localnet-alice:
   subtensor-localnet-bob:
@@ -7,7 +15,7 @@ volumes:
 
 services:
   localnet:
-    image: ghcr.io/opentensor/subtensor-localnet:latest
+    image: ${LOCALNET_IMAGE:-ghcr.io/opentensor/subtensor-localnet:v3.1.5}
     container_name: subtensor-localnet
     cpu_count: 4
     mem_limit: 40000000000
@@ -67,8 +75,14 @@ services:
       - localnet
     ports:
       - "127.0.0.1:8090:8090"
+    volumes:
+      # Dev: правки server.mjs с хоста без rebuild образа (после сохранения — restart контейнера).
+      - ./services/faucet/server.mjs:/app/server.mjs
     environment:
       PORT: "8090"
       WS_URL: ws://localnet:9944
       FAUCET_SEED: //Alice
       FAUCET_MAX_TAO_PER_TRANSFER: "1000000"
+      # Прокси POST /v1/subnet-math-probe → контейнер subnet-math (тот же Docker-сеть xsubtensor_default).
+      # Пустая строка — отключить маршрут. См. REQUEST_TO_SUBNET.md
+      SUBNET_MATH_PROBE_URL: ${SUBNET_MATH_PROBE_URL:-http://subtensor-math-probe:8091}

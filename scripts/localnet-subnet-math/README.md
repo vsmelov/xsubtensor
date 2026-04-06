@@ -1,0 +1,1 @@
+Автоматических скриптов здесь нет. Пошаговая инструкция: [../../SUBNET_MATH_LOCALNET.md](../../SUBNET_MATH_LOCALNET.md) (§4 — `subnet create` / `subnet start` без интерактива, логи в корне: `subnet-create.log`, `subnet-start.log`).

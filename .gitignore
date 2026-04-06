@@ -26,6 +26,14 @@
 .envrc
 .direnv
 
+# subnet-math compose (локальный NETUID / пути)
+.env.subnet-math
+
+# Локальные черновики снимка сети (канонический пример: docs/network-snapshot.example.json)
+.network-snapshot*.json
+_snap.json
+_probe-body.json
+
 # Vim (BTW™)
 *.swp
 *.swo
@@ -42,6 +50,17 @@ specs/*.json
 
 # IntelliJ IDEA configuration
 .idea
+
+# Cursor / local IDE
+.cursor/
+
+# Python
+**/__pycache__/
+*.py[cod]
+
+# Local compose / subnet logs
+subnet-create.log
+subnet-start.log
 
 # Runtime upgrade snapshot
 bt.snap

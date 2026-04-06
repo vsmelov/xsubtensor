@@ -1,0 +1,1730 @@
+{
+  "ok": true,
+  "generated_at_ms": 1775515766420,
+  "ws_url": "ws://localnet:9944",
+  "snapshot_query": {
+    "events_depth": 25,
+    "events_max": 500,
+    "events_filter": "subtensorModule,balances,system",
+    "events_only_subtensor": false,
+    "blocks_extrinsics_depth": 20,
+    "extrinsics_max": 500,
+    "extrinsics_filter": null
+  },
+  "chain": {
+    "name": "Bittensor",
+    "node": "Subtensor Node 4.0.0-dev-18379a4cd99",
+    "properties": {
+      "isEthereum": false,
+      "ss58Format": 42,
+      "tokenDecimals": [
+        9
+      ],
+      "tokenSymbol": [
+        "TAO"
+      ]
+    }
+  },
+  "sync": {
+    "peers": 1,
+    "isSyncing": false,
+    "shouldHavePeers": false
+  },
+  "head": {
+    "number": 10856,
+    "hash": "0x2a390ab80d396f296ca5380229dc41cffdd78f4591d2ac1b81ba8b9d1f8f9146"
+  },
+  "finalized": {
+    "number": 10851,
+    "hash": "0xec596b182a1b4eb46d77ee2905144ee3c43cdb0d7449009d395c2cd7387d27a8"
+  },
+  "subtensor": {
+    "total_networks": 3,
+    "total_stake": "107033442042718",
+    "total_issuance_balances": "2908996557059430"
+  },
+  "network_graph": {
+    "subnets": [
+      {
+        "netuid": 0,
+        "nameUtf8": "root",
+        "symbolUtf8": "Τ",
+        "numUids": 0,
+        "tempo": 100,
+        "ownerColdkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"
+      },
+      {
+        "netuid": 1,
+        "nameUtf8": "apex",
+        "symbolUtf8": "α",
+        "numUids": 1,
+        "tempo": 100,
+        "ownerColdkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"
+      },
+      {
+        "netuid": 2,
+        "nameUtf8": "subnet-math",
+        "symbolUtf8": "β",
+        "numUids": 5,
+        "tempo": 10,
+        "ownerColdkey": "5G9D1taznHeRhmrWQZKAXgxgAkodKmP3jsFcm1LvYB7Z2Pc1"
+      }
+    ],
+    "neurons": [
+      {
+        "netuid": 1,
+        "uid": 0,
+        "hotkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+        "coldkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+        "active": false,
+        "validatorPermit": true,
+        "axonPort": 0,
+        "axonIpPacked": 0,
+        "incentives": 0,
+        "dividends": 0,
+        "emission": 0,
+        "totalStake": 1000000000
+      },
+      {
+        "netuid": 2,
+        "uid": 0,
+        "hotkey": "5ELEf1D9imZsx29TKnBBNu6UsHNzNZJL8UkHY67E5mJruaaC",
+        "coldkey": "5G9D1taznHeRhmrWQZKAXgxgAkodKmP3jsFcm1LvYB7Z2Pc1",
+        "active": false,
+        "validatorPermit": true,
+        "axonPort": 0,
+        "axonIpPacked": 0,
+        "incentives": 0,
+        "dividends": 0,
+        "emission": 0,
+        "totalStake": 1470226760797
+      },
+      {
+        "netuid": 2,
+        "uid": 1,
+        "hotkey": "5Cz4zaA2v2xACR4hFATYi5zPqoRxCVp2t57sir8Cq1bu9qnz",
+        "coldkey": "5H4KLzBBNbUwj5EJ1reZUiZmrs1YoaVhkSEAZFSJdN64zkp3",
+        "active": false,
+        "validatorPermit": true,
+        "axonPort": 8901,
+        "axonIpPacked": 2886860807,
+        "incentives": 33427,
+        "dividends": 0,
+        "emission": 2300439023,
+        "totalStake": 1828016193499
+      },
+      {
+        "netuid": 2,
+        "uid": 2,
+        "hotkey": "5GpidnbWDmak97q1PkBdbQ2gWm5ne6DKJJQK56mG8cLymnnb",
+        "coldkey": "5FRXRG1oqCxgLRRiw5GTzd9GpiWMgzzUnS1e8XoxutQhQyce",
+        "active": true,
+        "validatorPermit": true,
+        "axonPort": 9101,
+        "axonIpPacked": 2886860805,
+        "incentives": 0,
+        "dividends": 65139,
+        "emission": 4482833301,
+        "totalStake": 3703087567621
+      },
+      {
+        "netuid": 2,
+        "uid": 3,
+        "hotkey": "5HjdH1FcFy8e1TRRSHpFf3YdX5R4Zwqat3FMMg7tAXr6B2QR",
+        "coldkey": "5CSWfpaNDpSwyY8bX81dJzCz35pfYoBTAkjJDs2Wo3u1T96n",
+        "active": true,
+        "validatorPermit": true,
+        "axonPort": 8902,
+        "axonIpPacked": 2886860804,
+        "incentives": 32107,
+        "dividends": 0,
+        "emission": 2209586147,
+        "totalStake": 408956291845
+      },
+      {
+        "netuid": 2,
+        "uid": 4,
+        "hotkey": "5DFqBYHPoHpjfU6F9JbE2H9LTjgWreGxBG8rnnkfY3CWTQV6",
+        "coldkey": "5CJNnnHxN7revXzcv6y45d7G3u6iRdQLy1LRG6u5DSifaB67",
+        "active": true,
+        "validatorPermit": true,
+        "axonPort": 9102,
+        "axonIpPacked": 2886860806,
+        "incentives": 0,
+        "dividends": 395,
+        "emission": 27191870,
+        "totalStake": 24147602553
+      }
+    ],
+    "edges": [],
+    "note": "On-chain edges for miner axon traffic are not stored; reward flow is reflected in emission/incentives/dividends per uid. Commit-reveal weights are not expanded here."
+  },
+  "runtime_calls": {
+    "getAllMetagraphs": {
+      "ok": true,
+      "data": [
+        {
+          "netuid": 0,
+          "name": [
+            114,
+            111,
+            111,
+            116
+          ],
+          "symbol": [
+            206,
+            164
+          ],
+          "identity": null,
+          "networkRegisteredAt": 0,
+          "ownerHotkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "ownerColdkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "block": 10856,
+          "tempo": 100,
+          "lastStep": 0,
+          "blocksSinceLastStep": 10856,
+          "subnetEmission": 0,
+          "alphaIn": 0,
+          "alphaOut": 0,
+          "taoIn": 0,
+          "alphaOutEmission": 0,
+          "alphaInEmission": 0,
+          "taoInEmission": 0,
+          "pendingAlphaEmission": 0,
+          "pendingRootEmission": 0,
+          "subnetVolume": 0,
+          "movingPrice": {
+            "bits": 0
+          },
+          "rho": 10,
+          "kappa": 32767,
+          "minAllowedWeights": 0,
+          "maxWeightsLimit": 65535,
+          "weightsVersion": 0,
+          "weightsRateLimit": 100,
+          "activityCutoff": 5000,
+          "maxValidators": 64,
+          "numUids": 0,
+          "maxUids": 64,
+          "burn": 500000,
+          "difficulty": 10000000,
+          "registrationAllowed": true,
+          "powRegistrationAllowed": false,
+          "immunityPeriod": 4096,
+          "minDifficulty": 10000000,
+          "maxDifficulty": "0x3fffffffffffffff",
+          "minBurn": 500000,
+          "maxBurn": 100000000000,
+          "adjustmentAlpha": 0,
+          "adjustmentInterval": 100,
+          "targetRegsPerInterval": 1,
+          "maxRegsPerBlock": 1,
+          "servingRateLimit": 50,
+          "commitRevealWeightsEnabled": false,
+          "commitRevealPeriod": 1,
+          "liquidAlphaEnabled": false,
+          "alphaHigh": 58982,
+          "alphaLow": 45875,
+          "bondsMovingAvg": 900000,
+          "hotkeys": [],
+          "coldkeys": [],
+          "identities": [],
+          "axons": [],
+          "active": [],
+          "validatorPermit": [],
+          "pruningScore": [],
+          "lastUpdate": [],
+          "emission": [],
+          "dividends": [],
+          "incentives": [],
+          "consensus": [],
+          "trust": [],
+          "rank": [],
+          "blockAtRegistration": [],
+          "alphaStake": [],
+          "taoStake": [],
+          "totalStake": [],
+          "taoDividendsPerHotkey": [],
+          "alphaDividendsPerHotkey": [],
+          "nameUtf8": "root",
+          "symbolUtf8": "Τ"
+        },
+        {
+          "netuid": 1,
+          "name": [
+            97,
+            112,
+            101,
+            120
+          ],
+          "symbol": [
+            206,
+            177
+          ],
+          "identity": null,
+          "networkRegisteredAt": 0,
+          "ownerHotkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "ownerColdkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "block": 10856,
+          "tempo": 100,
+          "lastStep": 10804,
+          "blocksSinceLastStep": 52,
+          "subnetEmission": 0,
+          "alphaIn": 10000000000,
+          "alphaOut": 1000000000,
+          "taoIn": 10000000000,
+          "alphaOutEmission": 0,
+          "alphaInEmission": 0,
+          "taoInEmission": 0,
+          "pendingAlphaEmission": 0,
+          "pendingRootEmission": 0,
+          "subnetVolume": 0,
+          "movingPrice": {
+            "bits": 0
+          },
+          "rho": 10,
+          "kappa": 32767,
+          "minAllowedWeights": 0,
+          "maxWeightsLimit": 65535,
+          "weightsVersion": 0,
+          "weightsRateLimit": 100,
+          "activityCutoff": 5000,
+          "maxValidators": 64,
+          "numUids": 1,
+          "maxUids": 256,
+          "burn": 500000,
+          "difficulty": 10000000,
+          "registrationAllowed": true,
+          "powRegistrationAllowed": false,
+          "immunityPeriod": 4096,
+          "minDifficulty": 10000000,
+          "maxDifficulty": "0x3fffffffffffffff",
+          "minBurn": 500000,
+          "maxBurn": 100000000000,
+          "adjustmentAlpha": 0,
+          "adjustmentInterval": 100,
+          "targetRegsPerInterval": 2,
+          "maxRegsPerBlock": 1,
+          "servingRateLimit": 50,
+          "commitRevealWeightsEnabled": false,
+          "commitRevealPeriod": 1,
+          "liquidAlphaEnabled": false,
+          "alphaHigh": 58982,
+          "alphaLow": 45875,
+          "bondsMovingAvg": 900000,
+          "hotkeys": [
+            "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"
+          ],
+          "coldkeys": [
+            "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"
+          ],
+          "identities": [
+            null
+          ],
+          "axons": [
+            {
+              "block": 0,
+              "version": 0,
+              "ip": 0,
+              "port": 0,
+              "ipType": 0,
+              "protocol": 0,
+              "placeholder1": 0,
+              "placeholder2": 0
+            }
+          ],
+          "active": [
+            false
+          ],
+          "validatorPermit": [
+            true
+          ],
+          "pruningScore": [
+            65535
+          ],
+          "lastUpdate": [
+            0
+          ],
+          "emission": [
+            0
+          ],
+          "dividends": [
+            0
+          ],
+          "incentives": [
+            0
+          ],
+          "consensus": [
+            0
+          ],
+          "trust": [
+            0
+          ],
+          "rank": [
+            0
+          ],
+          "blockAtRegistration": [
+            0
+          ],
+          "alphaStake": [
+            1000000000
+          ],
+          "taoStake": [
+            0
+          ],
+          "totalStake": [
+            1000000000
+          ],
+          "taoDividendsPerHotkey": [
+            [
+              "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+              0
+            ]
+          ],
+          "alphaDividendsPerHotkey": [
+            [
+              "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+              0
+            ]
+          ],
+          "nameUtf8": "apex",
+          "symbolUtf8": "α"
+        },
+        {
+          "netuid": 2,
+          "name": [
+            115,
+            117,
+            98,
+            110,
+            101,
+            116,
+            45,
+            109,
+            97,
+            116,
+            104
+          ],
+          "symbol": [
+            206,
+            178
+          ],
+          "identity": {
+            "subnetName": "0x7375626e65742d6d617468",
+            "githubRepo": "0x68747470733a2f2f6769746875622e636f6d2f6f70656e74656e736f722f62697474656e736f72",
+            "subnetContact": "0x646576406c6f63616c2e74657374",
+            "subnetUrl": "0x68747470733a2f2f6578616d706c652e636f6d",
+            "discord": "0x6e6f6e65",
+            "description": "0x6c6f63616c6e65742d646576",
+            "additional": "0x6e6f6e65"
+          },
+          "networkRegisteredAt": 2859,
+          "ownerHotkey": "5ELEf1D9imZsx29TKnBBNu6UsHNzNZJL8UkHY67E5mJruaaC",
+          "ownerColdkey": "5G9D1taznHeRhmrWQZKAXgxgAkodKmP3jsFcm1LvYB7Z2Pc1",
+          "block": 10856,
+          "tempo": 10,
+          "lastStep": 10853,
+          "blocksSinceLastStep": 3,
+          "subnetEmission": 0,
+          "alphaIn": 22033540119,
+          "alphaOut": 7440714442616,
+          "taoIn": 107033442042718,
+          "alphaOutEmission": 1000000000,
+          "alphaInEmission": 205856,
+          "taoInEmission": 1000000000,
+          "pendingAlphaEmission": 2460013731,
+          "pendingRootEmission": 0,
+          "subnetVolume": 100003441942718,
+          "movingPrice": {
+            "bits": 1136453
+          },
+          "rho": 10,
+          "kappa": 32767,
+          "minAllowedWeights": 1,
+          "maxWeightsLimit": 65535,
+          "weightsVersion": 0,
+          "weightsRateLimit": 100,
+          "activityCutoff": 5000,
+          "maxValidators": 64,
+          "numUids": 5,
+          "maxUids": 256,
+          "burn": 750035847,
+          "difficulty": "0xffffffffffffffff",
+          "registrationAllowed": true,
+          "powRegistrationAllowed": false,
+          "immunityPeriod": 5000,
+          "minDifficulty": "0xffffffffffffffff",
+          "maxDifficulty": "0xffffffffffffffff",
+          "minBurn": 500000,
+          "maxBurn": 100000000000,
+          "adjustmentAlpha": "0xf851eb851eb851ea",
+          "adjustmentInterval": 360,
+          "targetRegsPerInterval": 1,
+          "maxRegsPerBlock": 1,
+          "servingRateLimit": 50,
+          "commitRevealWeightsEnabled": false,
+          "commitRevealPeriod": 1,
+          "liquidAlphaEnabled": false,
+          "alphaHigh": 58982,
+          "alphaLow": 45875,
+          "bondsMovingAvg": 900000,
+          "hotkeys": [
+            "5ELEf1D9imZsx29TKnBBNu6UsHNzNZJL8UkHY67E5mJruaaC",
+            "5Cz4zaA2v2xACR4hFATYi5zPqoRxCVp2t57sir8Cq1bu9qnz",
+            "5GpidnbWDmak97q1PkBdbQ2gWm5ne6DKJJQK56mG8cLymnnb",
+            "5HjdH1FcFy8e1TRRSHpFf3YdX5R4Zwqat3FMMg7tAXr6B2QR",
+            "5DFqBYHPoHpjfU6F9JbE2H9LTjgWreGxBG8rnnkfY3CWTQV6"
+          ],
+          "coldkeys": [
+            "5G9D1taznHeRhmrWQZKAXgxgAkodKmP3jsFcm1LvYB7Z2Pc1",
+            "5H4KLzBBNbUwj5EJ1reZUiZmrs1YoaVhkSEAZFSJdN64zkp3",
+            "5FRXRG1oqCxgLRRiw5GTzd9GpiWMgzzUnS1e8XoxutQhQyce",
+            "5CSWfpaNDpSwyY8bX81dJzCz35pfYoBTAkjJDs2Wo3u1T96n",
+            "5CJNnnHxN7revXzcv6y45d7G3u6iRdQLy1LRG6u5DSifaB67"
+          ],
+          "identities": [
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "axons": [
+            {
+              "block": 0,
+              "version": 0,
+              "ip": 0,
+              "port": 0,
+              "ipType": 0,
+              "protocol": 0,
+              "placeholder1": 0,
+              "placeholder2": 0
+            },
+            {
+              "block": 8543,
+              "version": 9007000,
+              "ip": 2886860807,
+              "port": 8901,
+              "ipType": 4,
+              "protocol": 4,
+              "placeholder1": 0,
+              "placeholder2": 0
+            },
+            {
+              "block": 8544,
+              "version": 9007000,
+              "ip": 2886860805,
+              "port": 9101,
+              "ipType": 4,
+              "protocol": 4,
+              "placeholder1": 0,
+              "placeholder2": 0
+            },
+            {
+              "block": 8543,
+              "version": 9007000,
+              "ip": 2886860804,
+              "port": 8902,
+              "ipType": 4,
+              "protocol": 4,
+              "placeholder1": 0,
+              "placeholder2": 0
+            },
+            {
+              "block": 8544,
+              "version": 9007000,
+              "ip": 2886860806,
+              "port": 9102,
+              "ipType": 4,
+              "protocol": 4,
+              "placeholder1": 0,
+              "placeholder2": 0
+            }
+          ],
+          "active": [
+            false,
+            false,
+            true,
+            true,
+            true
+          ],
+          "validatorPermit": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "pruningScore": [
+            0,
+            33630,
+            65535,
+            32302,
+            398
+          ],
+          "lastUpdate": [
+            2859,
+            5121,
+            10761,
+            8142,
+            10774
+          ],
+          "emission": [
+            0,
+            2300439023,
+            4482833301,
+            2209586147,
+            27191870
+          ],
+          "dividends": [
+            0,
+            0,
+            65139,
+            0,
+            395
+          ],
+          "incentives": [
+            0,
+            33427,
+            0,
+            32107,
+            0
+          ],
+          "consensus": [
+            0,
+            33432,
+            0,
+            32102,
+            0
+          ],
+          "trust": [
+            0,
+            65535,
+            0,
+            65515,
+            0
+          ],
+          "rank": [
+            0,
+            33427,
+            0,
+            32107,
+            0
+          ],
+          "blockAtRegistration": [
+            2859,
+            5121,
+            5177,
+            8142,
+            8181
+          ],
+          "alphaStake": [
+            1470226760797,
+            1828016193499,
+            3703087567621,
+            408956291845,
+            24147602553
+          ],
+          "taoStake": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "totalStake": [
+            1470226760797,
+            1828016193499,
+            3703087567621,
+            408956291845,
+            24147602553
+          ],
+          "taoDividendsPerHotkey": [
+            [
+              "5ELEf1D9imZsx29TKnBBNu6UsHNzNZJL8UkHY67E5mJruaaC",
+              0
+            ],
+            [
+              "5Cz4zaA2v2xACR4hFATYi5zPqoRxCVp2t57sir8Cq1bu9qnz",
+              0
+            ],
+            [
+              "5GpidnbWDmak97q1PkBdbQ2gWm5ne6DKJJQK56mG8cLymnnb",
+              0
+            ],
+            [
+              "5HjdH1FcFy8e1TRRSHpFf3YdX5R4Zwqat3FMMg7tAXr6B2QR",
+              0
+            ],
+            [
+              "5DFqBYHPoHpjfU6F9JbE2H9LTjgWreGxBG8rnnkfY3CWTQV6",
+              0
+            ]
+          ],
+          "alphaDividendsPerHotkey": [
+            [
+              "5ELEf1D9imZsx29TKnBBNu6UsHNzNZJL8UkHY67E5mJruaaC",
+              0
+            ],
+            [
+              "5Cz4zaA2v2xACR4hFATYi5zPqoRxCVp2t57sir8Cq1bu9qnz",
+              0
+            ],
+            [
+              "5GpidnbWDmak97q1PkBdbQ2gWm5ne6DKJJQK56mG8cLymnnb",
+              3675943829
+            ],
+            [
+              "5HjdH1FcFy8e1TRRSHpFf3YdX5R4Zwqat3FMMg7tAXr6B2QR",
+              0
+            ],
+            [
+              "5DFqBYHPoHpjfU6F9JbE2H9LTjgWreGxBG8rnnkfY3CWTQV6",
+              22297457
+            ]
+          ],
+          "nameUtf8": "subnet-math",
+          "symbolUtf8": "β"
+        }
+      ]
+    },
+    "getAllDynamicInfo": {
+      "ok": true,
+      "data": [
+        {
+          "netuid": 0,
+          "ownerHotkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "ownerColdkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "subnetName": [
+            114,
+            111,
+            111,
+            116
+          ],
+          "tokenSymbol": [
+            206,
+            164
+          ],
+          "tempo": 100,
+          "lastStep": 0,
+          "blocksSinceLastStep": 10856,
+          "emission": 0,
+          "alphaIn": 0,
+          "alphaOut": 0,
+          "taoIn": 0,
+          "alphaOutEmission": 0,
+          "alphaInEmission": 0,
+          "taoInEmission": 0,
+          "pendingAlphaEmission": 0,
+          "pendingRootEmission": 0,
+          "subnetVolume": 0,
+          "networkRegisteredAt": 0,
+          "subnetIdentity": null,
+          "movingPrice": {
+            "bits": 0
+          }
+        },
+        {
+          "netuid": 1,
+          "ownerHotkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "ownerColdkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "subnetName": [
+            97,
+            112,
+            101,
+            120
+          ],
+          "tokenSymbol": [
+            206,
+            177
+          ],
+          "tempo": 100,
+          "lastStep": 10804,
+          "blocksSinceLastStep": 52,
+          "emission": 0,
+          "alphaIn": 10000000000,
+          "alphaOut": 1000000000,
+          "taoIn": 10000000000,
+          "alphaOutEmission": 0,
+          "alphaInEmission": 0,
+          "taoInEmission": 0,
+          "pendingAlphaEmission": 0,
+          "pendingRootEmission": 0,
+          "subnetVolume": 0,
+          "networkRegisteredAt": 0,
+          "subnetIdentity": null,
+          "movingPrice": {
+            "bits": 0
+          }
+        },
+        {
+          "netuid": 2,
+          "ownerHotkey": "5ELEf1D9imZsx29TKnBBNu6UsHNzNZJL8UkHY67E5mJruaaC",
+          "ownerColdkey": "5G9D1taznHeRhmrWQZKAXgxgAkodKmP3jsFcm1LvYB7Z2Pc1",
+          "subnetName": [
+            115,
+            117,
+            98,
+            110,
+            101,
+            116,
+            45,
+            109,
+            97,
+            116,
+            104
+          ],
+          "tokenSymbol": [
+            206,
+            178
+          ],
+          "tempo": 10,
+          "lastStep": 10853,
+          "blocksSinceLastStep": 3,
+          "emission": 0,
+          "alphaIn": 22033540119,
+          "alphaOut": 7440714442616,
+          "taoIn": 107033442042718,
+          "alphaOutEmission": 1000000000,
+          "alphaInEmission": 205856,
+          "taoInEmission": 1000000000,
+          "pendingAlphaEmission": 2460013731,
+          "pendingRootEmission": 0,
+          "subnetVolume": 100003441942718,
+          "networkRegisteredAt": 2859,
+          "subnetIdentity": {
+            "subnetName": "0x7375626e65742d6d617468",
+            "githubRepo": "0x68747470733a2f2f6769746875622e636f6d2f6f70656e74656e736f722f62697474656e736f72",
+            "subnetContact": "0x646576406c6f63616c2e74657374",
+            "subnetUrl": "0x68747470733a2f2f6578616d706c652e636f6d",
+            "discord": "0x6e6f6e65",
+            "description": "0x6c6f63616c6e65742d646576",
+            "additional": "0x6e6f6e65"
+          },
+          "movingPrice": {
+            "bits": 1136453
+          }
+        }
+      ]
+    },
+    "getSubnetsInfoV2": {
+      "ok": true,
+      "data": [
+        {
+          "netuid": 0,
+          "rho": 10,
+          "kappa": 32767,
+          "difficulty": 10000000,
+          "immunityPeriod": 4096,
+          "maxAllowedValidators": 64,
+          "minAllowedWeights": 0,
+          "maxWeightsLimit": 65535,
+          "scalingLawPower": 50,
+          "subnetworkN": 0,
+          "maxAllowedUids": 64,
+          "blocksSinceLastStep": 0,
+          "tempo": 100,
+          "networkModality": 0,
+          "networkConnect": [],
+          "emissionValue": 0,
+          "burn": 500000,
+          "owner": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "identity": null
+        },
+        {
+          "netuid": 1,
+          "rho": 10,
+          "kappa": 32767,
+          "difficulty": 10000000,
+          "immunityPeriod": 4096,
+          "maxAllowedValidators": 64,
+          "minAllowedWeights": 0,
+          "maxWeightsLimit": 65535,
+          "scalingLawPower": 50,
+          "subnetworkN": 1,
+          "maxAllowedUids": 256,
+          "blocksSinceLastStep": 52,
+          "tempo": 100,
+          "networkModality": 0,
+          "networkConnect": [],
+          "emissionValue": 0,
+          "burn": 500000,
+          "owner": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "identity": null
+        },
+        {
+          "netuid": 2,
+          "rho": 10,
+          "kappa": 32767,
+          "difficulty": "0xffffffffffffffff",
+          "immunityPeriod": 5000,
+          "maxAllowedValidators": 64,
+          "minAllowedWeights": 1,
+          "maxWeightsLimit": 65535,
+          "scalingLawPower": 50,
+          "subnetworkN": 5,
+          "maxAllowedUids": 256,
+          "blocksSinceLastStep": 3,
+          "tempo": 10,
+          "networkModality": 0,
+          "networkConnect": [],
+          "emissionValue": 0,
+          "burn": 750035847,
+          "owner": "5G9D1taznHeRhmrWQZKAXgxgAkodKmP3jsFcm1LvYB7Z2Pc1",
+          "identity": {
+            "subnetName": "0x7375626e65742d6d617468",
+            "githubRepo": "0x68747470733a2f2f6769746875622e636f6d2f6f70656e74656e736f722f62697474656e736f72",
+            "subnetContact": "0x646576406c6f63616c2e74657374",
+            "subnetUrl": "0x68747470733a2f2f6578616d706c652e636f6d",
+            "discord": "0x6e6f6e65",
+            "description": "0x6c6f63616c6e65742d646576",
+            "additional": "0x6e6f6e65"
+          }
+        }
+      ]
+    },
+    "getDelegates": {
+      "ok": true,
+      "data": []
+    },
+    "getNetworkRegistrationCost": {
+      "ok": true,
+      "data": 1920664689902
+    }
+  },
+  "recent_events": {
+    "depth_blocks_requested": 25,
+    "max_events": 500,
+    "count": 25,
+    "events": [
+      {
+        "blockNumber": 10856,
+        "blockHash": "0x2a390ab80d396f296ca5380229dc41cffdd78f4591d2ac1b81ba8b9d1f8f9146",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10855,
+        "blockHash": "0x0e5bdddde738779ca357cbd5c8b167d84d16147e529ce2fc829407979b3f87f7",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10854,
+        "blockHash": "0x65a5d7d70a8aafaff0e323ce2a93d0659f33cfeace6c04f8763ac0aa9f85e2e1",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10853,
+        "blockHash": "0x9368a6f3e644f8563498a59133b3681b9cff6493fb904ff95920be26715d1866",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10852,
+        "blockHash": "0x03786bf20e78850f23a8232072cb5f312c56f638673133f85f89a1f395ac5555",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10851,
+        "blockHash": "0xec596b182a1b4eb46d77ee2905144ee3c43cdb0d7449009d395c2cd7387d27a8",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10850,
+        "blockHash": "0xaa90bd171bf858dcb10494f632737345b69548fe81ce689a7c267393fd1cfcd3",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10849,
+        "blockHash": "0xdb2f0ba0489f86b616270957d44ca4ff72ffcb83cff5d0bac74adf4c77ee6450",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10848,
+        "blockHash": "0x441103657ed63e0a85d93655e9bb6007cc43a84aefc744bbbcfabef7dc28e793",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10847,
+        "blockHash": "0x74de7e3fc1461bd51a10dfbc0308db925217712be9136086ea95206d9322c386",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10846,
+        "blockHash": "0xffd951a2d90c0f2109fba4b33c7847b764150fdfab96a2e08c1981248479c167",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10845,
+        "blockHash": "0x6719ecc0aeb57894433c0b60517f4d2c137105905e860e7d1f510978fc274d68",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10844,
+        "blockHash": "0x0547dc857ef3accd4d7901a9a65916853dd16f3755b154ddc2ad53536cd8fb42",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10843,
+        "blockHash": "0x7ba82f4d1d40bf5d1138a3185bda747591a31bbea8aac434013030d4e8e496e8",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10842,
+        "blockHash": "0xf3787aaaea62489ec9b8d303b0e014381aa39cee5f6ac5729061ace2e1755c3c",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10841,
+        "blockHash": "0xe267bbc07fb557f83c41ccb26b93d6cd81e409c7178f98cc78b6d16d97e4c98b",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10840,
+        "blockHash": "0x6bbc6e858b2dcb9c7b15b7380b9047a9b0ad4ccaf9f728090389ef1b9cd91bdc",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10839,
+        "blockHash": "0xb1031fed3951fc3183285220291f3bd754233f64024e75488a41ef4d94d6e370",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10838,
+        "blockHash": "0x6bc73b181e69d2692c605d01bfb3060711ac66f4457116efa7ac5c89f1bc54a0",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10837,
+        "blockHash": "0xf8a473a3a8ff5fd90c79c58ab5212553172b01af8c2fd06c4365c07172a401ed",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10836,
+        "blockHash": "0x0478ddd89de6143b189e6ce3e5c16b7006df5bd23be8aec4fa7b288d15875d3b",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10835,
+        "blockHash": "0x9cecf3cbc1322473ee729ed1b298987ffb43024b84493dd525c0a92aeb59ca5e",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10834,
+        "blockHash": "0x3e8930614768f37fbeabf69e90e0a45eb95aba599a50122088ced26a84d4e47f",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10833,
+        "blockHash": "0xc71405153816d107bacea662110500e41fea3054605ad473619420c6eea370cf",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 10832,
+        "blockHash": "0xfa2056c32d777d142ee887310f3bce965033e2958dc7a0d4e1de0dbd562bb6f5",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      }
+    ]
+  },
+  "recent_extrinsics": {
+    "blocks_scanned_requested": 20,
+    "max_rows": 500,
+    "count": 20,
+    "extrinsics": [
+      {
+        "blockNumber": 10856,
+        "blockHash": "0x2a390ab80d396f296ca5380229dc41cffdd78f4591d2ac1b81ba8b9d1f8f9146",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0xab2f407da0a13a82e3ce22400f7c92ca4e518db22ca9bb309caaa0744a4a04dd",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,764,750"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 10855,
+        "blockHash": "0x0e5bdddde738779ca357cbd5c8b167d84d16147e529ce2fc829407979b3f87f7",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0x78d6cae82e25068cb371f99abfaa7f3473992d21962715da25de5c4899af6a1f",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,764,501"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 10854,
+        "blockHash": "0x65a5d7d70a8aafaff0e323ce2a93d0659f33cfeace6c04f8763ac0aa9f85e2e1",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0x48a2d9c4d6fa7f59a9550f39fd39aeabc2d5bf8dfebd7ec9037fa7f912827cb3",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,764,002"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 10853,
+        "blockHash": "0x9368a6f3e644f8563498a59133b3681b9cff6493fb904ff95920be26715d1866",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0x687eab5d7c9e6c350fbe1e0b23b9ed9b486ad406c16b09abd47277b0ff76a094",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,763,751"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 10852,
+        "blockHash": "0x03786bf20e78850f23a8232072cb5f312c56f638673133f85f89a1f395ac5555",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0x48a86817c2acbcc3730a3aaa46c727d52965091eb5c2d8b2366c095f2c562008",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,763,500"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 10851,
+        "blockHash": "0xec596b182a1b4eb46d77ee2905144ee3c43cdb0d7449009d395c2cd7387d27a8",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0xb78d4f95410c064ac442392d0083e080d578a59a79a3a320530fe6bf56475280",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,763,250"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 10850,
+        "blockHash": "0xaa90bd171bf858dcb10494f632737345b69548fe81ce689a7c267393fd1cfcd3",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0x5cdb1889d594227e49c932427b16c05c0dd76426ed786a6861e291442d7de890",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,762,750"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 10849,
+        "blockHash": "0xdb2f0ba0489f86b616270957d44ca4ff72ffcb83cff5d0bac74adf4c77ee6450",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0x8733887f4f23c51fc85f12e7a1f16b4cc542910659fb115616537cbf2d3988e9",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,762,503"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 10848,
+        "blockHash": "0x441103657ed63e0a85d93655e9bb6007cc43a84aefc744bbbcfabef7dc28e793",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0x0df1f2bbbf46adb9c574109090ae2e0edc5f944e9f48db53b406c174bea7200b",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,762,251"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 10847,
+        "blockHash": "0x74de7e3fc1461bd51a10dfbc0308db925217712be9136086ea95206d9322c386",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0x3d8943c12c42af77721ccbde7fcbe0c6d0f3c126d5e08cab717a0a9dfe6d16ba",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,762,000"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 10846,
+        "blockHash": "0xffd951a2d90c0f2109fba4b33c7847b764150fdfab96a2e08c1981248479c167",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0x4de59083d3eee4ae7726edf0c5d8e974d7ffa321ee1bc325ddcdaa009b82f001",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,761,501"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 10845,
+        "blockHash": "0x6719ecc0aeb57894433c0b60517f4d2c137105905e860e7d1f510978fc274d68",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0x30a17cae71a3e1f167550b694056c3c7894de6b792ea77e596a1ae4e7b117d70",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,761,250"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 10844,
+        "blockHash": "0x0547dc857ef3accd4d7901a9a65916853dd16f3755b154ddc2ad53536cd8fb42",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0x37ac4c33798ac5191c843144409d17a07666e929ecb36f8bef6edb06f60ef290",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,761,000"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 10843,
+        "blockHash": "0x7ba82f4d1d40bf5d1138a3185bda747591a31bbea8aac434013030d4e8e496e8",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0x63f5d246630b002501773f0544f8c99fbe60f6b8e8e474bbb60e6be74424c74a",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,760,750"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 10842,
+        "blockHash": "0xf3787aaaea62489ec9b8d303b0e014381aa39cee5f6ac5729061ace2e1755c3c",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0x4280bdf18a065c04e7005266ac45a185dcb24a3e6b2769b18eacab016c300eca",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,760,500"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 10841,
+        "blockHash": "0xe267bbc07fb557f83c41ccb26b93d6cd81e409c7178f98cc78b6d16d97e4c98b",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0x90636efd846510d7795bb46e93ad4be865c8663f33aa6891b71437b938aecfa0",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,760,000"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 10840,
+        "blockHash": "0x6bbc6e858b2dcb9c7b15b7380b9047a9b0ad4ccaf9f728090389ef1b9cd91bdc",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0x0af4e48aa2a8a0d02d166fbacde4550900304064749305c01ba0779ed59b91ce",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,759,751"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 10839,
+        "blockHash": "0xb1031fed3951fc3183285220291f3bd754233f64024e75488a41ef4d94d6e370",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0xa8fc60fafbdaf5793523bb4757be30f6895ffd0e95a3d71ab113ebfae844be94",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,759,502"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 10838,
+        "blockHash": "0x6bc73b181e69d2692c605d01bfb3060711ac66f4457116efa7ac5c89f1bc54a0",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0xc82e08ad076040abc24a97413015ddba05c4069c5105536c9aa4cfd420df934a",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,759,252"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 10837,
+        "blockHash": "0xf8a473a3a8ff5fd90c79c58ab5212553172b01af8c2fd06c4365c07172a401ed",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0x82d62ae06981d6e4a58756ec99fff4ab43617c1fc036dbf4ef6ca17f7dc011f3",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,515,758,750"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      }
+    ]
+  },
+  "limits": {
+    "SNAPSHOT_MAX_EVENTS_DEPTH": 50,
+    "SNAPSHOT_MAX_EVENTS": 500,
+    "SNAPSHOT_MAX_BLOCKS_EXTRINSICS_DEPTH": 30,
+    "SNAPSHOT_MAX_EXTRINSICS": 800
+  }
+}

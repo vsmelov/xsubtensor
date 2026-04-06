@@ -1,0 +1,221 @@
+# Имя проекта ОБЯЗАТЕЛЬНО отличается от docker-compose.localnet.yml: иначе `compose up`
+# для subnet-math удалит контейнеры localnet (один и тот же default project name из каталога).
+name: subnet-math
+
+# subnet-math: один compose-файл, два режима.
+#
+# 1) Реальная цепь (localnet + кошельки на хосте) — по умолчанию:
+#    docker compose -f docker-compose.localnet.yml up -d
+#    copy .env.subnet-math.example .env.subnet-math   # заполнить NETUID после btcli
+#    см. пошагово: SUBNET_MATH_LOCALNET.md
+#    docker compose -f docker-compose.subnet-math.yml --env-file .env.subnet-math up -d --build
+#    Второй майнер/валидатор (порты 8902/9102): сервисы math-miner-b, math-validator-b — см. .env.subnet-math.example
+#
+# 2) Офлайн-smoke (--mock, без localnet и без кошельков):
+#    docker compose -f docker-compose.subnet-math.yml --profile mock up -d --build
+#
+# Сеть `chain` нужна только режиму (1); mock использует изолированную сеть.
+#
+# Разработка: каталоги template / neurons / scripts смонтированы в /app — правки на хосте
+# видны в контейнере без `docker compose build`. После смены кода перезапустите сервис
+# (`docker compose ... restart math-miner`), иначе Python держит старые модули в памяти.
+# Меняли requirements.txt или Dockerfile — снова `docker compose ... up --build`.
+
+networks:
+  chain:
+    name: ${SUBTENSOR_DOCKER_NETWORK:-xsubtensor_default}
+    external: true
+  mock_isolated:
+    driver: bridge
+
+services:
+  math-miner:
+    build:
+      context: ./subnet-math
+      dockerfile: Dockerfile
+    container_name: subtensor-math-miner
+    restart: unless-stopped
+    networks: [chain]
+    volumes:
+      - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
+      - ./subnet-math/template:/app/template
+      - ./subnet-math/neurons:/app/neurons
+      - ./subnet-math/scripts:/app/scripts
+    environment:
+      NETUID: ${NETUID:-1}
+      WALLET_NAME: ${MINER_WALLET:-math-miner}
+    command:
+      - sh
+      - -c
+      - |
+        IP=$$(hostname -i | awk '{print $$1}')
+        exec python neurons/miner.py \
+          --netuid $${NETUID} \
+          --subtensor.chain_endpoint ws://subtensor-localnet:9944 \
+          --wallet.name $${WALLET_NAME} \
+          --wallet.hotkey default \
+          --axon.port 8901 \
+          --axon.external_ip "$$IP" \
+          --neuron.name miner \
+          --logging.info
+
+  math-validator:
+    build:
+      context: ./subnet-math
+      dockerfile: Dockerfile
+    container_name: subtensor-math-validator
+    restart: unless-stopped
+    networks: [chain]
+    volumes:
+      - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
+      - ./subnet-math/template:/app/template
+      - ./subnet-math/neurons:/app/neurons
+      - ./subnet-math/scripts:/app/scripts
+    environment:
+      NETUID: ${NETUID:-1}
+      WALLET_NAME: ${VALIDATOR_WALLET:-math-val}
+    command:
+      - sh
+      - -c
+      - |
+        IP=$$(hostname -i | awk '{print $$1}')
+        exec python neurons/validator.py \
+          --netuid $${NETUID} \
+          --subtensor.chain_endpoint ws://subtensor-localnet:9944 \
+          --wallet.name $${WALLET_NAME} \
+          --wallet.hotkey default \
+          --axon.port 9101 \
+          --axon.external_ip "$$IP" \
+          --neuron.name validator \
+          --neuron.sample_size 4 \
+          --logging.info
+
+  # HTTP: dendrite MathSynapse → майнеры, детальный JSON (тот же bittensor, что miner/validator).
+  # С хоста: http://127.0.0.1:8092 — см. REQUEST_TO_SUBNET.md
+  math-probe:
+    build:
+      context: ./subnet-math
+      dockerfile: Dockerfile
+    container_name: subtensor-math-probe
+    restart: unless-stopped
+    networks: [chain]
+    # 8091 на Windows часто занят — с хоста заходите на 8092 (внутри сети контейнеров по-прежнему :8091).
+    ports:
+      - "127.0.0.1:8092:8091"
+    volumes:
+      - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
+      - ./subnet-math/template:/app/template
+      - ./subnet-math/scripts:/app/scripts
+    environment:
+      NETUID: ${NETUID:-1}
+      WALLET_NAME: ${VALIDATOR_WALLET:-math-val}
+      HOTKEY: default
+      PROBE_PORT: "8091"
+      SUBTENSOR_CHAIN: ws://subtensor-localnet:9944
+    command: ["python", "scripts/subnet_probe_http.py"]
+
+  math-miner-b:
+    build:
+      context: ./subnet-math
+      dockerfile: Dockerfile
+    container_name: subtensor-math-miner-b
+    restart: unless-stopped
+    networks: [chain]
+    volumes:
+      - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
+      - ./subnet-math/template:/app/template
+      - ./subnet-math/neurons:/app/neurons
+      - ./subnet-math/scripts:/app/scripts
+    environment:
+      NETUID: ${NETUID:-1}
+      WALLET_NAME: ${MINER_WALLET_B:-math-miner-b}
+    command:
+      - sh
+      - -c
+      - |
+        IP=$$(hostname -i | awk '{print $$1}')
+        exec python neurons/miner.py \
+          --netuid $${NETUID} \
+          --subtensor.chain_endpoint ws://subtensor-localnet:9944 \
+          --wallet.name $${WALLET_NAME} \
+          --wallet.hotkey default \
+          --axon.port 8902 \
+          --axon.external_ip "$$IP" \
+          --neuron.name miner-b \
+          --logging.info
+
+  math-validator-b:
+    build:
+      context: ./subnet-math
+      dockerfile: Dockerfile
+    container_name: subtensor-math-validator-b
+    restart: unless-stopped
+    networks: [chain]
+    volumes:
+      - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
+      - ./subnet-math/template:/app/template
+      - ./subnet-math/neurons:/app/neurons
+      - ./subnet-math/scripts:/app/scripts
+    environment:
+      NETUID: ${NETUID:-1}
+      WALLET_NAME: ${VALIDATOR_WALLET_B:-math-val-b}
+    command:
+      - sh
+      - -c
+      - |
+        IP=$$(hostname -i | awk '{print $$1}')
+        exec python neurons/validator.py \
+          --netuid $${NETUID} \
+          --subtensor.chain_endpoint ws://subtensor-localnet:9944 \
+          --wallet.name $${WALLET_NAME} \
+          --wallet.hotkey default \
+          --axon.port 9102 \
+          --axon.external_ip "$$IP" \
+          --neuron.name validator-b \
+          --neuron.sample_size 4 \
+          --logging.info
+
+  math-miner-mock:
+    profiles: [mock]
+    build:
+      context: ./subnet-math
+      dockerfile: Dockerfile
+    container_name: subtensor-math-miner-mock
+    networks: [mock_isolated]
+    volumes:
+      - ./subnet-math/template:/app/template
+      - ./subnet-math/neurons:/app/neurons
+      - ./subnet-math/scripts:/app/scripts
+    command:
+      - sh
+      - -c
+      - |
+        exec python neurons/miner.py \
+          --mock \
+          --netuid 1 \
+          --axon.port 8901 \
+          --neuron.name miner-mock \
+          --logging.info
+
+  math-validator-mock:
+    profiles: [mock]
+    build:
+      context: ./subnet-math
+      dockerfile: Dockerfile
+    container_name: subtensor-math-validator-mock
+    networks: [mock_isolated]
+    volumes:
+      - ./subnet-math/template:/app/template
+      - ./subnet-math/neurons:/app/neurons
+      - ./subnet-math/scripts:/app/scripts
+    command:
+      - sh
+      - -c
+      - |
+        exec python neurons/validator.py \
+          --mock \
+          --netuid 1 \
+          --axon.port 9101 \
+          --neuron.name validator-mock \
+          --neuron.sample_size 4 \
+          --logging.info

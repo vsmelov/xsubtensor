@@ -1,0 +1,1023 @@
+{
+  "ok": true,
+  "generated_at_ms": 1775516156465,
+  "ws_url": "ws://localnet:9944",
+  "snapshot_query": {
+    "events_depth": 3,
+    "events_max": 500,
+    "events_filter": null,
+    "events_only_subtensor": false,
+    "blocks_extrinsics_depth": 3,
+    "extrinsics_max": 200,
+    "extrinsics_filter": null
+  },
+  "chain": {
+    "name": "Bittensor",
+    "node": "Subtensor Node 4.0.0-dev-18379a4cd99",
+    "properties": {
+      "isEthereum": false,
+      "ss58Format": 42,
+      "tokenDecimals": [
+        9
+      ],
+      "tokenSymbol": [
+        "TAO"
+      ]
+    }
+  },
+  "sync": {
+    "peers": 1,
+    "isSyncing": false,
+    "shouldHavePeers": false
+  },
+  "head": {
+    "number": 12129,
+    "hash": "0xee462f7a3f84fe451af017e1adfa64d30e715683eaca8e28e719dde1fc259e79"
+  },
+  "finalized": {
+    "number": 12124,
+    "hash": "0x09a552f31be330c4e3d08694a3c333fb269e98310ac5aeb0d03adb72b01af926"
+  },
+  "subtensor": {
+    "total_networks": 3,
+    "total_stake": "108306442042718",
+    "total_issuance_balances": "2908996557059430"
+  },
+  "network_graph": {
+    "subnets": [
+      {
+        "netuid": 0,
+        "nameUtf8": "root",
+        "symbolUtf8": "Τ",
+        "numUids": 0,
+        "tempo": 100,
+        "ownerColdkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"
+      },
+      {
+        "netuid": 1,
+        "nameUtf8": "apex",
+        "symbolUtf8": "α",
+        "numUids": 1,
+        "tempo": 100,
+        "ownerColdkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"
+      },
+      {
+        "netuid": 2,
+        "nameUtf8": "subnet-math",
+        "symbolUtf8": "β",
+        "numUids": 5,
+        "tempo": 10,
+        "ownerColdkey": "5G9D1taznHeRhmrWQZKAXgxgAkodKmP3jsFcm1LvYB7Z2Pc1"
+      }
+    ],
+    "neurons": [
+      {
+        "netuid": 1,
+        "uid": 0,
+        "hotkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+        "coldkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+        "active": false,
+        "validatorPermit": true,
+        "axonPort": 0,
+        "axonIpPacked": 0,
+        "incentives": 0,
+        "dividends": 0,
+        "emission": 0,
+        "totalStake": 1000000000
+      },
+      {
+        "netuid": 2,
+        "uid": 0,
+        "hotkey": "5ELEf1D9imZsx29TKnBBNu6UsHNzNZJL8UkHY67E5mJruaaC",
+        "coldkey": "5G9D1taznHeRhmrWQZKAXgxgAkodKmP3jsFcm1LvYB7Z2Pc1",
+        "active": false,
+        "validatorPermit": true,
+        "axonPort": 0,
+        "axonIpPacked": 0,
+        "incentives": 0,
+        "dividends": 0,
+        "emission": 0,
+        "totalStake": 1699900919269
+      },
+      {
+        "netuid": 2,
+        "uid": 1,
+        "hotkey": "5Cz4zaA2v2xACR4hFATYi5zPqoRxCVp2t57sir8Cq1bu9qnz",
+        "coldkey": "5H4KLzBBNbUwj5EJ1reZUiZmrs1YoaVhkSEAZFSJdN64zkp3",
+        "active": false,
+        "validatorPermit": true,
+        "axonPort": 8901,
+        "axonIpPacked": 2886860807,
+        "incentives": 32425,
+        "dividends": 0,
+        "emission": 2231454251,
+        "totalStake": 2103493188985
+      },
+      {
+        "netuid": 2,
+        "uid": 2,
+        "hotkey": "5GpidnbWDmak97q1PkBdbQ2gWm5ne6DKJJQK56mG8cLymnnb",
+        "coldkey": "5FRXRG1oqCxgLRRiw5GTzd9GpiWMgzzUnS1e8XoxutQhQyce",
+        "active": true,
+        "validatorPermit": true,
+        "axonPort": 9101,
+        "axonIpPacked": 2886860805,
+        "incentives": 0,
+        "dividends": 65155,
+        "emission": 4483893300,
+        "totalStake": 4223263229394
+      },
+      {
+        "netuid": 2,
+        "uid": 3,
+        "hotkey": "5HjdH1FcFy8e1TRRSHpFf3YdX5R4Zwqat3FMMg7tAXr6B2QR",
+        "coldkey": "5CSWfpaNDpSwyY8bX81dJzCz35pfYoBTAkjJDs2Wo3u1T96n",
+        "active": true,
+        "validatorPermit": true,
+        "axonPort": 8902,
+        "axonIpPacked": 2886860804,
+        "incentives": 33109,
+        "dividends": 0,
+        "emission": 2278570919,
+        "totalStake": 656642216129
+      },
+      {
+        "netuid": 2,
+        "uid": 4,
+        "hotkey": "5DFqBYHPoHpjfU6F9JbE2H9LTjgWreGxBG8rnnkfY3CWTQV6",
+        "coldkey": "5CJNnnHxN7revXzcv6y45d7G3u6iRdQLy1LRG6u5DSifaB67",
+        "active": true,
+        "validatorPermit": true,
+        "axonPort": 9102,
+        "axonIpPacked": 2886860806,
+        "incentives": 0,
+        "dividends": 379,
+        "emission": 26131870,
+        "totalStake": 27134860487
+      }
+    ],
+    "edges": [],
+    "note": "On-chain edges for miner axon traffic are not stored; reward flow is reflected in emission/incentives/dividends per uid. Commit-reveal weights are not expanded here."
+  },
+  "runtime_calls": {
+    "getAllMetagraphs": {
+      "ok": true,
+      "data": [
+        {
+          "netuid": 0,
+          "name": [
+            114,
+            111,
+            111,
+            116
+          ],
+          "symbol": [
+            206,
+            164
+          ],
+          "identity": null,
+          "networkRegisteredAt": 0,
+          "ownerHotkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "ownerColdkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "block": 12129,
+          "tempo": 100,
+          "lastStep": 0,
+          "blocksSinceLastStep": 12129,
+          "subnetEmission": 0,
+          "alphaIn": 0,
+          "alphaOut": 0,
+          "taoIn": 0,
+          "alphaOutEmission": 0,
+          "alphaInEmission": 0,
+          "taoInEmission": 0,
+          "pendingAlphaEmission": 0,
+          "pendingRootEmission": 0,
+          "subnetVolume": 0,
+          "movingPrice": {
+            "bits": 0
+          },
+          "rho": 10,
+          "kappa": 32767,
+          "minAllowedWeights": 0,
+          "maxWeightsLimit": 65535,
+          "weightsVersion": 0,
+          "weightsRateLimit": 100,
+          "activityCutoff": 5000,
+          "maxValidators": 64,
+          "numUids": 0,
+          "maxUids": 64,
+          "burn": 500000,
+          "difficulty": 10000000,
+          "registrationAllowed": true,
+          "powRegistrationAllowed": false,
+          "immunityPeriod": 4096,
+          "minDifficulty": 10000000,
+          "maxDifficulty": "0x3fffffffffffffff",
+          "minBurn": 500000,
+          "maxBurn": 100000000000,
+          "adjustmentAlpha": 0,
+          "adjustmentInterval": 100,
+          "targetRegsPerInterval": 1,
+          "maxRegsPerBlock": 1,
+          "servingRateLimit": 50,
+          "commitRevealWeightsEnabled": false,
+          "commitRevealPeriod": 1,
+          "liquidAlphaEnabled": false,
+          "alphaHigh": 58982,
+          "alphaLow": 45875,
+          "bondsMovingAvg": 900000,
+          "hotkeys": [],
+          "coldkeys": [],
+          "identities": [],
+          "axons": [],
+          "active": [],
+          "validatorPermit": [],
+          "pruningScore": [],
+          "lastUpdate": [],
+          "emission": [],
+          "dividends": [],
+          "incentives": [],
+          "consensus": [],
+          "trust": [],
+          "rank": [],
+          "blockAtRegistration": [],
+          "alphaStake": [],
+          "taoStake": [],
+          "totalStake": [],
+          "taoDividendsPerHotkey": [],
+          "alphaDividendsPerHotkey": [],
+          "nameUtf8": "root",
+          "symbolUtf8": "Τ"
+        },
+        {
+          "netuid": 1,
+          "name": [
+            97,
+            112,
+            101,
+            120
+          ],
+          "symbol": [
+            206,
+            177
+          ],
+          "identity": null,
+          "networkRegisteredAt": 0,
+          "ownerHotkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "ownerColdkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "block": 12129,
+          "tempo": 100,
+          "lastStep": 12117,
+          "blocksSinceLastStep": 12,
+          "subnetEmission": 0,
+          "alphaIn": 10000000000,
+          "alphaOut": 1000000000,
+          "taoIn": 10000000000,
+          "alphaOutEmission": 0,
+          "alphaInEmission": 0,
+          "taoInEmission": 0,
+          "pendingAlphaEmission": 0,
+          "pendingRootEmission": 0,
+          "subnetVolume": 0,
+          "movingPrice": {
+            "bits": 0
+          },
+          "rho": 10,
+          "kappa": 32767,
+          "minAllowedWeights": 0,
+          "maxWeightsLimit": 65535,
+          "weightsVersion": 0,
+          "weightsRateLimit": 100,
+          "activityCutoff": 5000,
+          "maxValidators": 64,
+          "numUids": 1,
+          "maxUids": 256,
+          "burn": 500000,
+          "difficulty": 10000000,
+          "registrationAllowed": true,
+          "powRegistrationAllowed": false,
+          "immunityPeriod": 4096,
+          "minDifficulty": 10000000,
+          "maxDifficulty": "0x3fffffffffffffff",
+          "minBurn": 500000,
+          "maxBurn": 100000000000,
+          "adjustmentAlpha": 0,
+          "adjustmentInterval": 100,
+          "targetRegsPerInterval": 2,
+          "maxRegsPerBlock": 1,
+          "servingRateLimit": 50,
+          "commitRevealWeightsEnabled": false,
+          "commitRevealPeriod": 1,
+          "liquidAlphaEnabled": false,
+          "alphaHigh": 58982,
+          "alphaLow": 45875,
+          "bondsMovingAvg": 900000,
+          "hotkeys": [
+            "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"
+          ],
+          "coldkeys": [
+            "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"
+          ],
+          "identities": [
+            null
+          ],
+          "axons": [
+            {
+              "block": 0,
+              "version": 0,
+              "ip": 0,
+              "port": 0,
+              "ipType": 0,
+              "protocol": 0,
+              "placeholder1": 0,
+              "placeholder2": 0
+            }
+          ],
+          "active": [
+            false
+          ],
+          "validatorPermit": [
+            true
+          ],
+          "pruningScore": [
+            65535
+          ],
+          "lastUpdate": [
+            0
+          ],
+          "emission": [
+            0
+          ],
+          "dividends": [
+            0
+          ],
+          "incentives": [
+            0
+          ],
+          "consensus": [
+            0
+          ],
+          "trust": [
+            0
+          ],
+          "rank": [
+            0
+          ],
+          "blockAtRegistration": [
+            0
+          ],
+          "alphaStake": [
+            1000000000
+          ],
+          "taoStake": [
+            0
+          ],
+          "totalStake": [
+            1000000000
+          ],
+          "taoDividendsPerHotkey": [
+            [
+              "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+              0
+            ]
+          ],
+          "alphaDividendsPerHotkey": [
+            [
+              "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+              0
+            ]
+          ],
+          "nameUtf8": "apex",
+          "symbolUtf8": "α"
+        },
+        {
+          "netuid": 2,
+          "name": [
+            115,
+            117,
+            98,
+            110,
+            101,
+            116,
+            45,
+            109,
+            97,
+            116,
+            104
+          ],
+          "symbol": [
+            206,
+            178
+          ],
+          "identity": {
+            "subnetName": "0x7375626e65742d6d617468",
+            "githubRepo": "0x68747470733a2f2f6769746875622e636f6d2f6f70656e74656e736f722f62697474656e736f72",
+            "subnetContact": "0x646576406c6f63616c2e74657374",
+            "subnetUrl": "0x68747470733a2f2f6578616d706c652e636f6d",
+            "discord": "0x6e6f6e65",
+            "description": "0x6c6f63616c6e65742d646576",
+            "additional": "0x6e6f6e65"
+          },
+          "networkRegisteredAt": 2859,
+          "ownerHotkey": "5ELEf1D9imZsx29TKnBBNu6UsHNzNZJL8UkHY67E5mJruaaC",
+          "ownerColdkey": "5G9D1taznHeRhmrWQZKAXgxgAkodKmP3jsFcm1LvYB7Z2Pc1",
+          "block": 12129,
+          "tempo": 10,
+          "lastStep": 12129,
+          "blocksSinceLastStep": 0,
+          "subnetEmission": 0,
+          "alphaIn": 22295594807,
+          "alphaOut": 8713714442616,
+          "taoIn": 108306442042718,
+          "alphaOutEmission": 1000000000,
+          "alphaInEmission": 205856,
+          "taoInEmission": 1000000000,
+          "pendingAlphaEmission": 0,
+          "pendingRootEmission": 0,
+          "subnetVolume": 100003441942718,
+          "movingPrice": {
+            "bits": 1660792
+          },
+          "rho": 10,
+          "kappa": 32767,
+          "minAllowedWeights": 1,
+          "maxWeightsLimit": 65535,
+          "weightsVersion": 0,
+          "weightsRateLimit": 100,
+          "activityCutoff": 5000,
+          "maxValidators": 64,
+          "numUids": 5,
+          "maxUids": 256,
+          "burn": 716785143,
+          "difficulty": "0xffffffffffffffff",
+          "registrationAllowed": true,
+          "powRegistrationAllowed": false,
+          "immunityPeriod": 5000,
+          "minDifficulty": "0xffffffffffffffff",
+          "maxDifficulty": "0xffffffffffffffff",
+          "minBurn": 500000,
+          "maxBurn": 100000000000,
+          "adjustmentAlpha": "0xf851eb851eb851ea",
+          "adjustmentInterval": 360,
+          "targetRegsPerInterval": 1,
+          "maxRegsPerBlock": 1,
+          "servingRateLimit": 50,
+          "commitRevealWeightsEnabled": false,
+          "commitRevealPeriod": 1,
+          "liquidAlphaEnabled": false,
+          "alphaHigh": 58982,
+          "alphaLow": 45875,
+          "bondsMovingAvg": 900000,
+          "hotkeys": [
+            "5ELEf1D9imZsx29TKnBBNu6UsHNzNZJL8UkHY67E5mJruaaC",
+            "5Cz4zaA2v2xACR4hFATYi5zPqoRxCVp2t57sir8Cq1bu9qnz",
+            "5GpidnbWDmak97q1PkBdbQ2gWm5ne6DKJJQK56mG8cLymnnb",
+            "5HjdH1FcFy8e1TRRSHpFf3YdX5R4Zwqat3FMMg7tAXr6B2QR",
+            "5DFqBYHPoHpjfU6F9JbE2H9LTjgWreGxBG8rnnkfY3CWTQV6"
+          ],
+          "coldkeys": [
+            "5G9D1taznHeRhmrWQZKAXgxgAkodKmP3jsFcm1LvYB7Z2Pc1",
+            "5H4KLzBBNbUwj5EJ1reZUiZmrs1YoaVhkSEAZFSJdN64zkp3",
+            "5FRXRG1oqCxgLRRiw5GTzd9GpiWMgzzUnS1e8XoxutQhQyce",
+            "5CSWfpaNDpSwyY8bX81dJzCz35pfYoBTAkjJDs2Wo3u1T96n",
+            "5CJNnnHxN7revXzcv6y45d7G3u6iRdQLy1LRG6u5DSifaB67"
+          ],
+          "identities": [
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "axons": [
+            {
+              "block": 0,
+              "version": 0,
+              "ip": 0,
+              "port": 0,
+              "ipType": 0,
+              "protocol": 0,
+              "placeholder1": 0,
+              "placeholder2": 0
+            },
+            {
+              "block": 8543,
+              "version": 9007000,
+              "ip": 2886860807,
+              "port": 8901,
+              "ipType": 4,
+              "protocol": 4,
+              "placeholder1": 0,
+              "placeholder2": 0
+            },
+            {
+              "block": 8544,
+              "version": 9007000,
+              "ip": 2886860805,
+              "port": 9101,
+              "ipType": 4,
+              "protocol": 4,
+              "placeholder1": 0,
+              "placeholder2": 0
+            },
+            {
+              "block": 8543,
+              "version": 9007000,
+              "ip": 2886860804,
+              "port": 8902,
+              "ipType": 4,
+              "protocol": 4,
+              "placeholder1": 0,
+              "placeholder2": 0
+            },
+            {
+              "block": 8544,
+              "version": 9007000,
+              "ip": 2886860806,
+              "port": 9102,
+              "ipType": 4,
+              "protocol": 4,
+              "placeholder1": 0,
+              "placeholder2": 0
+            }
+          ],
+          "active": [
+            false,
+            false,
+            true,
+            true,
+            true
+          ],
+          "validatorPermit": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "pruningScore": [
+            0,
+            32614,
+            65535,
+            33303,
+            382
+          ],
+          "lastUpdate": [
+            2859,
+            5121,
+            12031,
+            8142,
+            12101
+          ],
+          "emission": [
+            0,
+            2231454251,
+            4483893300,
+            2278570919,
+            26131870
+          ],
+          "dividends": [
+            0,
+            0,
+            65155,
+            0,
+            379
+          ],
+          "incentives": [
+            0,
+            32425,
+            0,
+            33109,
+            0
+          ],
+          "consensus": [
+            0,
+            32426,
+            0,
+            33108,
+            0
+          ],
+          "trust": [
+            0,
+            65535,
+            0,
+            65530,
+            0
+          ],
+          "rank": [
+            0,
+            32425,
+            0,
+            33109,
+            0
+          ],
+          "blockAtRegistration": [
+            2859,
+            5121,
+            5177,
+            8142,
+            8181
+          ],
+          "alphaStake": [
+            1699900919269,
+            2103493188985,
+            4223263229394,
+            656642216129,
+            27134860487
+          ],
+          "taoStake": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "totalStake": [
+            1699900919269,
+            2103493188985,
+            4223263229394,
+            656642216129,
+            27134860487
+          ],
+          "taoDividendsPerHotkey": [
+            [
+              "5ELEf1D9imZsx29TKnBBNu6UsHNzNZJL8UkHY67E5mJruaaC",
+              0
+            ],
+            [
+              "5Cz4zaA2v2xACR4hFATYi5zPqoRxCVp2t57sir8Cq1bu9qnz",
+              0
+            ],
+            [
+              "5GpidnbWDmak97q1PkBdbQ2gWm5ne6DKJJQK56mG8cLymnnb",
+              0
+            ],
+            [
+              "5HjdH1FcFy8e1TRRSHpFf3YdX5R4Zwqat3FMMg7tAXr6B2QR",
+              0
+            ],
+            [
+              "5DFqBYHPoHpjfU6F9JbE2H9LTjgWreGxBG8rnnkfY3CWTQV6",
+              0
+            ]
+          ],
+          "alphaDividendsPerHotkey": [
+            [
+              "5ELEf1D9imZsx29TKnBBNu6UsHNzNZJL8UkHY67E5mJruaaC",
+              0
+            ],
+            [
+              "5Cz4zaA2v2xACR4hFATYi5zPqoRxCVp2t57sir8Cq1bu9qnz",
+              0
+            ],
+            [
+              "5GpidnbWDmak97q1PkBdbQ2gWm5ne6DKJJQK56mG8cLymnnb",
+              3676813033
+            ],
+            [
+              "5HjdH1FcFy8e1TRRSHpFf3YdX5R4Zwqat3FMMg7tAXr6B2QR",
+              0
+            ],
+            [
+              "5DFqBYHPoHpjfU6F9JbE2H9LTjgWreGxBG8rnnkfY3CWTQV6",
+              21428252
+            ]
+          ],
+          "nameUtf8": "subnet-math",
+          "symbolUtf8": "β"
+        }
+      ]
+    },
+    "getAllDynamicInfo": {
+      "ok": true,
+      "data": [
+        {
+          "netuid": 0,
+          "ownerHotkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "ownerColdkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "subnetName": [
+            114,
+            111,
+            111,
+            116
+          ],
+          "tokenSymbol": [
+            206,
+            164
+          ],
+          "tempo": 100,
+          "lastStep": 0,
+          "blocksSinceLastStep": 12129,
+          "emission": 0,
+          "alphaIn": 0,
+          "alphaOut": 0,
+          "taoIn": 0,
+          "alphaOutEmission": 0,
+          "alphaInEmission": 0,
+          "taoInEmission": 0,
+          "pendingAlphaEmission": 0,
+          "pendingRootEmission": 0,
+          "subnetVolume": 0,
+          "networkRegisteredAt": 0,
+          "subnetIdentity": null,
+          "movingPrice": {
+            "bits": 0
+          }
+        },
+        {
+          "netuid": 1,
+          "ownerHotkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "ownerColdkey": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "subnetName": [
+            97,
+            112,
+            101,
+            120
+          ],
+          "tokenSymbol": [
+            206,
+            177
+          ],
+          "tempo": 100,
+          "lastStep": 12117,
+          "blocksSinceLastStep": 12,
+          "emission": 0,
+          "alphaIn": 10000000000,
+          "alphaOut": 1000000000,
+          "taoIn": 10000000000,
+          "alphaOutEmission": 0,
+          "alphaInEmission": 0,
+          "taoInEmission": 0,
+          "pendingAlphaEmission": 0,
+          "pendingRootEmission": 0,
+          "subnetVolume": 0,
+          "networkRegisteredAt": 0,
+          "subnetIdentity": null,
+          "movingPrice": {
+            "bits": 0
+          }
+        },
+        {
+          "netuid": 2,
+          "ownerHotkey": "5ELEf1D9imZsx29TKnBBNu6UsHNzNZJL8UkHY67E5mJruaaC",
+          "ownerColdkey": "5G9D1taznHeRhmrWQZKAXgxgAkodKmP3jsFcm1LvYB7Z2Pc1",
+          "subnetName": [
+            115,
+            117,
+            98,
+            110,
+            101,
+            116,
+            45,
+            109,
+            97,
+            116,
+            104
+          ],
+          "tokenSymbol": [
+            206,
+            178
+          ],
+          "tempo": 10,
+          "lastStep": 12129,
+          "blocksSinceLastStep": 0,
+          "emission": 0,
+          "alphaIn": 22295594807,
+          "alphaOut": 8713714442616,
+          "taoIn": 108306442042718,
+          "alphaOutEmission": 1000000000,
+          "alphaInEmission": 205856,
+          "taoInEmission": 1000000000,
+          "pendingAlphaEmission": 0,
+          "pendingRootEmission": 0,
+          "subnetVolume": 100003441942718,
+          "networkRegisteredAt": 2859,
+          "subnetIdentity": {
+            "subnetName": "0x7375626e65742d6d617468",
+            "githubRepo": "0x68747470733a2f2f6769746875622e636f6d2f6f70656e74656e736f722f62697474656e736f72",
+            "subnetContact": "0x646576406c6f63616c2e74657374",
+            "subnetUrl": "0x68747470733a2f2f6578616d706c652e636f6d",
+            "discord": "0x6e6f6e65",
+            "description": "0x6c6f63616c6e65742d646576",
+            "additional": "0x6e6f6e65"
+          },
+          "movingPrice": {
+            "bits": 1660792
+          }
+        }
+      ]
+    },
+    "getSubnetsInfoV2": {
+      "ok": true,
+      "data": [
+        {
+          "netuid": 0,
+          "rho": 10,
+          "kappa": 32767,
+          "difficulty": 10000000,
+          "immunityPeriod": 4096,
+          "maxAllowedValidators": 64,
+          "minAllowedWeights": 0,
+          "maxWeightsLimit": 65535,
+          "scalingLawPower": 50,
+          "subnetworkN": 0,
+          "maxAllowedUids": 64,
+          "blocksSinceLastStep": 0,
+          "tempo": 100,
+          "networkModality": 0,
+          "networkConnect": [],
+          "emissionValue": 0,
+          "burn": 500000,
+          "owner": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "identity": null
+        },
+        {
+          "netuid": 1,
+          "rho": 10,
+          "kappa": 32767,
+          "difficulty": 10000000,
+          "immunityPeriod": 4096,
+          "maxAllowedValidators": 64,
+          "minAllowedWeights": 0,
+          "maxWeightsLimit": 65535,
+          "scalingLawPower": 50,
+          "subnetworkN": 1,
+          "maxAllowedUids": 256,
+          "blocksSinceLastStep": 12,
+          "tempo": 100,
+          "networkModality": 0,
+          "networkConnect": [],
+          "emissionValue": 0,
+          "burn": 500000,
+          "owner": "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM",
+          "identity": null
+        },
+        {
+          "netuid": 2,
+          "rho": 10,
+          "kappa": 32767,
+          "difficulty": "0xffffffffffffffff",
+          "immunityPeriod": 5000,
+          "maxAllowedValidators": 64,
+          "minAllowedWeights": 1,
+          "maxWeightsLimit": 65535,
+          "scalingLawPower": 50,
+          "subnetworkN": 5,
+          "maxAllowedUids": 256,
+          "blocksSinceLastStep": 0,
+          "tempo": 10,
+          "networkModality": 0,
+          "networkConnect": [],
+          "emissionValue": 0,
+          "burn": 716785143,
+          "owner": "5G9D1taznHeRhmrWQZKAXgxgAkodKmP3jsFcm1LvYB7Z2Pc1",
+          "identity": {
+            "subnetName": "0x7375626e65742d6d617468",
+            "githubRepo": "0x68747470733a2f2f6769746875622e636f6d2f6f70656e74656e736f722f62697474656e736f72",
+            "subnetContact": "0x646576406c6f63616c2e74657374",
+            "subnetUrl": "0x68747470733a2f2f6578616d706c652e636f6d",
+            "discord": "0x6e6f6e65",
+            "description": "0x6c6f63616c6e65742d646576",
+            "additional": "0x6e6f6e65"
+          }
+        }
+      ]
+    },
+    "getDelegates": {
+      "ok": true,
+      "data": []
+    },
+    "getNetworkRegistrationCost": {
+      "ok": true,
+      "data": 1908035722820
+    }
+  },
+  "recent_events": {
+    "depth_blocks_requested": 3,
+    "max_events": 500,
+    "count": 3,
+    "events": [
+      {
+        "blockNumber": 12129,
+        "blockHash": "0xee462f7a3f84fe451af017e1adfa64d30e715683eaca8e28e719dde1fc259e79",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 12128,
+        "blockHash": "0x34cb8b6e612ba03b018aa503c205d8ce0a6552226d6207e291a742853fdcdef2",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      },
+      {
+        "blockNumber": 12127,
+        "blockHash": "0xf249151df77c6102e1eefde1bc5409ec63396e136a82f1823bdeb08781dbd2bb",
+        "section": "system",
+        "method": "ExtrinsicSuccess",
+        "phase": {
+          "ApplyExtrinsic": "0"
+        },
+        "data": {
+          "dispatchInfo": {
+            "weight": {
+              "refTime": "265,758,000",
+              "proofSize": "1,493"
+            },
+            "class": "Mandatory",
+            "paysFee": "Yes"
+          }
+        }
+      }
+    ]
+  },
+  "recent_extrinsics": {
+    "blocks_scanned_requested": 3,
+    "max_rows": 200,
+    "count": 3,
+    "extrinsics": [
+      {
+        "blockNumber": 12129,
+        "blockHash": "0xee462f7a3f84fe451af017e1adfa64d30e715683eaca8e28e719dde1fc259e79",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0x2b70ca62d1f4b8c59ccd27f64c3efb1d3158dd6ab5da86971e45141011e22c3b",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,516,156,250"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 12128,
+        "blockHash": "0x34cb8b6e612ba03b018aa503c205d8ce0a6552226d6207e291a742853fdcdef2",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0xd6379eb964a98043d63ea258cc574329276bb6f803539c4efe9c0a6a4b23672f",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,516,155,751"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      },
+      {
+        "blockNumber": 12127,
+        "blockHash": "0xf249151df77c6102e1eefde1bc5409ec63396e136a82f1823bdeb08781dbd2bb",
+        "extrinsicIndex": 0,
+        "extrinsicHash": "0x57a1a5caa03361c13fc1e813c718ea2c81e9854b003831c882f0ebdd7dc0c26d",
+        "isSigned": false,
+        "signer": null,
+        "section": "timestamp",
+        "method": "set",
+        "args": {
+          "args": {
+            "now": "1,775,516,155,500"
+          },
+          "method": "set",
+          "section": "timestamp"
+        }
+      }
+    ]
+  },
+  "limits": {
+    "SNAPSHOT_MAX_EVENTS_DEPTH": 50,
+    "SNAPSHOT_MAX_EVENTS": 500,
+    "SNAPSHOT_MAX_BLOCKS_EXTRINSICS_DEPTH": 30,
+    "SNAPSHOT_MAX_EXTRINSICS": 800
+  }
+}

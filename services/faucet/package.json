@@ -6,6 +6,7 @@
     "node": ">=20"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "@polkadot/api": "^15.0.1",
     "@polkadot/keyring": "^13.0.1",
     "@polkadot/util": "^13.0.1",
