@@ -1,0 +1,16 @@
+# TLS terminator for Substrate JSON-RPC WebSocket.
+# Clients use wss://127.0.0.1:3443 (or wss://localhost:3443) on the host.
+# default_sni helps TLS when clients send no/odd SNI (Node ws, some browsers).
+
+{
+	default_sni localhost
+}
+
+:3443 {
+	tls internal
+	reverse_proxy localnet:9944 {
+		transport http {
+			versions 1.1
+		}
+	}
+}
