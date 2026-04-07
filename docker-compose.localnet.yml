@@ -83,6 +83,7 @@ services:
       WS_URL: ws://localnet:9944
       FAUCET_SEED: //Alice
       FAUCET_MAX_TAO_PER_TRANSFER: "1000000"
-      # Прокси POST /v1/subnet-math-probe → контейнер subnet-math (тот же Docker-сеть xsubtensor_default).
-      # Пустая строка — отключить маршрут. См. REQUEST_TO_SUBNET.md
+      # Прокси POST /v1/subnet-math-probe → subnet-math; POST /v1/subnet-vla-probe → subnet-vla.
+      # Сеть xsubtensor_default. Пустая строка — отключить маршрут. См. REQUEST_TO_SUBNET.md, REQUEST_TO_SUBNET_VLA.md
       SUBNET_MATH_PROBE_URL: ${SUBNET_MATH_PROBE_URL:-http://subtensor-math-probe:8091}
+      SUBNET_VLA_PROBE_URL: ${SUBNET_VLA_PROBE_URL:-http://subtensor-vla-probe:8091}

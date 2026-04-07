@@ -1,0 +1,156 @@
+# Проектное имя отличается от xsubtensor / subnet-math.
+name: subnet-vla
+
+# Localnet + кошельки: см. SUBNET_MATH_LOCALNET.md (аналогично, vla-miner / subnet-vla), REQUEST_TO_SUBNET.md (VLA)
+#   docker compose -f docker-compose.subnet-vla.yml --env-file .env.subnet-vla up -d --build
+#
+# С хоста probe: http://127.0.0.1:8094 (внутри сети контейнер :8091)
+
+networks:
+  chain:
+    name: ${SUBTENSOR_DOCKER_NETWORK:-xsubtensor_default}
+    external: true
+
+services:
+  vla-miner:
+    build:
+      context: ./subnet-vla
+      dockerfile: Dockerfile
+    container_name: subtensor-vla-miner
+    restart: unless-stopped
+    networks: [chain]
+    volumes:
+      - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
+      - ./subnet-vla/template:/app/template
+      - ./subnet-vla/neurons:/app/neurons
+      - ./subnet-vla/scripts:/app/scripts
+    environment:
+      NETUID: ${NETUID:-1}
+      WALLET_NAME: ${MINER_WALLET:-vla-miner}
+    command:
+      - sh
+      - -c
+      - |
+        IP=$$(hostname -i | awk '{print $$1}')
+        exec python neurons/miner.py \
+          --netuid $${NETUID} \
+          --subtensor.chain_endpoint ws://subtensor-localnet:9944 \
+          --wallet.name $${WALLET_NAME} \
+          --wallet.hotkey default \
+          --axon.port 8921 \
+          --axon.external_ip "$$IP" \
+          --neuron.name vla-miner \
+          --logging.info
+
+  vla-validator:
+    build:
+      context: ./subnet-vla
+      dockerfile: Dockerfile
+    container_name: subtensor-vla-validator
+    restart: unless-stopped
+    networks: [chain]
+    volumes:
+      - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
+      - ./subnet-vla/template:/app/template
+      - ./subnet-vla/neurons:/app/neurons
+      - ./subnet-vla/scripts:/app/scripts
+    environment:
+      NETUID: ${NETUID:-1}
+      WALLET_NAME: ${VALIDATOR_WALLET:-vla-val}
+    command:
+      - sh
+      - -c
+      - |
+        IP=$$(hostname -i | awk '{print $$1}')
+        exec python neurons/validator.py \
+          --netuid $${NETUID} \
+          --subtensor.chain_endpoint ws://subtensor-localnet:9944 \
+          --wallet.name $${WALLET_NAME} \
+          --wallet.hotkey default \
+          --axon.port 9121 \
+          --axon.external_ip "$$IP" \
+          --neuron.name vla-validator \
+          --neuron.sample_size 4 \
+          --logging.info
+
+  vla-probe:
+    build:
+      context: ./subnet-vla
+      dockerfile: Dockerfile
+    container_name: subtensor-vla-probe
+    restart: unless-stopped
+    networks: [chain]
+    ports:
+      - "127.0.0.1:8094:8091"
+    volumes:
+      - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
+      - ./subnet-vla/template:/app/template
+      - ./subnet-vla/scripts:/app/scripts
+    environment:
+      NETUID: ${NETUID:-1}
+      WALLET_NAME: ${VALIDATOR_WALLET:-vla-val}
+      HOTKEY: default
+      PROBE_PORT: "8091"
+      SUBTENSOR_CHAIN: ws://subtensor-localnet:9944
+    command: ["python", "scripts/vla_probe_http.py"]
+
+  vla-miner-b:
+    build:
+      context: ./subnet-vla
+      dockerfile: Dockerfile
+    container_name: subtensor-vla-miner-b
+    restart: unless-stopped
+    networks: [chain]
+    volumes:
+      - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
+      - ./subnet-vla/template:/app/template
+      - ./subnet-vla/neurons:/app/neurons
+      - ./subnet-vla/scripts:/app/scripts
+    environment:
+      NETUID: ${NETUID:-1}
+      WALLET_NAME: ${MINER_WALLET_B:-vla-miner-b}
+    command:
+      - sh
+      - -c
+      - |
+        IP=$$(hostname -i | awk '{print $$1}')
+        exec python neurons/miner.py \
+          --netuid $${NETUID} \
+          --subtensor.chain_endpoint ws://subtensor-localnet:9944 \
+          --wallet.name $${WALLET_NAME} \
+          --wallet.hotkey default \
+          --axon.port 8922 \
+          --axon.external_ip "$$IP" \
+          --neuron.name vla-miner-b \
+          --logging.info
+
+  vla-validator-b:
+    build:
+      context: ./subnet-vla
+      dockerfile: Dockerfile
+    container_name: subtensor-vla-validator-b
+    restart: unless-stopped
+    networks: [chain]
+    volumes:
+      - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
+      - ./subnet-vla/template:/app/template
+      - ./subnet-vla/neurons:/app/neurons
+      - ./subnet-vla/scripts:/app/scripts
+    environment:
+      NETUID: ${NETUID:-1}
+      WALLET_NAME: ${VALIDATOR_WALLET_B:-vla-val-b}
+    command:
+      - sh
+      - -c
+      - |
+        IP=$$(hostname -i | awk '{print $$1}')
+        exec python neurons/validator.py \
+          --netuid $${NETUID} \
+          --subtensor.chain_endpoint ws://subtensor-localnet:9944 \
+          --wallet.name $${WALLET_NAME} \
+          --wallet.hotkey default \
+          --axon.port 9122 \
+          --axon.external_ip "$$IP" \
+          --neuron.name vla-validator-b \
+          --neuron.sample_size 4 \
+          --logging.info

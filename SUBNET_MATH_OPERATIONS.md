@@ -91,13 +91,6 @@ docker compose -f docker-compose.subnet-math.yml run --rm -T -e HOME=/root --ent
 - **Строки `MATH_SCOREBOARD`** — мгновенные доли раунда (кто ближе к правильному ответу).
 - **Поля в метаграфе / `subnet show`** — уже агрегированные incentive/стейк в сети после того, как валидатор выставляет веса (не путать с одним раундом квиза).
 
-## 5. Mock без цепи (только проверка кода)
-
-```powershell
-docker compose -f docker-compose.subnet-math.yml --profile mock up -d --build
-docker logs -f subtensor-math-validator-mock
-```
-
 ---
 
 Файл **`.env.subnet-math`** создаёшь **локально** (`copy .env.subnet-math.example .env.subnet-math`), в git он не коммитится (см. `.gitignore`).

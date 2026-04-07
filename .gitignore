@@ -26,8 +26,10 @@
 .envrc
 .direnv
 
-# subnet-math compose (локальный NETUID / пути)
+# subnet-math / subnet-vla compose (локальный NETUID / пути)
 .env.subnet-math
+.env.subnet-vla
+.env.vla
 
 # Локальные черновики снимка сети (канонический пример: docs/network-snapshot.example.json)
 .network-snapshot*.json

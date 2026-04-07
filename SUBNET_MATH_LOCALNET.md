@@ -222,7 +222,3 @@ docker logs -f subtensor-math-miner-b
 ```
 
 Ожидаемые строки со скорингом: см. [`scripts/subnet-math-status/README.md`](scripts/subnet-math-status/README.md) (`MATH_SCOREBOARD`).
-
-## Офлайн-smoke без цепи
-
-Только проверка кода/образа: `docker compose -f docker-compose.subnet-math.yml --profile mock up -d --build` (см. комментарии в [`docker-compose.subnet-math.yml`](docker-compose.subnet-math.yml)).

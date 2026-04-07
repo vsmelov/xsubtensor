@@ -1,107 +1,150 @@
-# Запрос в сабнет (subnet-math): детальный ответ майнеров и скоры
+# Запросы в подсети по HTTP
 
-Здесь описан **off-chain** путь: тот же механизм, что у валидатора (`dendrite` → axon майнера), но один вызов по HTTP с JSON-отчётом. **On-chain** снимок по-прежнему через [`GET /v1/network-snapshot`](REQUEST_NET_GRAPH.md) (faucet + Polkadot API).
+Один **POST** с JSON: валидаторский кошёлёк (внутри probe) делает **dendrite → axon** майнеров и возвращает сводку. Снимок цепи отдельно: [`GET /v1/network-snapshot`](REQUEST_NET_GRAPH.md).
 
-## Почему не «всё внутри faucet»
+## Куда слать
 
-Образ **faucet** — Node.js + `@polkadot/api`. **Bittensor SDK / dendrite / подпись запросов к axon** живут в **Python** и зафиксированы в образе subnet-math. Дублировать протокол в Node нереалистично, поэтому:
+| Подсеть | Прямой URL (хост) | Через faucet `8090` |
+|---------|-------------------|---------------------|
+| **subnet-math** | `http://127.0.0.1:8092/v1/math-probe` | `http://127.0.0.1:8090/v1/subnet-math-probe` |
+| **subnet-vla** | `http://127.0.0.1:8094/v1/vla-probe` | `http://127.0.0.1:8090/v1/subnet-vla-probe` |
 
-1. Контейнер **`math-probe`** слушает **8091 внутри** контейнера; на **хост** проброшен **8092** (8091 на Windows часто уже занят).
-2. **Faucet** проксирует на **`http://subtensor-math-probe:8091`** (имя контейнера, внутренняя сеть) — см. [`docker-compose.localnet.yml`](docker-compose.localnet.yml).
+Заголовок: `Content-Type: application/json`. Тело — UTF-8 **без BOM** (иначе probe может не разобрать JSON).
 
-Версии в образе subnet-math (см. [`subnet-math/requirements.txt`](subnet-math/requirements.txt)):
+Общие поля тела (все опциональны, часть берётся из env контейнера probe): `netuid`, `wallet_name`, `hotkey`, `chain_endpoint`, `miner_uids`, `sample_size`, `timeout`.
 
-- **bittensor[cli]==9.7.0**
-- **bittensor-cli==9.7.0**
-- **bittensor-drand==0.5.0**
+Поднять ноды и probe: [**SUBNET_MATH_LOCALNET.md**](SUBNET_MATH_LOCALNET.md) (math), шаблон VLA — [`.env.subnet-vla.example`](.env.subnet-vla.example) + [`docker-compose.subnet-vla.yml`](docker-compose.subnet-vla.yml).
 
-Probe использует **тот же** стек, что `math-miner` / `math-validator`.
+---
 
-## Имена Docker-образов: это не баг
+## subnet-math — `MathSynapse`
 
-Compose задаёт **разные имена проектов** и **разные сервисы**:
+**Свои поля:** `operand_a`, `operand_b`, `op` (`+`, `-`, `*`).
 
-| Префикс образа | Откуда |
-|------------------|--------|
-| `xsubtensor-faucet` | [`docker-compose.localnet.yml`](docker-compose.localnet.yml), `name: xsubtensor`, сервис `faucet` |
-| `subnet-math-math-miner` и т.д. | [`docker-compose.subnet-math.yml`](docker-compose.subnet-math.yml), `name: subnet-math` — шаблон имени `<project>-<service>` |
+**Пример тела:** [`scripts/math-probe-body.example.json`](scripts/math-probe-body.example.json)
 
-Суффиксы **`math-miner-b` / `math-validator-b`** — **вторая пара** нод (другие кошельки и порты axon). Так делать нормально; при желании можно явно задать `image: myregistry/subnet-math-miner:dev` у каждого сервиса для коротких тегов.
-
-## Поднять probe
-
-Нужны **localnet** и сеть **`xsubtensor_default`**, зарегистрированный кошелёк валидатора (как у `math-validator`), корректный **`NETUID`** в `.env.subnet-math`.
-
-```powershell
-docker compose -f docker-compose.localnet.yml up -d
-docker compose -f docker-compose.subnet-math.yml --env-file .env.subnet-math up -d --build
+```json
+{"netuid":2,"sample_size":2,"operand_a":10,"operand_b":2,"op":"*"}
 ```
 
-Если **`math-probe` не поднимали** после добавления сервиса:
+Если не задать `miner_uids`, в выборку могут попасть **валидаторы** — у них другой axon, для `MathSynapse` часто будет `503`. Чтобы опросить только майнеров, добавьте, например: `"miner_uids": [1]`.
 
-```powershell
-docker compose -f docker-compose.subnet-math.yml --env-file .env.subnet-math up -d math-probe
-```
+**Что в ответе при `ok: true`:** `protocol`, `netuid`, `chain_endpoint`, `wallet_coldkey`, `request` (включая эталон **`expected`**), массив **`miners`** (у каждого: `uid`, `response_float`, `abs_error`, `reward_share`, `synapse` с `dendrite.status_code` / `status_message`), массив **`rewards`**, **`timing_ms`**.
 
-Проверка (**с хоста — порт 8092**):
-
-```powershell
-curl.exe -sS http://127.0.0.1:8092/health
-```
-
-## API probe (с хоста: порт **8092**)
-
-### `POST /v1/math-probe`
-
-Тело JSON (все поля опциональны, дефолты из env контейнера или указанные ниже):
-
-| Поле | Смысл |
-|------|--------|
-| `netuid` | Сабнет (env `NETUID`) |
-| `wallet_name` | Имя coldkey, **зарегистрированного** в сабсете (env `WALLET_NAME`, обычно как у валидатора) |
-| `hotkey` | Имя hotkey (по умолчанию `default`) |
-| `chain_endpoint` | WS RPC (в Docker: `ws://subtensor-localnet:9944`) |
-| `miner_uids` | Явный список UID; если не задан — случайная выборка |
-| `sample_size` | Сколько UID опросить, если `miner_uids` нет (по умолчанию 4) |
-| `operand_a`, `operand_b`, `op` | Задача `MathSynapse` (`op` ∈ `+`, `-`, `*`) |
-| `timeout` | Секунды на dendrite |
-
-Ответ (успех): `ok`, `request` (в т.ч. эталон `expected`), по каждому майнеру `uid`, `hotkey_ss58`, `axon`, `response_float`, `synapse` (поля ответа + метаданные dendrite, если SDK отдал synapse), `abs_error`, `reward_share`; массив `rewards` — те же веса, что считает [`template/validator/reward.py`](subnet-math/template/validator/reward.py) (winner-take-all по близости к `expected`).
-
-**Проверенные команды** (из корня репо; тело — [`scripts/math-probe-body.example.json`](scripts/math-probe-body.example.json), UTF-8 **без BOM**):
+**Проверенный `curl`** (из корня репо, PowerShell):
 
 ```powershell
 curl.exe -sS --max-time 90 -H "Content-Type: application/json" --data-binary "@scripts\math-probe-body.example.json" http://127.0.0.1:8092/v1/math-probe
 ```
 
-Через **faucet** (тот же JSON):
+Тот же запрос через faucet:
 
 ```powershell
 curl.exe -sS --max-time 90 -H "Content-Type: application/json" --data-binary "@scripts\math-probe-body.example.json" http://127.0.0.1:8090/v1/subnet-math-probe
 ```
 
-Если `Cannot POST /v1/subnet-math-probe` — пересоздайте faucet с compose (нужен bind-mount `server.mjs`):  
-`docker compose -f docker-compose.localnet.yml --profile faucet up -d faucet --force-recreate`.
+**Фрагмент реального ответа** (netuid 2, опрошены uid 1 и 2: майнер дал число, валидатор — `503`):
 
-Если `curl: (52)` на 8092 — смотрите `docker logs subtensor-math-probe`; убедитесь, что контейнер **`subtensor-math-probe`** в `docker ps`. Порт **8091 на хосте** часто занят — с хоста используйте **8092**.
+```json
+{
+  "ok": true,
+  "protocol": "subnet-math MathSynapse",
+  "netuid": 2,
+  "request": { "operand_a": 10, "operand_b": 2, "op": "*", "expected": 20.0 },
+  "miner_uids_queried": [1, 2],
+  "miners": [
+    {
+      "uid": 1,
+      "response_float": 19.994417293825975,
+      "abs_error": 0.005582706174024565,
+      "reward_share": 1.0,
+      "synapse": {
+        "result": 19.994417293825975,
+        "dendrite": { "status_code": 200, "status_message": "Success" }
+      }
+    },
+    {
+      "uid": 2,
+      "response_float": null,
+      "abs_error": null,
+      "reward_share": 0.0,
+      "synapse": {
+        "result": null,
+        "dendrite": {
+          "status_code": 503,
+          "status_message": "Service unavailable at …:9101/MathSynapse"
+        }
+      }
+    }
+  ],
+  "rewards": [1.0, 0.0]
+}
+```
 
-## Через faucet (8090)
+---
 
-Внутри Docker faucet ходит на `http://subtensor-math-probe:8091` (см. [`docker-compose.localnet.yml`](docker-compose.localnet.yml)).
+## subnet-vla — `VLASynapse`
 
-Отключить прокси: в override задайте `SUBNET_MATH_PROBE_URL=` (пусто).
+**Своё поле:** **`task`** — текст задачи робота. Допустимые значения: `Clean-up the guestroom`, `Clean-up the kitchen`, `Prepare groceries`, `Setup the table` (см. [`subnet-vla/template/protocol.py`](subnet-vla/template/protocol.py)).
 
-## Ограничения
+**Пример тела:** [`scripts/vla-probe-body.example.json`](scripts/vla-probe-body.example.json)
 
-- Только протокол **subnet-math / `MathSynapse`**; другие сабсеты — другой synapse и другой сервис.
-- Это **не** замена полного лога валидатора (`MATH_SCOREBOARD` в логах); здесь **один** синтетический запрос и расчёт reward по шаблону.
-- Несколько валидаторов на сети — у каждого свои веса; отчёт отражает **ваш** dendrite-запрос от выбранного кошелька.
+```json
+{"netuid": 3, "sample_size": 1, "miner_uids": [1], "task": "Clean-up the guestroom"}
+```
 
-## Файлы
+**Что в ответе при `ok: true`:** как у math, но в `request` — `task` и `allowed_tasks`; у майнера вместо `response_float` — **`video_url`** (в заглушке один и тот же URL).
 
-| Путь | Назначение |
-|------|------------|
-| [`subnet-math/scripts/subnet_probe_lib.py`](subnet-math/scripts/subnet_probe_lib.py) | Логика dendrite + `get_rewards` |
-| [`subnet-math/scripts/subnet_probe_http.py`](subnet-math/scripts/subnet_probe_http.py) | HTTP-сервер |
-| [`scripts/math-probe-body.example.json`](scripts/math-probe-body.example.json) | Пример тела POST для `curl --data-binary` |
-| [`docker-compose.subnet-math.yml`](docker-compose.subnet-math.yml) | Сервис `math-probe` |
+**Проверенный `curl`:**
+
+```powershell
+curl.exe -sS --max-time 90 -H "Content-Type: application/json" --data-binary "@scripts\vla-probe-body.example.json" http://127.0.0.1:8094/v1/vla-probe
+```
+
+Через faucet:
+
+```powershell
+curl.exe -sS --max-time 90 -H "Content-Type: application/json" --data-binary "@scripts\vla-probe-body.example.json" http://127.0.0.1:8090/v1/subnet-vla-probe
+```
+
+**Фрагмент реального ответа** (netuid 3, один майнер uid 1):
+
+```json
+{
+  "ok": true,
+  "protocol": "subnet-vla VLASynapse",
+  "netuid": 3,
+  "request": {
+    "task": "Clean-up the guestroom",
+    "allowed_tasks": [
+      "Clean-up the guestroom",
+      "Clean-up the kitchen",
+      "Prepare groceries",
+      "Setup the table"
+    ]
+  },
+  "miner_uids_queried": [1],
+  "miners": [
+    {
+      "uid": 1,
+      "video_url": "https://konnex-ai.xyz/videos/results_tidy/40.mp4",
+      "reward_share": 1.0,
+      "synapse": {
+        "video_url": "https://konnex-ai.xyz/videos/results_tidy/40.mp4",
+        "task": "Clean-up the guestroom",
+        "dendrite": { "status_code": 200, "status_message": "Success" }
+      }
+    }
+  ],
+  "rewards": [1.0]
+}
+```
+
+---
+
+## Заметки
+
+- У каждой подсети свой путь и свой synapse; тела взаимно не подменяются.
+- Это один синтетический опрос, а не полный лог валидатора в реальном времени.
+
+Код: math — [`subnet-math/scripts/subnet_probe_http.py`](subnet-math/scripts/subnet_probe_http.py); vla — [`subnet-vla/scripts/vla_probe_http.py`](subnet-vla/scripts/vla_probe_http.py).

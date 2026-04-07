@@ -2,7 +2,7 @@
  * Local dev faucet: //Alice balance + signed transfers over Substrate RPC.
  *
  * Env: WS_URL, FAUCET_SEED, PORT, FAUCET_MAX_TAO_PER_TRANSFER, CORS_ORIGIN,
- *      SUBNET_MATH_PROBE_URL (optional proxy to subnet-math HTTP probe)
+ *      SUBNET_MATH_PROBE_URL, SUBNET_VLA_PROBE_URL (optional subnet HTTP probes)
  */
 
 import cors from 'cors';
@@ -36,6 +36,7 @@ const DEFAULT_SNAPSHOT_EVENTS_DEPTH = 3;
 const DEFAULT_SNAPSHOT_BLOCKS_EXTRINSICS_DEPTH = 3;
 /** Optional: Python math-probe on same Docker network (subnet-math compose). Empty = proxy disabled. */
 const SUBNET_MATH_PROBE_URL = (process.env.SUBNET_MATH_PROBE_URL ?? '').trim();
+const SUBNET_VLA_PROBE_URL = (process.env.SUBNET_VLA_PROBE_URL ?? '').trim();
 
 let apiPromise;
 let faucetPair;
@@ -565,6 +566,50 @@ async function start() {
     }
   });
 
+  /**
+   * Прокси к subnet-vla probe. Тело — JSON как у POST /v1/vla-probe (поле task).
+   * Док: REQUEST_TO_SUBNET_VLA.md
+   */
+  app.post('/v1/subnet-vla-probe', async (req, res) => {
+    if (!SUBNET_VLA_PROBE_URL) {
+      res.status(503).json({
+        ok: false,
+        error:
+          'SUBNET_VLA_PROBE_URL is not set; start vla-probe (subnet-vla compose) or set the env',
+      });
+      return;
+    }
+    const base = SUBNET_VLA_PROBE_URL.replace(/\/$/, '');
+    const target = `${base}/v1/vla-probe`;
+    try {
+      const r = await fetch(target, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(req.body && typeof req.body === 'object' ? req.body : {}),
+      });
+      const text = await r.text();
+      const ct = r.headers.get('content-type') ?? '';
+      if (ct.includes('application/json')) {
+        try {
+          res.status(r.status).json(JSON.parse(text));
+        } catch {
+          res.status(r.status).type('text').send(text);
+        }
+      } else {
+        res.status(r.status).type('text').send(text);
+      }
+    } catch (e) {
+      res.status(502).json({
+        ok: false,
+        error: e?.message ?? String(e),
+        hint: `could not reach ${target}`,
+      });
+    }
+  });
+
   app.get('/health', async (_req, res) => {
     try {
       const api = await getApi();
@@ -785,11 +830,13 @@ async function start() {
           'GET /health',
           'GET /v1/network-snapshot',
           'POST /v1/subnet-math-probe',
+          'POST /v1/subnet-vla-probe',
           'GET /v1/balance',
           'GET /v1/tx-status',
           'POST /v1/transfer',
         ],
         subnet_math_probe_url: SUBNET_MATH_PROBE_URL || null,
+        subnet_vla_probe_url: SUBNET_VLA_PROBE_URL || null,
       }),
     );
   });

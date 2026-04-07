@@ -2,19 +2,12 @@
 # для subnet-math удалит контейнеры localnet (один и тот же default project name из каталога).
 name: subnet-math
 
-# subnet-math: один compose-файл, два режима.
-#
-# 1) Реальная цепь (localnet + кошельки на хосте) — по умолчанию:
+# subnet-math: localnet + кошельки на хосте.
 #    docker compose -f docker-compose.localnet.yml up -d
 #    copy .env.subnet-math.example .env.subnet-math   # заполнить NETUID после btcli
 #    см. пошагово: SUBNET_MATH_LOCALNET.md
 #    docker compose -f docker-compose.subnet-math.yml --env-file .env.subnet-math up -d --build
-#    Второй майнер/валидатор (порты 8902/9102): сервисы math-miner-b, math-validator-b — см. .env.subnet-math.example
-#
-# 2) Офлайн-smoke (--mock, без localnet и без кошельков):
-#    docker compose -f docker-compose.subnet-math.yml --profile mock up -d --build
-#
-# Сеть `chain` нужна только режиму (1); mock использует изолированную сеть.
+#    Второй майнер/валидатор (порты 8902/9102): math-miner-b, math-validator-b — см. .env.subnet-math.example
 #
 # Разработка: каталоги template / neurons / scripts смонтированы в /app — правки на хосте
 # видны в контейнере без `docker compose build`. После смены кода перезапустите сервис
@@ -25,8 +18,6 @@ networks:
   chain:
     name: ${SUBTENSOR_DOCKER_NETWORK:-xsubtensor_default}
     external: true
-  mock_isolated:
-    driver: bridge
 
 services:
   math-miner:
@@ -172,50 +163,5 @@ services:
           --axon.port 9102 \
           --axon.external_ip "$$IP" \
           --neuron.name validator-b \
-          --neuron.sample_size 4 \
-          --logging.info
-
-  math-miner-mock:
-    profiles: [mock]
-    build:
-      context: ./subnet-math
-      dockerfile: Dockerfile
-    container_name: subtensor-math-miner-mock
-    networks: [mock_isolated]
-    volumes:
-      - ./subnet-math/template:/app/template
-      - ./subnet-math/neurons:/app/neurons
-      - ./subnet-math/scripts:/app/scripts
-    command:
-      - sh
-      - -c
-      - |
-        exec python neurons/miner.py \
-          --mock \
-          --netuid 1 \
-          --axon.port 8901 \
-          --neuron.name miner-mock \
-          --logging.info
-
-  math-validator-mock:
-    profiles: [mock]
-    build:
-      context: ./subnet-math
-      dockerfile: Dockerfile
-    container_name: subtensor-math-validator-mock
-    networks: [mock_isolated]
-    volumes:
-      - ./subnet-math/template:/app/template
-      - ./subnet-math/neurons:/app/neurons
-      - ./subnet-math/scripts:/app/scripts
-    command:
-      - sh
-      - -c
-      - |
-        exec python neurons/validator.py \
-          --mock \
-          --netuid 1 \
-          --axon.port 9101 \
-          --neuron.name validator-mock \
           --neuron.sample_size 4 \
           --logging.info
