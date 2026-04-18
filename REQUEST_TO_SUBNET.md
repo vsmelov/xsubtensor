@@ -8,6 +8,7 @@
 |---------|-------------------|---------------------|
 | **subnet-math** | `http://127.0.0.1:8092/v1/math-probe` | `http://127.0.0.1:8090/v1/subnet-math-probe` |
 | **subnet-vla** | `http://127.0.0.1:8094/v1/vla-probe` | `http://127.0.0.1:8090/v1/subnet-vla-probe` |
+| **vla-video-analyzer** (OpenAI vision, для `using_ai_verification`) | `http://127.0.0.1:8095` (`GET /health`, `POST /v1/analyze`) | — |
 
 Заголовок: `Content-Type: application/json`. Тело — UTF-8 **без BOM** (иначе probe может не разобрать JSON).
 
@@ -95,6 +96,15 @@ curl.exe -sS --max-time 90 -H "Content-Type: application/json" --data-binary "@s
 
 **Что в ответе при `ok: true`:** как у math, но в `request` — `task` и `allowed_tasks`; у майнера вместо `response_float` — **`video_url`** (в заглушке один и тот же URL).
 
+**ИИ-верификация видео (`using_ai_verification`):** если в теле **`"using_ai_verification": true`**, после ответов майнеров probe для **каждого** майнера с непустым `video_url` параллельно вызывает сервис **AI video analyzer** (FastAPI), который гоняет ролик через тот же пайплайн, что и [`video-robot-eval`](subnet-vla/video-robot-eval/) (кадры 0.5 с, батчи по 12, merge с `importance`, без встроенных PNG в JSON по умолчанию).
+
+- **URL анализатора:** поле тела **`video_analyzer_url`** (строка), иначе переменная окружения контейнера probe **`VLA_VIDEO_ANALYZER_URL`**. В `docker-compose.subnet-vla.yml` по умолчанию для контейнера probe: `http://vla-video-analyzer:8000`; с хоста напрямую к анализатору: `http://127.0.0.1:8095` (`GET /health`, `POST /v1/analyze` с JSON `video_url`, опционально `task`, `embed_png`, `fps`, `frames_per_batch`).
+- **Ключ OpenAI** задаётся для сервиса **`vla-video-analyzer`** (`OPENAI_API_KEY` в `.env.subnet-vla`), не для probe.
+- В ответе probe при успехе: на верхнем уровне **`using_ai_verification`: true**, **`video_analyzer_url`**; у каждого элемента **`miners`** — объект **`ai_verification`**: при успехе `{ "ok": true, "analysis": { ... } }` (внутри `analysis` те же поля, что в отчёте `video-robot-eval`: **`predicted_task_prompt`** — краткая гипотеза, какую инструкцию давали VLA под это видео, плюс `evaluation`, `usage`, `estimated_usd`, …); при ошибке `{ "ok": false, "error": "..." }`.
+- **`OPENAI_API_KEY`** для `vla-video-analyzer`: в compose подключаются **`env_file`** `.env.subnet-vla` и **`subnet-vla/video-robot-eval/.env`** (достаточно ключа в одном из файлов; приоритет у переменных из **последнего** файла в списке — `subnet-vla/video-robot-eval/.env`).
+
+Если включили флаг, но не задали URL и не настроили `VLA_VIDEO_ANALYZER_URL`, вернётся **`ok: false`** с текстом ошибки (при этом список **`miners`** с ответами сети может быть прислан для отладки).
+
 **Проверенный `curl`:**
 
 ```powershell
@@ -137,6 +147,19 @@ curl.exe -sS --max-time 90 -H "Content-Type: application/json" --data-binary "@s
     }
   ],
   "rewards": [1.0]
+}
+```
+
+**Пример тела с ИИ-верификацией** (тот же probe, после поднятия `vla-video-analyzer` и `OPENAI_API_KEY`):
+
+```json
+{
+  "netuid": 3,
+  "sample_size": 2,
+  "miner_uids": [1, 2],
+  "task": "Clean-up the guestroom",
+  "using_ai_verification": true,
+  "timeout": 300
 }
 ```
 

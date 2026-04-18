@@ -1,0 +1,11 @@
+{
+  "netuid": 3,
+  "wallet_name": "vla-val",
+  "hotkey": "default",
+  "chain_endpoint": "ws://subtensor-localnet:9944",
+  "n_miners": 3,
+  "task": "Clean-up the guestroom",
+  "using_ai_verification": true,
+  "video_analyzer_url": "http://vla-video-analyzer:8000",
+  "timeout": 600
+}

@@ -1,0 +1,1011 @@
+{
+  "ok": true,
+  "protocol": "subnet-vla VLASynapse",
+  "bittensor_sdk_pinned": "9.7.0 (see requirements.txt)",
+  "netuid": 3,
+  "chain_endpoint": "ws://subtensor-localnet:9944",
+  "wallet_coldkey": "vla-val",
+  "dendrite_deserialize_flag": true,
+  "request": {
+    "task": "Clean-up the guestroom",
+    "allowed_tasks": [
+      "Clean-up the guestroom",
+      "Clean-up the kitchen",
+      "Prepare groceries",
+      "Setup the table"
+    ]
+  },
+  "miner_uids_queried": [
+    1,
+    3
+  ],
+  "miners": [
+    {
+      "uid": 1,
+      "hotkey_ss58": "5EUtRUd1uC1ZEvh7fWXXY24bv4auuKt1qjzM1LWYZMGqeY1v",
+      "axon": {
+        "ip": "172.18.0.11",
+        "port": 8921,
+        "is_serving": true,
+        "hotkey": "5EUtRUd1uC1ZEvh7fWXXY24bv4auuKt1qjzM1LWYZMGqeY1v"
+      },
+      "video_url": null,
+      "synapse": {
+        "video_url": null,
+        "task": "Clean-up the guestroom",
+        "dendrite": {
+          "status_code": 503,
+          "status_message": "Service unavailable at 172.18.0.11:8921/VLASynapse",
+          "process_time": null,
+          "ip": "31.7.59.170",
+          "port": null
+        }
+      },
+      "reward_share": 0.0,
+      "ai_verification": {
+        "ok": false,
+        "error": "no video_url"
+      }
+    },
+    {
+      "uid": 3,
+      "hotkey_ss58": "5CShowKQMeEuF4m4N3KnM1yTVm9Zg1Ti231CkG3n7oB7kvxY",
+      "axon": {
+        "ip": "172.18.0.10",
+        "port": 8922,
+        "is_serving": true,
+        "hotkey": "5CShowKQMeEuF4m4N3KnM1yTVm9Zg1Ti231CkG3n7oB7kvxY"
+      },
+      "video_url": "https://konnex-ai.xyz/videos/results_tidy/40.mp4",
+      "synapse": {
+        "video_url": "https://konnex-ai.xyz/videos/results_tidy/40.mp4",
+        "task": "Clean-up the guestroom",
+        "dendrite": {
+          "status_code": 200,
+          "status_message": "Success",
+          "process_time": 13.287779569625854,
+          "ip": "31.7.59.170",
+          "port": null
+        }
+      },
+      "reward_share": 1.0,
+      "ai_verification": {
+        "ok": true,
+        "analysis": {
+          "video_url": "https://konnex-ai.xyz/videos/results_tidy/40.mp4",
+          "model": "gpt-4o-mini",
+          "predicted_task_prompt": "Clear the table and organize items in the guestroom. · Pick up the items from the table and place them in the bin. · Pick up the items from the table and place them on the couch. · Pick up items from the couch and place them in the bin. · Clean the countertop and remove items from the sink. · Clear…",
+          "fps_sample": 2.0,
+          "frames_total": 99,
+          "batches": 9,
+          "frames_per_batch": 12,
+          "importance_png_min": 0.7,
+          "high_importance_png_embedded": 0,
+          "usage": {
+            "prompt_tokens": 294831,
+            "completion_tokens": 5481,
+            "total_tokens": 300312
+          },
+          "estimated_usd": {
+            "input_rate_per_mtok": 0.15,
+            "output_rate_per_mtok": 0.6,
+            "total_usd": 0.047513
+          },
+          "evaluation": {
+            "overall_score": 0.75,
+            "safety": 0.8,
+            "efficiency": 0.7,
+            "task_match_score": 0.75,
+            "predicted_task_prompt": "Clear the table and organize items in the guestroom. · Pick up the items from the table and place them in the bin. · Pick up the items from the table and place them on the couch. · Pick up items from the couch and place them in the bin. · Clean the countertop and remove items from the sink. · Clear…",
+            "explain": "Episode metrics = min(frame-level risk merge with `importance`, batch-level mins). Per-frame rows in `details`.\n[0–11] Smooth motion with minor stalls; some repositioning visible. Task intent clear.\n[12–23] Smooth motion with minor pauses; some repositioning visible. Task alignment is clear.\n[24–35] Smooth approach to grasp items, minor repositioning observed. Good task alignment overall.\n[36–47] Smooth approach with minor stalls; some hesitation in grasping objects.\n[48–59] Smooth approach to the sink, but some hesitation and minor delays observed.\n[60–71] Smooth approach to items, but some hesitation noted. Minor inefficiencies in motion.\n[72–83] Smooth approach to the table; minor delays in grasping items. Consistent task focus.\n[84–95] Smooth approach to grasp, but some hesitation and minor stalls observed.\n[96–98] Smooth approach to the table, slight hesitation before grasping. Minor repositioning.",
+            "details": [
+              {
+                "frame_index": 0,
+                "second": 0.0,
+                "score": 0.75,
+                "safety": 0.85,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Robot is stationary, preparing for the next action."
+              },
+              {
+                "frame_index": 1,
+                "second": 0.5,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Robot begins to approach the table."
+              },
+              {
+                "frame_index": 2,
+                "second": 1.0,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Continues to approach, maintaining a steady motion."
+              },
+              {
+                "frame_index": 3,
+                "second": 1.5,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Still approaching the table, no significant changes."
+              },
+              {
+                "frame_index": 4,
+                "second": 2.0,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Robot is now closer to the table."
+              },
+              {
+                "frame_index": 5,
+                "second": 2.5,
+                "score": 0.75,
+                "safety": 0.85,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Minor adjustment in position observed."
+              },
+              {
+                "frame_index": 6,
+                "second": 3.0,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Maintains position, preparing for next action."
+              },
+              {
+                "frame_index": 7,
+                "second": 3.5,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Continues to hold position, slight movement detected."
+              },
+              {
+                "frame_index": 8,
+                "second": 4.0,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Robot appears to be ready to interact with the table."
+              },
+              {
+                "frame_index": 9,
+                "second": 4.5,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "No significant changes, still preparing."
+              },
+              {
+                "frame_index": 10,
+                "second": 5.0,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Maintains steady position, slight adjustments noted."
+              },
+              {
+                "frame_index": 11,
+                "second": 5.5,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Final adjustments before potential interaction."
+              },
+              {
+                "frame_index": 12,
+                "second": 6.0,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.4,
+                "note": "Robot is approaching the counter with items."
+              },
+              {
+                "frame_index": 13,
+                "second": 6.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.4,
+                "note": "Maintaining position, preparing for grasp."
+              },
+              {
+                "frame_index": 14,
+                "second": 7.0,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.4,
+                "note": "Still holding position, slight adjustment."
+              },
+              {
+                "frame_index": 15,
+                "second": 7.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.4,
+                "note": "Repositioning for better access to items."
+              },
+              {
+                "frame_index": 16,
+                "second": 8.0,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.75,
+                "note": "Grasping an item from the counter."
+              },
+              {
+                "frame_index": 17,
+                "second": 8.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.75,
+                "note": "Lifting the item, preparing to move."
+              },
+              {
+                "frame_index": 18,
+                "second": 9.0,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.75,
+                "note": "Moving towards the next area."
+              },
+              {
+                "frame_index": 19,
+                "second": 9.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.75,
+                "note": "Continuing to move with the item."
+              },
+              {
+                "frame_index": 20,
+                "second": 10.0,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.75,
+                "note": "Approaching the designated drop-off area."
+              },
+              {
+                "frame_index": 21,
+                "second": 10.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.75,
+                "note": "Positioning to release the item."
+              },
+              {
+                "frame_index": 22,
+                "second": 11.0,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.75,
+                "note": "Releasing the item, slight adjustment."
+              },
+              {
+                "frame_index": 23,
+                "second": 11.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.4,
+                "note": "Finalizing the drop-off, preparing for next action."
+              },
+              {
+                "frame_index": 24,
+                "second": 12.0,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.4,
+                "note": "Robot is positioned near the table, preparing to grasp."
+              },
+              {
+                "frame_index": 25,
+                "second": 12.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.4,
+                "note": "Robot's gripper is approaching the item on the table."
+              },
+              {
+                "frame_index": 26,
+                "second": 13.0,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.5,
+                "note": "Gripper is close to making contact with the item."
+              },
+              {
+                "frame_index": 27,
+                "second": 13.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.75,
+                "note": "Robot successfully grasps the item."
+              },
+              {
+                "frame_index": 28,
+                "second": 14.0,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.75,
+                "note": "Robot is lifting the item off the table."
+              },
+              {
+                "frame_index": 29,
+                "second": 14.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.6,
+                "note": "Robot is moving towards the couch with the item."
+              },
+              {
+                "frame_index": 30,
+                "second": 15.0,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.6,
+                "note": "Robot is nearing the couch."
+              },
+              {
+                "frame_index": 31,
+                "second": 15.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.6,
+                "note": "Robot is positioned above the couch."
+              },
+              {
+                "frame_index": 32,
+                "second": 16.0,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.75,
+                "note": "Robot is preparing to release the item onto the couch."
+              },
+              {
+                "frame_index": 33,
+                "second": 16.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.75,
+                "note": "Robot is releasing the item onto the couch."
+              },
+              {
+                "frame_index": 34,
+                "second": 17.0,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.4,
+                "note": "Item is now on the couch, robot is adjusting position."
+              },
+              {
+                "frame_index": 35,
+                "second": 17.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.4,
+                "note": "Robot is observing the item on the couch."
+              },
+              {
+                "frame_index": 36,
+                "second": 18.0,
+                "score": 0.75,
+                "safety": 0.85,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Approaching the couch with a visible item."
+              },
+              {
+                "frame_index": 37,
+                "second": 18.5,
+                "score": 0.75,
+                "safety": 0.85,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Maintaining position, preparing to grasp."
+              },
+              {
+                "frame_index": 38,
+                "second": 19.0,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Gripper is positioned closer to the item."
+              },
+              {
+                "frame_index": 39,
+                "second": 19.5,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Attempting to grasp the item."
+              },
+              {
+                "frame_index": 40,
+                "second": 20.0,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Grasping motion initiated."
+              },
+              {
+                "frame_index": 41,
+                "second": 20.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.6,
+                "note": "Successfully grasped the item, lifting it."
+              },
+              {
+                "frame_index": 42,
+                "second": 21.0,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Moving towards the chair with the item."
+              },
+              {
+                "frame_index": 43,
+                "second": 21.5,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Continuing to move towards the chair."
+              },
+              {
+                "frame_index": 44,
+                "second": 22.0,
+                "score": 0.75,
+                "safety": 0.85,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Positioning near the chair."
+              },
+              {
+                "frame_index": 45,
+                "second": 22.5,
+                "score": 0.75,
+                "safety": 0.85,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Preparing to release the item."
+              },
+              {
+                "frame_index": 46,
+                "second": 23.0,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Releasing the item into the bin."
+              },
+              {
+                "frame_index": 47,
+                "second": 23.5,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Finalizing the release motion."
+              },
+              {
+                "frame_index": 48,
+                "second": 24.0,
+                "score": 0.75,
+                "safety": 0.85,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Robot is positioned near the sink, preparing to engage."
+              },
+              {
+                "frame_index": 49,
+                "second": 24.5,
+                "score": 0.75,
+                "safety": 0.85,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Robot raises arms, indicating intent to grasp."
+              },
+              {
+                "frame_index": 50,
+                "second": 25.0,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Robot approaches the countertop, nearing the items."
+              },
+              {
+                "frame_index": 51,
+                "second": 25.5,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Robot hovers over the items, preparing for interaction."
+              },
+              {
+                "frame_index": 52,
+                "second": 26.0,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Maintains position, indicating a focus on the task."
+              },
+              {
+                "frame_index": 53,
+                "second": 26.5,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Robot remains steady, possibly assessing the next move."
+              },
+              {
+                "frame_index": 54,
+                "second": 27.0,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Robot appears to engage with the items on the counter."
+              },
+              {
+                "frame_index": 55,
+                "second": 27.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.6,
+                "note": "Robot successfully grasps an item, showing clear intent."
+              },
+              {
+                "frame_index": 56,
+                "second": 28.0,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Robot continues to manipulate the item, moving it."
+              },
+              {
+                "frame_index": 57,
+                "second": 28.5,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Robot adjusts grip, preparing for the next action."
+              },
+              {
+                "frame_index": 58,
+                "second": 29.0,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Robot shifts focus to the sink area, indicating task progression."
+              },
+              {
+                "frame_index": 59,
+                "second": 29.5,
+                "score": 0.8,
+                "safety": 0.85,
+                "efficiency": 0.75,
+                "importance": 0.5,
+                "note": "Robot is positioned to continue cleaning, showing task alignment."
+              },
+              {
+                "frame_index": 60,
+                "second": 30.0,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Robot is positioned over the table, preparing to interact."
+              },
+              {
+                "frame_index": 61,
+                "second": 30.5,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Robot maintains position, showing intent to grasp."
+              },
+              {
+                "frame_index": 62,
+                "second": 31.0,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "No significant movement; robot remains steady."
+              },
+              {
+                "frame_index": 63,
+                "second": 31.5,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Continues to hold position, slight adjustment noted."
+              },
+              {
+                "frame_index": 64,
+                "second": 32.0,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Robot appears to prepare for grasping motion."
+              },
+              {
+                "frame_index": 65,
+                "second": 32.5,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Still holding position, no grasping action yet."
+              },
+              {
+                "frame_index": 66,
+                "second": 33.0,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Robot remains steady, indicating a cautious approach."
+              },
+              {
+                "frame_index": 67,
+                "second": 33.5,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Minor adjustment in position, still no grasp."
+              },
+              {
+                "frame_index": 68,
+                "second": 34.0,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Robot is still in position, preparing for action."
+              },
+              {
+                "frame_index": 69,
+                "second": 34.5,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "No movement; robot is still focused on the task."
+              },
+              {
+                "frame_index": 70,
+                "second": 35.0,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Robot begins to move away from the table."
+              },
+              {
+                "frame_index": 71,
+                "second": 35.5,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Robot is moving away, indicating task completion."
+              },
+              {
+                "frame_index": 72,
+                "second": 36.0,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.4,
+                "note": "Robot approaches the table with a steady posture."
+              },
+              {
+                "frame_index": 73,
+                "second": 36.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.4,
+                "note": "Maintains position, preparing for interaction."
+              },
+              {
+                "frame_index": 74,
+                "second": 37.0,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.5,
+                "note": "Reaches closer to the table, indicating intent to grasp."
+              },
+              {
+                "frame_index": 75,
+                "second": 37.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.5,
+                "note": "Gripper poised above an item, slight hesitation noted."
+              },
+              {
+                "frame_index": 76,
+                "second": 38.0,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.5,
+                "note": "Gripper remains steady, still preparing to grasp."
+              },
+              {
+                "frame_index": 77,
+                "second": 38.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.5,
+                "note": "Continues to hover, indicating cautious approach."
+              },
+              {
+                "frame_index": 78,
+                "second": 39.0,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.5,
+                "note": "Gripper moves slightly, still focused on the item."
+              },
+              {
+                "frame_index": 79,
+                "second": 39.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.5,
+                "note": "Gripper adjusts position, preparing for grasp."
+              },
+              {
+                "frame_index": 80,
+                "second": 40.0,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.5,
+                "note": "Gripper makes contact, indicating a grasp attempt."
+              },
+              {
+                "frame_index": 81,
+                "second": 40.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.5,
+                "note": "Maintains grip, slight movement detected."
+              },
+              {
+                "frame_index": 82,
+                "second": 41.0,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.5,
+                "note": "Robot adjusts grip, preparing to lift item."
+              },
+              {
+                "frame_index": 83,
+                "second": 41.5,
+                "score": 0.85,
+                "safety": 0.9,
+                "efficiency": 0.8,
+                "importance": 0.5,
+                "note": "Item is lifted, indicating successful grasp."
+              },
+              {
+                "frame_index": 84,
+                "second": 42.0,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Robot is positioned near the table, preparing to grasp."
+              },
+              {
+                "frame_index": 85,
+                "second": 42.5,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Maintains position, slight adjustment observed."
+              },
+              {
+                "frame_index": 86,
+                "second": 43.0,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Continues to hover near the object, no grasp yet."
+              },
+              {
+                "frame_index": 87,
+                "second": 43.5,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Still hovering, slight repositioning noted."
+              },
+              {
+                "frame_index": 88,
+                "second": 44.0,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "No significant movement, maintaining position."
+              },
+              {
+                "frame_index": 89,
+                "second": 44.5,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Continues to hold position, no grasp attempt."
+              },
+              {
+                "frame_index": 90,
+                "second": 45.0,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Repositioning slightly, still no grasp."
+              },
+              {
+                "frame_index": 91,
+                "second": 45.5,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Maintains position, preparing for grasp."
+              },
+              {
+                "frame_index": 92,
+                "second": 46.0,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Still hovering, no grasp action initiated."
+              },
+              {
+                "frame_index": 93,
+                "second": 46.5,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Position remains stable, no grasp attempt."
+              },
+              {
+                "frame_index": 94,
+                "second": 47.0,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Slight adjustment, still no grasp."
+              },
+              {
+                "frame_index": 95,
+                "second": 47.5,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.4,
+                "note": "Final frame shows continued hovering without grasp."
+              },
+              {
+                "frame_index": 96,
+                "second": 48.0,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.5,
+                "note": "Robot approaches the table, preparing to grasp an object."
+              },
+              {
+                "frame_index": 97,
+                "second": 48.5,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.6,
+                "note": "Robot hovers near the object, showing slight hesitation."
+              },
+              {
+                "frame_index": 98,
+                "second": 49.0,
+                "score": 0.75,
+                "safety": 0.8,
+                "efficiency": 0.7,
+                "importance": 0.6,
+                "note": "Robot maintains position, ready to grasp the object."
+              }
+            ],
+            "batch_count": 9,
+            "merge_method": "min( importance_weighted_per_frame_min , min(batch metrics) ); per_frame: min_i(1 - importance_i*(1-metric_i)); explain = compact per batch; predicted_task_prompt = deduped join of batch predicted_task_prompt"
+          }
+        }
+      }
+    }
+  ],
+  "rewards": [
+    0.0,
+    1.0
+  ],
+  "timing_ms": {
+    "total": 38042,
+    "dendrite_call": 13349
+  },
+  "using_ai_verification": true,
+  "video_analyzer_url": "http://vla-video-analyzer:8000"
+}

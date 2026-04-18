@@ -1,0 +1,162 @@
+# Проект отделён от localnet и subnet-math / subnet-vla (своё имя compose).
+name: subnet-navigation
+
+# Третий кастомный сабнет (копия шаблона subnet-math без правок исходного каталога).
+#   docker compose -f docker-compose.localnet.yml up -d
+#   copy .env.subnet-navigation.example .env.subnet-navigation
+#   см. SUBNET_NAVIGATION_LOCALNET.md
+#   docker compose -f docker-compose.subnet-navigation.yml --env-file .env.subnet-navigation up -d --build
+#
+# Порты axon: майнеры 8933/8934, валидаторы 9133/9134.
+# Probe с хоста: http://127.0.0.1:8096
+
+networks:
+  chain:
+    name: ${SUBTENSOR_DOCKER_NETWORK:-xsubtensor_default}
+    external: true
+
+services:
+  nav-miner:
+    build:
+      context: ./subnet-navigation
+      dockerfile: Dockerfile
+    container_name: subtensor-nav-miner
+    restart: unless-stopped
+    networks: [chain]
+    volumes:
+      - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
+      - ./subnet-navigation/template:/app/template
+      - ./subnet-navigation/neurons:/app/neurons
+      - ./subnet-navigation/scripts:/app/scripts
+    environment:
+      NETUID: ${NETUID:-1}
+      WALLET_NAME: ${MINER_WALLET:-nav-miner}
+    command:
+      - sh
+      - -c
+      - |
+        IP=$$(hostname -i | awk '{print $$1}')
+        exec python neurons/miner.py \
+          --netuid $${NETUID} \
+          --subtensor.chain_endpoint ws://subtensor-localnet:9944 \
+          --wallet.name $${WALLET_NAME} \
+          --wallet.hotkey default \
+          --axon.port 8933 \
+          --axon.external_ip "$$IP" \
+          --neuron.name nav-miner \
+          --logging.info
+
+  nav-validator:
+    build:
+      context: ./subnet-navigation
+      dockerfile: Dockerfile
+    container_name: subtensor-nav-validator
+    restart: unless-stopped
+    networks: [chain]
+    volumes:
+      - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
+      - ./subnet-navigation/template:/app/template
+      - ./subnet-navigation/neurons:/app/neurons
+      - ./subnet-navigation/scripts:/app/scripts
+    environment:
+      NETUID: ${NETUID:-1}
+      WALLET_NAME: ${VALIDATOR_WALLET:-nav-val}
+    command:
+      - sh
+      - -c
+      - |
+        IP=$$(hostname -i | awk '{print $$1}')
+        exec python neurons/validator.py \
+          --netuid $${NETUID} \
+          --subtensor.chain_endpoint ws://subtensor-localnet:9944 \
+          --wallet.name $${WALLET_NAME} \
+          --wallet.hotkey default \
+          --axon.port 9133 \
+          --axon.external_ip "$$IP" \
+          --neuron.name nav-validator \
+          --neuron.validator_axon_ports 9133,9134 \
+          --neuron.sample_size 4 \
+          --logging.info
+
+  nav-probe:
+    build:
+      context: ./subnet-navigation
+      dockerfile: Dockerfile
+    container_name: subtensor-nav-probe
+    restart: unless-stopped
+    networks: [chain]
+    ports:
+      - "127.0.0.1:8096:8091"
+    volumes:
+      - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
+      - ./subnet-navigation/template:/app/template
+      - ./subnet-navigation/scripts:/app/scripts
+    environment:
+      NETUID: ${NETUID:-1}
+      WALLET_NAME: ${VALIDATOR_WALLET:-nav-val}
+      HOTKEY: default
+      PROBE_PORT: "8091"
+      SUBTENSOR_CHAIN: ws://subtensor-localnet:9944
+    command: ["python", "scripts/subnet_probe_http.py"]
+
+  nav-miner-b:
+    build:
+      context: ./subnet-navigation
+      dockerfile: Dockerfile
+    container_name: subtensor-nav-miner-b
+    restart: unless-stopped
+    networks: [chain]
+    volumes:
+      - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
+      - ./subnet-navigation/template:/app/template
+      - ./subnet-navigation/neurons:/app/neurons
+      - ./subnet-navigation/scripts:/app/scripts
+    environment:
+      NETUID: ${NETUID:-1}
+      WALLET_NAME: ${MINER_WALLET_B:-nav-miner-b}
+    command:
+      - sh
+      - -c
+      - |
+        IP=$$(hostname -i | awk '{print $$1}')
+        exec python neurons/miner.py \
+          --netuid $${NETUID} \
+          --subtensor.chain_endpoint ws://subtensor-localnet:9944 \
+          --wallet.name $${WALLET_NAME} \
+          --wallet.hotkey default \
+          --axon.port 8934 \
+          --axon.external_ip "$$IP" \
+          --neuron.name nav-miner-b \
+          --logging.info
+
+  nav-validator-b:
+    build:
+      context: ./subnet-navigation
+      dockerfile: Dockerfile
+    container_name: subtensor-nav-validator-b
+    restart: unless-stopped
+    networks: [chain]
+    volumes:
+      - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
+      - ./subnet-navigation/template:/app/template
+      - ./subnet-navigation/neurons:/app/neurons
+      - ./subnet-navigation/scripts:/app/scripts
+    environment:
+      NETUID: ${NETUID:-1}
+      WALLET_NAME: ${VALIDATOR_WALLET_B:-nav-val-b}
+    command:
+      - sh
+      - -c
+      - |
+        IP=$$(hostname -i | awk '{print $$1}')
+        exec python neurons/validator.py \
+          --netuid $${NETUID} \
+          --subtensor.chain_endpoint ws://subtensor-localnet:9944 \
+          --wallet.name $${WALLET_NAME} \
+          --wallet.hotkey default \
+          --axon.port 9134 \
+          --axon.external_ip "$$IP" \
+          --neuron.name nav-validator-b \
+          --neuron.validator_axon_ports 9133,9134 \
+          --neuron.sample_size 4 \
+          --logging.info

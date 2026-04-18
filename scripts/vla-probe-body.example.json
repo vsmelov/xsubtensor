@@ -1,1 +1,7 @@
-{"netuid": 3, "sample_size": 1, "miner_uids": [1], "task": "Clean-up the guestroom"}
+{
+  "netuid": 3,
+  "n_miners": 1,
+  "task": "Clean-up the guestroom",
+  "using_ai_verification": false,
+  "video_analyzer_url": null
+}

@@ -1,0 +1,154 @@
+{
+  "ok": true,
+  "probe_run_id": "820a83bc31",
+  "probe_public_base": "http://127.0.0.1:8094",
+  "protocol": "subnet-vla VLASynapse",
+  "bittensor_sdk_pinned": "9.7.0 (see requirements.txt)",
+  "netuid": 1,
+  "chain_endpoint": "ws://subtensor-localnet:9944",
+  "wallet_coldkey": "vla-val",
+  "dendrite_deserialize_flag": true,
+  "skip_dendrite": true,
+  "dry_run": true,
+  "request": {
+    "task": "Clean-up the guestroom",
+    "allowed_tasks": [
+      "Clean-up the guestroom",
+      "Clean-up the kitchen",
+      "Prepare groceries",
+      "Setup the table"
+    ],
+    "n_miners": 3
+  },
+  "miner_uids_queried": [
+    0,
+    1,
+    2
+  ],
+  "miners": [
+    {
+      "uid": 0,
+      "hotkey_ss58": null,
+      "axon": {
+        "ip": null,
+        "port": null,
+        "is_serving": null,
+        "hotkey": null,
+        "dry_run": true
+      },
+      "video_url": "http://subtensor-vla-probe:8091/videos/vars/0/661.mp4",
+      "synapse": {
+        "video_url": "http://subtensor-vla-probe:8091/videos/vars/0/661.mp4",
+        "task": "Clean-up the guestroom",
+        "dendrite": {
+          "status_code": 200,
+          "status_message": "dry_run (no dendrite)",
+          "process_time": 0.0,
+          "ip": null,
+          "port": null
+        }
+      },
+      "miner_declared_video_url": null,
+      "vars_video_slot": "low",
+      "vars_folder": "0",
+      "static_video_relpath": "vars/0/661.mp4",
+      "static_video_bytes": 8365918,
+      "reward_share": 0.3439958989620209,
+      "video_path_on_probe": "/videos/vars/0/661.mp4",
+      "video_url_on_probe": "http://127.0.0.1:8094/videos/vars/0/661.mp4"
+    },
+    {
+      "uid": 1,
+      "hotkey_ss58": null,
+      "axon": {
+        "ip": null,
+        "port": null,
+        "is_serving": null,
+        "hotkey": null,
+        "dry_run": true
+      },
+      "video_url": "http://subtensor-vla-probe:8091/videos/vars/0/663.mp4",
+      "synapse": {
+        "video_url": "http://subtensor-vla-probe:8091/videos/vars/0/663.mp4",
+        "task": "Clean-up the guestroom",
+        "dendrite": {
+          "status_code": 200,
+          "status_message": "dry_run (no dendrite)",
+          "process_time": 0.0,
+          "ip": null,
+          "port": null
+        }
+      },
+      "miner_declared_video_url": null,
+      "vars_video_slot": "mid",
+      "vars_folder": "0",
+      "static_video_relpath": "vars/0/663.mp4",
+      "static_video_bytes": 3510394,
+      "reward_share": 0.3232404887676239,
+      "video_path_on_probe": "/videos/vars/0/663.mp4",
+      "video_url_on_probe": "http://127.0.0.1:8094/videos/vars/0/663.mp4"
+    },
+    {
+      "uid": 2,
+      "hotkey_ss58": null,
+      "axon": {
+        "ip": null,
+        "port": null,
+        "is_serving": null,
+        "hotkey": null,
+        "dry_run": true
+      },
+      "video_url": "http://subtensor-vla-probe:8091/videos/vars/0/666.mp4",
+      "synapse": {
+        "video_url": "http://subtensor-vla-probe:8091/videos/vars/0/666.mp4",
+        "task": "Clean-up the guestroom",
+        "dendrite": {
+          "status_code": 200,
+          "status_message": "dry_run (no dendrite)",
+          "process_time": 0.0,
+          "ip": null,
+          "port": null
+        }
+      },
+      "miner_declared_video_url": null,
+      "vars_video_slot": "high",
+      "vars_folder": "0",
+      "static_video_relpath": "vars/0/666.mp4",
+      "static_video_bytes": 4525711,
+      "reward_share": 0.3327636122703552,
+      "video_path_on_probe": "/videos/vars/0/666.mp4",
+      "video_url_on_probe": "http://127.0.0.1:8094/videos/vars/0/666.mp4"
+    }
+  ],
+  "rewards": [
+    0.3439958989620209,
+    0.3232404887676239,
+    0.3327636122703552
+  ],
+  "timing_ms": {
+    "total": 55,
+    "dendrite_call": 0
+  },
+  "vars_static_videos": {
+    "vars_folder": "0",
+    "folder_path": "/app/vla-video-static/vars/0",
+    "files": [
+      {
+        "slot": "low",
+        "relpath": "vars/0/661.mp4",
+        "bytes": 8365918
+      },
+      {
+        "slot": "mid",
+        "relpath": "vars/0/663.mp4",
+        "bytes": 3510394
+      },
+      {
+        "slot": "high",
+        "relpath": "vars/0/666.mp4",
+        "bytes": 4525711
+      }
+    ]
+  },
+  "use_vars_static_videos": true
+}

@@ -165,7 +165,8 @@ curl -sS http://127.0.0.1:8090/health
 | **`snapshot_query`** | Какие параметры реально применились (глубина, фильтры). |
 | **`chain`**, **`sync`**, **`head`**, **`finalized`** | Состояние ноды и цепи. |
 | **`subtensor`** | Агрегаты (`total_networks`, stake, issuance). |
-| **`network_graph`** | Упрощённый **граф**: сабнеты + плоский список нейронов (uid, hotkey, permit, axon, incentive/dividend/emission/stake). Рёбра axon-трафика **в цепи нет** — см. примечание в JSON. |
+| **`network_graph`** | Упрощённый **граф**: сабнеты + плоский список нейронов (uid, hotkey, **`validatorPermit`**, **`hasSubnetStake`**, **`likelyValidatorRole`**, axon, incentive/dividend/emission/stake). На **localnet** у стейкнутых валидаторов `validatorPermit` часто долго остаётся `false` (обновление по эпохе) — для UI используйте **`likelyValidatorRole`** или **`hasSubnetStake`**, иначе «валидаторов не видно». Рёбра axon-трафика **в цепи нет** — см. примечание в JSON. |
+| **`minting_share_hint`** | Подсказка для **pie chart** доли по сабнетам. Query: **`minting_share_mode=dashboard_fallback`** (по умолчанию) — если EMA цены (`movingPrice.bits`) ещё 0, в вес входят **taoIn** и ликвидность, чтобы новый сабнет не был 0%; **`minting_share_mode=chain_ema`** — только \|movingPrice.bits\| (как у нулевого TAO в coinbase при нулевой EMA). См. [`MINTING_SHARE_SUBNETS.md`](MINTING_SHARE_SUBNETS.md). |
 | **`runtime_calls`** | Полные декодированные **`getAllMetagraphs`**, **`getAllDynamicInfo`**, **`getSubnetsInfoV2`**, делегаты, стоимость регистрации сети — срез состояния сабнетов/метаграфов из runtime API за один проход. |
 | **`recent_events`** | События `system.events` по последним блокам (фильтр по pallet опционален). |
 | **`recent_extrinsics`** | Список **extrinsic** по последним блокам: хэш, индекс, подписант, `section.method`, аргументы (`toHuman`). |
@@ -233,6 +234,8 @@ python -c "import json, pathlib; p=pathlib.Path('_snap.json'); pathlib.Path('doc
 | **`blocks_extrinsics_depth`** | `3` | Сколько последних блоков для **`recent_extrinsics`**. **`0`** — отключить. |
 | **`extrinsics_max`** | `200` | Максимум строк extrinsic. |
 | **`extrinsics_filter`** | — | Через запятую pallet для extrinsic (по `method.section`). |
+| **`minting_share_mode`** | `dashboard_fallback` | Режим весов для **`minting_share_hint`**: `chain_ema` — только EMA цены; иначе — fallback с ликвидностью (см. таблицу выше). |
+| **`reward_split_placeholder`** | включено | `0` или `false` — не подставлять иллюстративный split в **`reward_split_hint.for_ui`** (только расчёт из метаграфа; `min` может остаться 0). |
 
 Потолки env в `server.mjs`: **`SNAPSHOT_MAX_EVENTS_DEPTH`**, **`SNAPSHOT_MAX_EVENTS`**, **`SNAPSHOT_MAX_BLOCKS_EXTRINSICS_DEPTH`**, **`SNAPSHOT_MAX_EXTRINSICS`**.
 

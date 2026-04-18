@@ -29,8 +29,11 @@ services:
     volumes:
       - subtensor-localnet-alice:/tmp/alice
       - subtensor-localnet-bob:/tmp/bob
-    # True = fast blocks (default). Use ["False"] for non-fast-blocks binary.
-    command: ["True"]
+    # True = fast blocks (~250 ms) — на dev удобно для регистраций (интервал сброса счётчика ~90 с вместо ~72 мин).
+    # False = ~12 s per block — ближе к «реальной» скорости, но 4-я регистрация в том же интервале ждёт долго.
+    # --no-purge: не вызывать purge-chain при старте — сохранять цепь в томах после ребута/restart.
+    # Сбросить цепь намеренно: docker compose -f docker-compose.localnet.yml down -v
+    command: ["True", "--no-purge"]
 
   # Windows Docker Desktop: raw ws://127.0.0.1:9944 from the host often breaks (1006).
   # This proxy speaks WSS on 3443 on the host; chain traffic is still plain WS inside the network.

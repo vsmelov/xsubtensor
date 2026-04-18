@@ -4,7 +4,10 @@ name: subnet-vla
 # Localnet + кошельки: см. SUBNET_MATH_LOCALNET.md (аналогично, vla-miner / subnet-vla), REQUEST_TO_SUBNET.md (VLA)
 #   docker compose -f docker-compose.subnet-vla.yml --env-file .env.subnet-vla up -d --build
 #
-# С хоста probe: http://127.0.0.1:8094 (внутри сети контейнер :8091)
+# С хоста probe: http://127.0.0.1:8094 (внутри сети контейнер :8091).
+# Порт на хосте: по умолчанию все интерфейсы 8094 (на Windows надёжнее, чем только 127.0.0.1).
+# AI video analyzer (OpenAI vision): http://127.0.0.1:8095  (тело probe: using_ai_verification + OPENAI_API_KEY)
+# Локальные MP4 через тот же probe: http://127.0.0.1:8094/videos/... -> subnet-vla/vla-video-static/
 
 networks:
   chain:
@@ -12,6 +15,7 @@ networks:
     external: true
 
 services:
+  # If probe returns 503 for this miner but TCP to the container:8921 works, the chain may still list an old axon IP — restart vla-miner to re-serve.
   vla-miner:
     build:
       context: ./subnet-vla
@@ -86,13 +90,56 @@ services:
       - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
       - ./subnet-vla/template:/app/template
       - ./subnet-vla/scripts:/app/scripts
+      - ./subnet-vla/vla-video-static:/app/vla-video-static:ro
     environment:
       NETUID: ${NETUID:-1}
       WALLET_NAME: ${VALIDATOR_WALLET:-vla-val}
       HOTKEY: default
       PROBE_PORT: "8091"
       SUBTENSOR_CHAIN: ws://subtensor-localnet:9944
+      # skip_dendrite: AI по умолчанию без URL в JSON клиента
+      VLA_PROBE_USING_AI: ${VLA_PROBE_USING_AI:-true}
+      VLA_VIDEO_ANALYZER_URL: ${VLA_VIDEO_ANALYZER_URL:-http://vla-video-analyzer:8000}
+      VLA_VIDEO_STATIC_ROOT: /app/vla-video-static
+      # Браузер на хосте; из другого контейнера: http://subtensor-vla-probe:8091
+      VLA_PROBE_PUBLIC_BASE: ${VLA_PROBE_PUBLIC_BASE:-http://127.0.0.1:8094}
+      # URL анализатора и майнеров для скачивания /videos/... (порт 8091 внутри сети chain)
+      VLA_PROBE_INTERNAL_BASE: ${VLA_PROBE_INTERNAL_BASE:-http://subtensor-vla-probe:8091}
     command: ["python", "scripts/vla_probe_http.py"]
+
+  vla-video-analyzer:
+    build:
+      context: .
+      dockerfile: services/vla-video-analyzer/Dockerfile
+    container_name: subtensor-vla-video-analyzer
+    restart: unless-stopped
+    networks: [chain]
+    ports:
+      - "127.0.0.1:8095:8000"
+    # Код с хоста: без пересборки образа при правках Python (--reload перезапускает процесс).
+    # Зависимости по-прежнему из образа: при изменении requirements.txt — docker compose build vla-video-analyzer
+    volumes:
+      - ./subnet-vla/video-robot-eval:/app/video-robot-eval
+      - ./services/vla-video-analyzer/main_api.py:/app/main_api.py
+    command:
+      - uvicorn
+      - main_api:app
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "8000"
+      - --reload
+      - --reload-dir
+      - /app
+    env_file:
+      - path: .env.subnet-vla
+        required: false
+      - path: subnet-vla/video-robot-eval/.env
+        required: false
+    environment:
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      # Скачивание MP4 с vla-probe (длинные ролики / медленный диск)
+      VIDEO_DOWNLOAD_TIMEOUT_S: ${VIDEO_DOWNLOAD_TIMEOUT_S:-600}
 
   vla-miner-b:
     build:
@@ -122,6 +169,37 @@ services:
           --axon.port 8922 \
           --axon.external_ip "$$IP" \
           --neuron.name vla-miner-b \
+          --logging.info
+
+  # Third miner (separate coldkey); axon 8923 — see MINER_WALLET_C in .env.subnet-vla
+  vla-miner-c:
+    build:
+      context: ./subnet-vla
+      dockerfile: Dockerfile
+    container_name: subtensor-vla-miner-c
+    restart: unless-stopped
+    networks: [chain]
+    volumes:
+      - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
+      - ./subnet-vla/template:/app/template
+      - ./subnet-vla/neurons:/app/neurons
+      - ./subnet-vla/scripts:/app/scripts
+    environment:
+      NETUID: ${NETUID:-1}
+      WALLET_NAME: ${MINER_WALLET_C:-vla-miner-c}
+    command:
+      - sh
+      - -c
+      - |
+        IP=$$(hostname -i | awk '{print $$1}')
+        exec python neurons/miner.py \
+          --netuid $${NETUID} \
+          --subtensor.chain_endpoint ws://subtensor-localnet:9944 \
+          --wallet.name $${WALLET_NAME} \
+          --wallet.hotkey default \
+          --axon.port 8923 \
+          --axon.external_ip "$$IP" \
+          --neuron.name vla-miner-c \
           --logging.info
 
   vla-validator-b:

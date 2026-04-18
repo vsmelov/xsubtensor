@@ -39,6 +39,8 @@ const SUBNET_MATH_PROBE_URL = (process.env.SUBNET_MATH_PROBE_URL ?? '').trim();
 const SUBNET_VLA_PROBE_URL = (process.env.SUBNET_VLA_PROBE_URL ?? '').trim();
 
 let apiPromise;
+/** In-flight connect so concurrent callers share one `ApiPromise.create`. */
+let connectPromise;
 let faucetPair;
 
 function taoStringToRao(s) {
@@ -63,11 +65,39 @@ function raoStringToBigInt(s) {
 
 async function getApi() {
   if (apiPromise) {
-    return apiPromise;
+    const connected =
+      typeof apiPromise.isConnected === 'boolean'
+        ? apiPromise.isConnected
+        : true;
+    if (connected) {
+      return apiPromise;
+    }
+    try {
+      await apiPromise.disconnect();
+    } catch {
+      /* ignore */
+    }
+    apiPromise = undefined;
   }
-  const provider = new WsProvider(WS_URL);
-  apiPromise = await ApiPromise.create({ provider });
-  return apiPromise;
+  if (connectPromise) {
+    return connectPromise;
+  }
+  connectPromise = (async () => {
+    const provider = new WsProvider(WS_URL);
+    const api = await ApiPromise.create({ provider });
+    apiPromise = api;
+    provider.on('disconnected', () => {
+      if (apiPromise === api) {
+        apiPromise = undefined;
+      }
+    });
+    return api;
+  })();
+  try {
+    return await connectPromise;
+  } finally {
+    connectPromise = undefined;
+  }
 }
 
 function getFaucetPair(api) {
@@ -231,6 +261,15 @@ function metagraphNeuronCount(mg) {
   return 0;
 }
 
+function totalStakeAtUid(mg, uid) {
+  const v = mg?.totalStake?.[uid];
+  if (v == null) {
+    return 0;
+  }
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+
 /**
  * Уплощённый «граф» для визуализации: сабнеты + нейроны (рёбра off-chain не в цепи).
  */
@@ -256,13 +295,22 @@ function buildNetworkGraphSummary(metagraphs) {
     const n = metagraphNeuronCount(mg);
     for (let uid = 0; uid < n; uid++) {
       const ax = mg.axons?.[uid];
+      const stakeRao = totalStakeAtUid(mg, uid);
+      const permit = mg.validatorPermit?.[uid] ?? null;
       neurons.push({
         netuid,
         uid,
         hotkey: mg.hotkeys?.[uid] ?? null,
         coldkey: mg.coldkeys?.[uid] ?? null,
         active: mg.active?.[uid] ?? null,
-        validatorPermit: mg.validatorPermit?.[uid] ?? null,
+        validatorPermit: permit,
+        /** Non-zero alpha/TAO stake on this subnet (raw units from metagraph). */
+        hasSubnetStake: stakeRao > 0,
+        /**
+         * UI hint: on localnet `validatorPermit` is often false until epoch/permit updates;
+         * neurons with stake here usually correspond to validators who staked TAO into the subnet.
+         */
+        likelyValidatorRole: permit === true || stakeRao > 0,
         axonPort: ax?.port ?? null,
         axonIpPacked: ax?.ip ?? null,
         incentives: mg.incentives?.[uid] ?? null,
@@ -277,7 +325,172 @@ function buildNetworkGraphSummary(metagraphs) {
     neurons,
     edges: [],
     note:
-      'On-chain edges for miner axon traffic are not stored; reward flow is reflected in emission/incentives/dividends per uid. Commit-reveal weights are not expanded here.',
+      'On-chain edges for miner axon traffic are not stored; reward flow is reflected in emission/incentives/dividends per uid. Commit-reveal weights are not expanded here. For explorers: filter validators with likelyValidatorRole or hasSubnetStake, not validatorPermit alone — permit may stay false on dev chains until runtime updates it.',
+  };
+}
+
+/**
+ * Pie-chart friendly share hint. On-chain coinbase splits TAO by sum of
+ * `get_moving_alpha_price` (EMA of alpha price); young subnets often have
+ * movingPrice.bits === 0 and receive 0 TAO until `update_moving_price` catches up.
+ *
+ * Query `minting_share_mode=chain_ema` — weight = |movingPrice.bits| only (zeros stay 0).
+ * Default / `dashboard_fallback` — if EMA is 0, blend in taoIn + alpha liquidity so
+ * new subnets (e.g. navigation) are not invisible in explorers.
+ */
+function buildMintingShareHint(metagraphs, mode) {
+  const m = mode === 'chain_ema' ? 'chain_ema' : 'dashboard_fallback';
+  if (!Array.isArray(metagraphs)) {
+    return {
+      mode: m,
+      subnets: [],
+      note:
+        'No metagraphs. minting_share_mode: chain_ema = raw EMA only; dashboard_fallback = EMA or liquidity proxy for UI.',
+    };
+  }
+  const rows = [];
+  for (const mg of metagraphs) {
+    if (!mg || typeof mg !== 'object') {
+      continue;
+    }
+    const netuid = mg.netuid;
+    if (netuid === 0 || netuid === '0') {
+      continue;
+    }
+    const bits = mg.movingPrice?.bits;
+    const emaW =
+      typeof bits === 'number' && bits !== 0 ? Math.abs(bits) : 0;
+    const taoIn = Number(mg.taoIn ?? 0);
+    const alphaIn = Number(mg.alphaIn ?? 0);
+    const alphaOut = Number(mg.alphaOut ?? 0);
+    const vol = Number(mg.subnetVolume ?? 0);
+    let liquidityProxy = 0;
+    if (m === 'dashboard_fallback') {
+      liquidityProxy =
+        taoIn +
+        (alphaIn + alphaOut) * 1e-6 +
+        vol * 1e-18;
+    }
+    let rawWeight = emaW > 0 ? emaW : 0;
+    if (m === 'dashboard_fallback' && rawWeight === 0) {
+      if (liquidityProxy > 0) {
+        rawWeight = liquidityProxy;
+      } else if (metagraphNeuronCount(mg) > 0) {
+        rawWeight = 1;
+      }
+    }
+    rows.push({
+      netuid,
+      nameUtf8: mg.nameUtf8 ?? null,
+      symbolUtf8: mg.symbolUtf8 ?? null,
+      weight_raw: rawWeight,
+      moving_price_bits: bits ?? null,
+      tao_in: taoIn,
+    });
+
+  }
+  const sum = rows.reduce((a, r) => a + r.weight_raw, 0);
+  const subnets = rows.map((r) => ({
+    netuid: r.netuid,
+    nameUtf8: r.nameUtf8,
+    symbolUtf8: r.symbolUtf8,
+    weight_raw: r.weight_raw,
+    share: sum > 0 ? r.weight_raw / sum : 0,
+    share_percent: sum > 0 ? (100 * r.weight_raw) / sum : 0,
+  }));
+  return {
+    mode: m,
+    subnets,
+    note:
+      m === 'chain_ema'
+        ? 'Weights = |movingPrice.bits| per subnet (matches zero-TAO coinbase when EMA is 0).'
+        : 'If moving EMA is 0, weight uses taoIn + tiny alpha/volume terms so new subnets appear; not identical to on-chain coinbase until EMA is non-zero.',
+  };
+}
+
+/** Default val/min bar when chain attributes all emission to validatorPermit uids (common on localnet). */
+const REWARD_SPLIT_PLACEHOLDER_VALIDATOR = 0.35;
+const REWARD_SPLIT_PLACEHOLDER_MINER = 0.65;
+
+/**
+ * Per-subnet validator vs miner emission split for dashboard cards.
+ * Chain: sum `emission[i]` where `validatorPermit[i]` vs rest.
+ * If miner side is 0 (or total 0) and `usePlaceholder`, `for_ui` uses illustrative 35/65.
+ * Query: reward_split_placeholder=0 or false — only on-chain ratios (min may stay 0).
+ */
+function buildSubnetRewardSplitHints(metagraphs, usePlaceholder) {
+  if (!Array.isArray(metagraphs)) {
+    return {
+      subnets: [],
+      note:
+        'reward_split_placeholder: default on — illustrative miner share when chain shows 0.',
+    };
+  }
+  const subnets = [];
+  for (const mg of metagraphs) {
+    if (!mg || typeof mg !== 'object') {
+      continue;
+    }
+    const netuid = mg.netuid;
+    if (netuid === 0 || netuid === '0') {
+      continue;
+    }
+    const n = metagraphNeuronCount(mg);
+    let total = 0;
+    let valSum = 0;
+    for (let i = 0; i < n; i++) {
+      const e = Number(mg.emission?.[i] ?? 0);
+      if (!Number.isFinite(e)) {
+        continue;
+      }
+      total += e;
+      if (mg.validatorPermit?.[i] === true) {
+        valSum += e;
+      }
+    }
+    const minSum = Math.max(0, total - valSum);
+    let validatorShare;
+    let minerShare;
+    let mode;
+    if (usePlaceholder && (total <= 0 || minSum <= 0)) {
+      validatorShare = REWARD_SPLIT_PLACEHOLDER_VALIDATOR;
+      minerShare = REWARD_SPLIT_PLACEHOLDER_MINER;
+      mode =
+        total <= 0
+          ? 'placeholder_no_subnet_emission'
+          : 'placeholder_miner_emission_zero_on_chain';
+    } else if (total <= 0) {
+      validatorShare = 0;
+      minerShare = 0;
+      mode = 'raw_empty';
+    } else {
+      validatorShare = valSum / total;
+      minerShare = minSum / total;
+      mode = 'from_metagraph_emission_by_validator_permit';
+    }
+    subnets.push({
+      netuid,
+      nameUtf8: mg.nameUtf8 ?? null,
+      symbolUtf8: mg.symbolUtf8 ?? null,
+      on_chain: {
+        emission_total: total,
+        emission_to_validator_permit_uids: valSum,
+        emission_to_other_uids: minSum,
+      },
+      for_ui: {
+        validator_share: validatorShare,
+        miner_share: minerShare,
+        validator_percent: 100 * validatorShare,
+        miner_percent: 100 * minerShare,
+        mode,
+      },
+    });
+  }
+  return {
+    placeholder_enabled: usePlaceholder,
+    subnets,
+    note:
+      'Use for_ui for REWARD SPLIT bars. mode placeholder_* = not on-chain. Disable with reward_split_placeholder=0.',
   };
 }
 
@@ -392,6 +605,23 @@ async function buildNetworkSnapshot(api, query) {
       ? buildNetworkGraphSummary(metagraphs)
       : buildNetworkGraphSummary([]);
 
+  const mintingShareMode =
+    query.minting_share_mode === 'chain_ema'
+      ? 'chain_ema'
+      : 'dashboard_fallback';
+  const mintingShareHint = buildMintingShareHint(
+    Array.isArray(metagraphs) ? metagraphs : [],
+    mintingShareMode,
+  );
+
+  const rewardSplitPlaceholder =
+    query.reward_split_placeholder !== '0' &&
+    query.reward_split_placeholder !== 'false';
+  const rewardSplitHint = buildSubnetRewardSplitHints(
+    Array.isArray(metagraphs) ? metagraphs : [],
+    rewardSplitPlaceholder,
+  );
+
   return {
     ok: true,
     generated_at_ms: Date.now(),
@@ -407,6 +637,8 @@ async function buildNetworkSnapshot(api, query) {
       blocks_extrinsics_depth: extrDepth,
       extrinsics_max: maxExtr,
       extrinsics_filter: query.extrinsics_filter ?? null,
+      minting_share_mode: mintingShareMode,
+      reward_split_placeholder: rewardSplitPlaceholder,
     },
     chain: {
       name: chainName.toString(),
@@ -428,6 +660,8 @@ async function buildNetworkSnapshot(api, query) {
       total_issuance_balances: issuance?.toString?.() ?? String(issuance),
     },
     network_graph: networkGraph,
+    minting_share_hint: mintingShareHint,
+    reward_split_hint: rewardSplitHint,
     runtime_calls: {
       getAllMetagraphs: metagraphsR.ok
         ? { ok: true, data: metagraphs }
@@ -506,6 +740,8 @@ async function start() {
    *   events_only_subtensor=1 — shorthand filter subtensorModule only.
    *   blocks_extrinsics_depth (default 3; 0 = off), extrinsics_max — extrinsic log scan.
    *   extrinsics_filter — comma pallet sections for extrinsics.
+   *   minting_share_mode — `dashboard_fallback` (default) or `chain_ema` for minting_share_hint.
+   *   reward_split_placeholder — `0` or `false` disables illustrative val/min split for reward_split_hint.
    *
    * Docs: REQUEST_NET_GRAPH.md — snapshot + docs/network-snapshot*.json
    */

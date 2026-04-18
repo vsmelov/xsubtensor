@@ -1,0 +1,8 @@
+{
+  "task": "Clean-up the guestroom",
+  "skip_dendrite": true,
+  "n_miners": 3,
+  "use_vars_static_videos": true,
+  "using_ai_verification": false,
+  "timeout": 60
+}

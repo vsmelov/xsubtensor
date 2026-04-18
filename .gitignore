@@ -31,6 +31,9 @@
 .env.subnet-vla
 .env.vla
 
+# Local VLA demo MP4s (see subnet-vla/vla-video-static/WHERE.txt)
+subnet-vla/vla-video-static/**/*.mp4
+
 # Локальные черновики снимка сети (канонический пример: docs/network-snapshot.example.json)
 .network-snapshot*.json
 _snap.json
@@ -63,6 +66,7 @@ specs/*.json
 # Local compose / subnet logs
 subnet-create.log
 subnet-start.log
+btcli-last.log
 
 # Runtime upgrade snapshot
 bt.snap

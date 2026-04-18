@@ -1,0 +1,5 @@
+{
+  "ok": false,
+  "error": "miner_uids empty or out of metagraph range",
+  "type": "ValueError"
+}
