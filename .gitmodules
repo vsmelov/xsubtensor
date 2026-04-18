@@ -1,7 +1,7 @@
 [submodule "subnet-math"]
 	path = subnet-math
-	url = git@github.com:vsmelov/xsubnet-template.git
+	url = https://vsmelov@github.com/vsmelov/xsubnet-template.git
 [submodule "subnet-vla"]
 	path = subnet-vla
-	url = git@github.com:vsmelov/xsubnet-template.git
+	url = https://vsmelov@github.com/vsmelov/xsubnet-template.git
 	branch = master-vla
