@@ -23,6 +23,8 @@ services:
     container_name: subtensor-nav-miner
     restart: unless-stopped
     networks: [chain]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
       - ./subnet-navigation/template:/app/template
@@ -31,6 +33,9 @@ services:
     environment:
       NETUID: ${NETUID:-1}
       WALLET_NAME: ${MINER_WALLET:-nav-miner}
+      SUBTENSOR_CHAIN_ENDPOINT: ${SUBTENSOR_CHAIN_ENDPOINT:-ws://subtensor-localnet:9944}
+      KONNEX_NAV_RUNTIME_BASE_URL: ${KONNEX_NAV_RUNTIME_BASE_URL:-http://host.docker.internal:8791}
+      KONNEX_NAV_RUNTIME_TIMEOUT: ${KONNEX_NAV_RUNTIME_TIMEOUT:-10}
     command:
       - sh
       - -c
@@ -38,7 +43,8 @@ services:
         IP=$$(hostname -i | awk '{print $$1}')
         exec python neurons/miner.py \
           --netuid $${NETUID} \
-          --subtensor.chain_endpoint ws://subtensor-localnet:9944 \
+          --subtensor.chain_endpoint $${SUBTENSOR_CHAIN_ENDPOINT} \
+          --wallet.path /root/.bittensor \
           --wallet.name $${WALLET_NAME} \
           --wallet.hotkey default \
           --axon.port 8933 \
@@ -53,6 +59,8 @@ services:
     container_name: subtensor-nav-validator
     restart: unless-stopped
     networks: [chain]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
       - ./subnet-navigation/template:/app/template
@@ -61,6 +69,9 @@ services:
     environment:
       NETUID: ${NETUID:-1}
       WALLET_NAME: ${VALIDATOR_WALLET:-nav-val}
+      SUBTENSOR_CHAIN_ENDPOINT: ${SUBTENSOR_CHAIN_ENDPOINT:-ws://subtensor-localnet:9944}
+      KONNEX_NAV_RUNTIME_BASE_URL: ${KONNEX_NAV_RUNTIME_BASE_URL:-http://host.docker.internal:8791}
+      KONNEX_NAV_RUNTIME_TIMEOUT: ${KONNEX_NAV_RUNTIME_TIMEOUT:-10}
     command:
       - sh
       - -c
@@ -68,7 +79,8 @@ services:
         IP=$$(hostname -i | awk '{print $$1}')
         exec python neurons/validator.py \
           --netuid $${NETUID} \
-          --subtensor.chain_endpoint ws://subtensor-localnet:9944 \
+          --subtensor.chain_endpoint $${SUBTENSOR_CHAIN_ENDPOINT} \
+          --wallet.path /root/.bittensor \
           --wallet.name $${WALLET_NAME} \
           --wallet.hotkey default \
           --axon.port 9133 \
@@ -85,6 +97,8 @@ services:
     container_name: subtensor-nav-probe
     restart: unless-stopped
     networks: [chain]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "127.0.0.1:8096:8091"
     volumes:
@@ -96,7 +110,9 @@ services:
       WALLET_NAME: ${VALIDATOR_WALLET:-nav-val}
       HOTKEY: default
       PROBE_PORT: "8091"
-      SUBTENSOR_CHAIN: ws://subtensor-localnet:9944
+      SUBTENSOR_CHAIN: ${SUBTENSOR_CHAIN_ENDPOINT:-ws://subtensor-localnet:9944}
+      KONNEX_NAV_RUNTIME_BASE_URL: ${KONNEX_NAV_RUNTIME_BASE_URL:-http://host.docker.internal:8791}
+      KONNEX_NAV_RUNTIME_TIMEOUT: ${KONNEX_NAV_RUNTIME_TIMEOUT:-10}
     command: ["python", "scripts/subnet_probe_http.py"]
 
   nav-miner-b:
@@ -106,6 +122,8 @@ services:
     container_name: subtensor-nav-miner-b
     restart: unless-stopped
     networks: [chain]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
       - ./subnet-navigation/template:/app/template
@@ -114,6 +132,9 @@ services:
     environment:
       NETUID: ${NETUID:-1}
       WALLET_NAME: ${MINER_WALLET_B:-nav-miner-b}
+      SUBTENSOR_CHAIN_ENDPOINT: ${SUBTENSOR_CHAIN_ENDPOINT:-ws://subtensor-localnet:9944}
+      KONNEX_NAV_RUNTIME_BASE_URL: ${KONNEX_NAV_RUNTIME_BASE_URL:-http://host.docker.internal:8791}
+      KONNEX_NAV_RUNTIME_TIMEOUT: ${KONNEX_NAV_RUNTIME_TIMEOUT:-10}
     command:
       - sh
       - -c
@@ -121,7 +142,8 @@ services:
         IP=$$(hostname -i | awk '{print $$1}')
         exec python neurons/miner.py \
           --netuid $${NETUID} \
-          --subtensor.chain_endpoint ws://subtensor-localnet:9944 \
+          --subtensor.chain_endpoint $${SUBTENSOR_CHAIN_ENDPOINT} \
+          --wallet.path /root/.bittensor \
           --wallet.name $${WALLET_NAME} \
           --wallet.hotkey default \
           --axon.port 8934 \
@@ -136,6 +158,8 @@ services:
     container_name: subtensor-nav-validator-b
     restart: unless-stopped
     networks: [chain]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
       - ./subnet-navigation/template:/app/template
@@ -144,6 +168,9 @@ services:
     environment:
       NETUID: ${NETUID:-1}
       WALLET_NAME: ${VALIDATOR_WALLET_B:-nav-val-b}
+      SUBTENSOR_CHAIN_ENDPOINT: ${SUBTENSOR_CHAIN_ENDPOINT:-ws://subtensor-localnet:9944}
+      KONNEX_NAV_RUNTIME_BASE_URL: ${KONNEX_NAV_RUNTIME_BASE_URL:-http://host.docker.internal:8791}
+      KONNEX_NAV_RUNTIME_TIMEOUT: ${KONNEX_NAV_RUNTIME_TIMEOUT:-10}
     command:
       - sh
       - -c
@@ -151,7 +178,8 @@ services:
         IP=$$(hostname -i | awk '{print $$1}')
         exec python neurons/validator.py \
           --netuid $${NETUID} \
-          --subtensor.chain_endpoint ws://subtensor-localnet:9944 \
+          --subtensor.chain_endpoint $${SUBTENSOR_CHAIN_ENDPOINT} \
+          --wallet.path /root/.bittensor \
           --wallet.name $${WALLET_NAME} \
           --wallet.hotkey default \
           --axon.port 9134 \

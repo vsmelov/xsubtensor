@@ -1,0 +1,142 @@
+name: subnet-slam
+
+# semantic-slam runtime shim:
+#   docker compose -f docker-compose.subnet-slam.yml --env-file .env.subnet-slam up -d --build
+# Host runtime debug port: http://127.0.0.1:${SLAM_RUNTIME_HOST_PORT:-8793}/healthz
+
+networks:
+  chain:
+    name: ${SUBTENSOR_DOCKER_NETWORK:-xsubtensor_default}
+    external: true
+
+services:
+  slam-runtime:
+    image: python:3.11-slim
+    container_name: subtensor-slam-runtime
+    restart: unless-stopped
+    networks: [chain]
+    ports:
+      - "127.0.0.1:${SLAM_RUNTIME_HOST_PORT:-8793}:8793"
+    volumes:
+      - ../semantic-slam:/workspace:ro
+    command:
+      - bash
+      - -lc
+      - |
+        set -euo pipefail
+        pip install --no-cache-dir -r /workspace/services/slam-runtime/requirements.txt
+        cd /workspace/services/slam-runtime
+        exec uvicorn app:app --host 0.0.0.0 --port 8793
+
+  slam-miner:
+    build:
+      context: ./subnet-slam
+      dockerfile: Dockerfile
+    container_name: subtensor-slam-miner
+    restart: unless-stopped
+    networks: [chain]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
+      - ./subnet-slam/template:/app/template
+      - ./subnet-slam/neurons:/app/neurons
+      - ./subnet-slam/scripts:/app/scripts
+    environment:
+      NETUID: ${NETUID:-1}
+      WALLET_NAME: ${MINER_WALLET:-slam-miner}
+      SUBTENSOR_CHAIN_ENDPOINT: ${SUBTENSOR_CHAIN_ENDPOINT:-ws://subtensor-localnet:9944}
+      KONNEX_SLAM_RUNTIME_BASE_URL: ${KONNEX_SLAM_RUNTIME_BASE_URL:-http://slam-runtime:8793}
+      KONNEX_SLAM_RUNTIME_TIMEOUT: ${KONNEX_SLAM_RUNTIME_TIMEOUT:-30}
+      KONNEX_CONTROL_PLANE_URL: ${KONNEX_CONTROL_PLANE_URL:-}
+      KONNEX_INTERNAL_API_TOKEN: ${KONNEX_INTERNAL_API_TOKEN:-}
+      KONNEX_CONTROL_PLANE_SUBNET: semantic-slam
+    command:
+      - sh
+      - -c
+      - |
+        IP=$$(hostname -i | awk '{print $$1}')
+        exec python neurons/miner.py \
+          --netuid $${NETUID} \
+          --subtensor.chain_endpoint $${SUBTENSOR_CHAIN_ENDPOINT} \
+          --wallet.path /root/.bittensor \
+          --wallet.name $${WALLET_NAME} \
+          --wallet.hotkey default \
+          --axon.port 8941 \
+          --axon.external_ip "$$IP" \
+          --neuron.name slam-miner \
+          --logging.info
+
+  slam-miner-b:
+    build:
+      context: ./subnet-slam
+      dockerfile: Dockerfile
+    container_name: subtensor-slam-miner-b
+    restart: unless-stopped
+    networks: [chain]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
+      - ./subnet-slam/template:/app/template
+      - ./subnet-slam/neurons:/app/neurons
+      - ./subnet-slam/scripts:/app/scripts
+    environment:
+      NETUID: ${NETUID:-1}
+      WALLET_NAME: ${MINER_WALLET_B:-slam-miner-b}
+      SUBTENSOR_CHAIN_ENDPOINT: ${SUBTENSOR_CHAIN_ENDPOINT:-ws://subtensor-localnet:9944}
+      KONNEX_SLAM_RUNTIME_BASE_URL: ${KONNEX_SLAM_RUNTIME_BASE_URL:-http://slam-runtime:8793}
+      KONNEX_SLAM_RUNTIME_TIMEOUT: ${KONNEX_SLAM_RUNTIME_TIMEOUT:-30}
+    command:
+      - sh
+      - -c
+      - |
+        IP=$$(hostname -i | awk '{print $$1}')
+        exec python neurons/miner.py \
+          --netuid $${NETUID} \
+          --subtensor.chain_endpoint $${SUBTENSOR_CHAIN_ENDPOINT} \
+          --wallet.path /root/.bittensor \
+          --wallet.name $${WALLET_NAME} \
+          --wallet.hotkey default \
+          --axon.port 8942 \
+          --axon.external_ip "$$IP" \
+          --neuron.name slam-miner-b \
+          --logging.info
+
+  slam-validator:
+    build:
+      context: ./subnet-slam
+      dockerfile: Dockerfile
+    container_name: subtensor-slam-validator
+    restart: unless-stopped
+    networks: [chain]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ${WALLET_PATH:-${USERPROFILE}/.bittensor}:/root/.bittensor
+      - ./subnet-slam/template:/app/template
+      - ./subnet-slam/neurons:/app/neurons
+      - ./subnet-slam/scripts:/app/scripts
+    environment:
+      NETUID: ${NETUID:-1}
+      WALLET_NAME: ${VALIDATOR_WALLET:-slam-val}
+      SUBTENSOR_CHAIN_ENDPOINT: ${SUBTENSOR_CHAIN_ENDPOINT:-ws://subtensor-localnet:9944}
+      KONNEX_SLAM_RUNTIME_BASE_URL: ${KONNEX_SLAM_RUNTIME_BASE_URL:-http://slam-runtime:8793}
+      KONNEX_SLAM_RUNTIME_TIMEOUT: ${KONNEX_SLAM_RUNTIME_TIMEOUT:-30}
+    command:
+      - sh
+      - -c
+      - |
+        IP=$$(hostname -i | awk '{print $$1}')
+        exec python neurons/validator.py \
+          --netuid $${NETUID} \
+          --subtensor.chain_endpoint $${SUBTENSOR_CHAIN_ENDPOINT} \
+          --wallet.path /root/.bittensor \
+          --wallet.name $${WALLET_NAME} \
+          --wallet.hotkey default \
+          --axon.port 9141 \
+          --axon.external_ip "$$IP" \
+          --neuron.name slam-validator \
+          --neuron.sample_size 2 \
+          --neuron.validator_axon_ports 9141,9142 \
+          --logging.info

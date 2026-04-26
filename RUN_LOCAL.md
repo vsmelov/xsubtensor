@@ -189,6 +189,8 @@ Pre-built images match **published** Opentensor tags, not arbitrary commits in y
 
 - [SETUP_LOG_SUBNET_MATH.md](SETUP_LOG_SUBNET_MATH.md) — лог настройки `subnet-math`, submodule, диагностика WebSocket на Windows + Docker
 - [SUBNET_MATH_LOCALNET.md](SUBNET_MATH_LOCALNET.md) — subnet-math на localnet: шаги вручную, `.env.subnet-math`, `btcli`, compose; **§4** — полный набор identity-флагов для `subnet create` (без залипания на prompts), фоновые `scripts/subnet-create-localnet.cmd` / `subnet-start-localnet.cmd` и логи `subnet-create.log` / `subnet-start.log`
+- [SUBNET_VLA_LOCALNET.md](SUBNET_VLA_LOCALNET.md) — `subnet-vla` как robokitchen chain shim: compose, kitchen runtime, `query_miner.py`
+- [SUBNET_SLAM_LOCALNET.md](SUBNET_SLAM_LOCALNET.md) — `subnet-slam` scaffold: compose, semantic-slam runtime, miner/validator shim
 - [REQUEST_NET_GRAPH.md](REQUEST_NET_GRAPH.md) — JSON-RPC метаграфов/нейронов, `GET /v1/network-snapshot` (faucet), pretty-примеры [`docs/network-snapshot.example.json`](docs/network-snapshot.example.json) / [`docs/network-snapshot.full.example.json`](docs/network-snapshot.full.example.json)
 - [REQUEST_TO_SUBNET.md](REQUEST_TO_SUBNET.md) — HTTP probe: dendrite MathSynapse, детальный JSON по майнерам и reward; прокси `POST /v1/subnet-math-probe` на faucet
 - [SUBNET_MATH_OPERATIONS.md](SUBNET_MATH_OPERATIONS.md) — логи, `MATH_SCOREBOARD`, запрос к майнеру (`query_miner.py`), метаграф

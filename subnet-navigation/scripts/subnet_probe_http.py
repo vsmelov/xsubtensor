@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
 """
-HTTP-обёртка над run_math_probe: POST /v1/math-probe, GET /health.
-Запуск из корня /app в образе subnet-math:
+HTTP-обёртка над navigation probe.
 
-  PROBE_PORT=8091 NETUID=2 WALLET_NAME=math-val python scripts/subnet_probe_http.py
+Основной маршрут: POST /v1/navigation-probe
+Совместимость: POST /v1/math-probe
+
+Запуск из корня /app в образе subnet-navigation:
+
+  PROBE_PORT=8091 NETUID=4 WALLET_NAME=nav-val \
+  KONNEX_NAV_RUNTIME_BASE_URL=http://navigation-runtime:8791 \
+  python scripts/subnet_probe_http.py
 """
 
 from __future__ import annotations
@@ -21,7 +27,7 @@ _SCRIPTS = Path(__file__).resolve().parent
 sys.path.insert(0, str(_ROOT))
 sys.path.insert(0, str(_SCRIPTS))
 
-from subnet_probe_lib import run_math_probe  # noqa: E402
+from subnet_probe_lib import run_navigation_probe  # noqa: E402
 
 
 def _env_int(name: str, default: int) -> int:
@@ -40,17 +46,22 @@ def _env_float(name: str, default: float) -> float:
 
 DEFAULTS = {
     "netuid": lambda: _env_int("NETUID", 1),
-    "wallet_name": lambda: os.environ.get("WALLET_NAME", "math-val"),
+    "wallet_name": lambda: os.environ.get("WALLET_NAME", "nav-val"),
     "hotkey": lambda: os.environ.get("HOTKEY", "default"),
     "chain_endpoint": lambda: os.environ.get(
         "SUBTENSOR_CHAIN",
         "ws://127.0.0.1:9944",
     ),
     "sample_size": lambda: _env_int("PROBE_SAMPLE_SIZE", 4),
-    "operand_a": lambda: _env_int("PROBE_OPERAND_A", 6),
-    "operand_b": lambda: _env_int("PROBE_OPERAND_B", 7),
-    "op": lambda: os.environ.get("PROBE_OP", "*"),
     "timeout": lambda: _env_float("PROBE_TIMEOUT", 30.0),
+    "scene_id": lambda: os.environ.get("PROBE_SCENE_ID", "localnet-dev-scene"),
+    "map_id": lambda: os.environ.get("PROBE_MAP_ID", "localnet-grid"),
+    "request_id": lambda: os.environ.get("PROBE_REQUEST_ID", ""),
+    "runtime_base_url": lambda: os.environ.get("KONNEX_NAV_RUNTIME_BASE_URL", ""),
+    "runtime_timeout": lambda: _env_float(
+        "KONNEX_NAV_RUNTIME_TIMEOUT",
+        _env_float("PROBE_TIMEOUT", 30.0),
+    ),
 }
 
 
@@ -64,10 +75,35 @@ def _merge_body(body: dict | None) -> dict:
         b.get("chain_endpoint", DEFAULTS["chain_endpoint"]()),
     )
     out["sample_size"] = int(b.get("sample_size", DEFAULTS["sample_size"]()))
-    out["operand_a"] = int(b.get("operand_a", DEFAULTS["operand_a"]()))
-    out["operand_b"] = int(b.get("operand_b", DEFAULTS["operand_b"]()))
-    out["op"] = str(b.get("op", DEFAULTS["op"]()))
     out["timeout"] = float(b.get("timeout", DEFAULTS["timeout"]()))
+    out["scene_id"] = str(b.get("scene_id", DEFAULTS["scene_id"]()))
+    out["map_id"] = str(b.get("map_id", DEFAULTS["map_id"]()))
+    out["mission_prompt"] = b.get("mission_prompt")
+    request_id = str(b.get("request_id", DEFAULTS["request_id"]())).strip()
+    out["request_id"] = request_id or None
+    out["goal"] = b.get("goal")
+    out["start"] = b.get("start")
+    out["constraints"] = b.get("constraints")
+    out["context"] = b.get("context")
+    runtime_base_url = str(
+        b.get("runtime_base_url", DEFAULTS["runtime_base_url"]()),
+    ).strip()
+    out["runtime_base_url"] = runtime_base_url or None
+    out["runtime_timeout"] = float(
+        b.get("runtime_timeout", DEFAULTS["runtime_timeout"]()),
+    )
+    if "operand_a" in b and b["operand_a"] is not None:
+        out["operand_a"] = int(b["operand_a"])
+    else:
+        out["operand_a"] = None
+    if "operand_b" in b and b["operand_b"] is not None:
+        out["operand_b"] = int(b["operand_b"])
+    else:
+        out["operand_b"] = None
+    if "op" in b and b["op"] is not None:
+        out["op"] = str(b["op"])
+    else:
+        out["op"] = None
     if "miner_uids" in b and b["miner_uids"] is not None:
         out["miner_uids"] = [int(x) for x in b["miner_uids"]]
     else:
@@ -106,8 +142,13 @@ class Handler(BaseHTTPRequestHandler):
                 200,
                 {
                     "ok": True,
-                    "service": "subnet-math-probe",
-                    "routes": ["GET /health", "POST /v1/math-probe"],
+                    "service": "subnet-navigation-probe",
+                    "runtime_base_url": DEFAULTS["runtime_base_url"]() or None,
+                    "routes": [
+                        "GET /health",
+                        "POST /v1/navigation-probe",
+                        "POST /v1/math-probe (compat)",
+                    ],
                 },
             )
             return
@@ -115,7 +156,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         path = self.path.split("?")[0].rstrip("/") or "/"
-        if path != "/v1/math-probe":
+        if path not in ("/v1/navigation-probe", "/v1/math-probe"):
             self.send_error(404)
             return
         try:
@@ -135,7 +176,7 @@ class Handler(BaseHTTPRequestHandler):
                 return
             kw = _merge_body(body)
             try:
-                result = asyncio.run(run_math_probe(**kw))
+                result = asyncio.run(run_navigation_probe(**kw))
             except Exception as e:
                 traceback.print_exc(file=sys.stderr)
                 self._send_json(
@@ -163,7 +204,7 @@ class Handler(BaseHTTPRequestHandler):
 def main() -> None:
     port = _env_int("PROBE_PORT", 8091)
     server = HTTPServer(("0.0.0.0", port), Handler)
-    print(f"subnet-math-probe listening on 0.0.0.0:{port}", flush=True)
+    print(f"subnet-navigation-probe listening on 0.0.0.0:{port}", flush=True)
     server.serve_forever()
 
 
