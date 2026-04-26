@@ -174,10 +174,13 @@ Logs: `docker logs -f subtensor-math-validator`, `docker logs -f subtensor-math-
 
 Short checklist: [`SUBNET_NAVIGATION_LOCALNET.md`](SUBNET_NAVIGATION_LOCALNET.md).
 
+- Contract status: `subnet-navigation` is now a chain-facing shim to **navigation-runtime**. Miners produce navigation proposals, validators/probe submit those proposals to `/internal/verify-round`, and scalar math fields are compatibility-only.
 - Copy `.env.subnet-navigation.example` → `.env.subnet-navigation`, set **`NETUID`**.
+- Set **`KONNEX_NAV_RUNTIME_BASE_URL`** in `.env.subnet-navigation` to a reachable navigation-runtime endpoint. Default example uses `http://host.docker.internal:8791`; on a shared Docker network use the runtime service DNS name instead.
 - Wallets: **`nav-owner`**, **`nav-miner`**, **`nav-miner-b`**, **`nav-val`**, **`nav-val-b`**; faucet; **`subnet create`** (see [`scripts/subnet-create-navigation-localnet.cmd`](scripts/subnet-create-navigation-localnet.cmd) → `subnet-create-navigation.log`).
 - Owner must run **`subnet start`** for that netuid: [`scripts/subnet-start-navigation-localnet.cmd`](scripts/subnet-start-navigation-localnet.cmd).
 - Then `docker compose -f docker-compose.subnet-navigation.yml --env-file .env.subnet-navigation up -d --build`.
+- Probe routes: `GET /health`, primary `POST /v1/navigation-probe`, compatibility alias `POST /v1/math-probe` on `http://127.0.0.1:8096`.
 
 ### 9.2 subnet-vla
 

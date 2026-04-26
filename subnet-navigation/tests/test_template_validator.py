@@ -16,102 +16,96 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import asyncio
 import sys
 import unittest
+from types import SimpleNamespace
+from unittest.mock import patch
 
-import bittensor as bt
 import numpy as np
 
 from neurons.validator import Validator
-from template.base.validator import BaseValidatorNeuron
-from template.protocol import MathSynapse
+from template.protocol import NavigationSynapse
 from template.utils.uids import get_random_uids
 from template.validator.reward import get_rewards
 
 
 class TemplateValidatorNeuronTestCase(unittest.TestCase):
-    """
-    This class contains unit tests for the RewardEvent classes.
-
-    The tests cover different scenarios where completions may or may not be successful and the reward events are checked that they don't contain missing values.
-    The `reward` attribute of all RewardEvents is expected to be a float, and the `is_filter_model` attribute is expected to be a boolean.
-    """
-
     def setUp(self):
-        sys.argv = sys.argv[0] + ["--config", "tests/configs/validator.json"]
-
-        config = BaseValidatorNeuron.config()
+        sys.argv = [sys.argv[0]]
+        config = Validator.config()
+        config.mock = True
+        if config.wallet is None:
+            config.wallet = SimpleNamespace()
+        if config.metagraph is None:
+            config.metagraph = SimpleNamespace()
+        if config.subtensor is None:
+            config.subtensor = SimpleNamespace()
         config.wallet._mock = True
         config.metagraph._mock = True
         config.subtensor._mock = True
+        config.neuron.axon_off = True
+        config.neuron.disable_set_weights = True
+        config.neuron.num_concurrent_forwards = 1
+        config.neuron.sample_size = 4
+        config.neuron.runtime_base_url = ""
         self.neuron = Validator(config)
-        self.miner_uids = get_random_uids(self, k=10)
+        self.miner_uids = get_random_uids(self.neuron, k=4)
 
-    def test_run_single_step(self):
-        # TODO: Test a single step
-        pass
-
-    def test_sync_error_if_not_registered(self):
-        # TODO: Test that the validator throws an error if it is not registered on metagraph
-        pass
-
-    def test_forward(self):
-        # TODO: Test that the forward function returns the correct value
-        pass
-
-    def test_dummy_responses(self):
-        step = self.neuron.step
-        synapse = MathSynapse(operand_a=step, operand_b=2, op="*")
-        expected = step * 2
+    def test_dummy_responses_are_navigation_proposals(self):
+        synapse = NavigationSynapse(
+            request_id="test-navigation-query",
+            task_kind="goal-conditioned-navigation",
+            scene_id="test-scene",
+            map_id="test-map",
+            start={"kind": "origin", "coordinates": {"x": 0, "y": 0}},
+            goal={"instruction": "Move toward the highlighted checkpoint."},
+            constraints={"preferred_motion_kind": "discrete"},
+        )
 
         responses = self.neuron.dendrite.query(
-            axons=[
-                self.neuron.metagraph.axons[uid] for uid in self.miner_uids
-            ],
+            axons=[self.neuron.metagraph.axons[uid] for uid in self.miner_uids],
             synapse=synapse,
-            deserialize=True,
+            deserialize=False,
         )
 
         for response in responses:
-            self.assertLess(abs(float(response) - float(expected)), 0.11)
+            self.assertIsInstance(response.proposal, dict)
+            self.assertIn("action_id", response.proposal)
+            self.assertIn("motion_kind", response.proposal)
+            self.assertIsNone(response.result)
 
-    def test_reward(self):
-        step = self.neuron.step
-        synapse = MathSynapse(operand_a=step, operand_b=2, op="*")
-        expected = float(step * 2)
+    def test_navigation_rewards_normalize_explicit_scores(self):
+        responses = [
+            SimpleNamespace(score=0.2),
+            SimpleNamespace(score=0.8),
+            SimpleNamespace(score=0.0),
+        ]
 
-        responses = self.neuron.dendrite.query(
-            axons=[
-                self.neuron.metagraph.axons[uid] for uid in self.miner_uids
-            ],
-            synapse=synapse,
-            deserialize=True,
+        rewards = get_rewards(self.neuron, expected=None, responses=responses)
+
+        self.assertTrue(np.allclose(rewards, np.array([0.2, 0.8, 0.0], dtype=np.float32)))
+        self.assertAlmostEqual(float(np.sum(rewards)), 1.0, places=6)
+
+    def test_legacy_reward_fallback_still_works(self):
+        rewards = get_rewards(
+            self.neuron,
+            expected=10.0,
+            responses=[10.0, 12.0, None],
         )
 
-        rewards = get_rewards(self.neuron, expected=expected, responses=responses)
-        self.assertAlmostEqual(float(np.sum(rewards)), 1.0, places=5)
-        self.assertTrue(np.all(rewards >= 0))
+        self.assertTrue(np.allclose(rewards, np.array([1.0, 0.0, 0.0], dtype=np.float32)))
 
-    def test_reward_with_nan(self):
-        step = self.neuron.step
-        synapse = MathSynapse(operand_a=step, operand_b=2, op="*")
-        expected = float(step * 2)
+    def test_forward_updates_scores_via_navigation_path(self):
+        before = np.array(self.neuron.scores, copy=True)
 
-        responses = self.neuron.dendrite.query(
-            axons=[
-                self.neuron.metagraph.axons[uid] for uid in self.miner_uids
-            ],
-            synapse=synapse,
-            deserialize=True,
-        )
+        with patch("template.validator.forward.time.sleep", return_value=None):
+            asyncio.run(self.neuron.forward())
 
-        rewards = np.array(
-            get_rewards(self.neuron, expected=expected, responses=responses),
-            copy=True,
-        )
-        expected_rewards = rewards.copy()
-        # Add NaN values to rewards
-        rewards[0] = float("nan")
+        after = self.neuron.scores
+        self.assertEqual(after.shape, before.shape)
+        self.assertGreater(float(np.sum(after)), float(np.sum(before)))
 
-        with self.assertLogs(bt.logging, level="WARNING") as cm:
-            self.neuron.update_scores(rewards, self.miner_uids)
+
+if __name__ == "__main__":
+    unittest.main()

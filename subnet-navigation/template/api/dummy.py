@@ -18,8 +18,8 @@
 # DEALINGS IN THE SOFTWARE.
 
 import bittensor as bt
-from typing import List, Optional, Union, Any, Dict
-from template.protocol import MathSynapse
+from typing import Any, List, Union
+from template.protocol import NavigationSynapse
 from bittensor.subnets import SubnetsAPI
 
 
@@ -30,16 +30,28 @@ class DummyAPI(SubnetsAPI):
         self.name = "dummy"
 
     def prepare_synapse(
-        self, operand_a: int, operand_b: int, op: str
-    ) -> MathSynapse:
-        return MathSynapse(operand_a=operand_a, operand_b=operand_b, op=op)
+        self,
+        scene_id: str,
+        goal_instruction: str,
+        request_id: str = "dummy-navigation-request",
+        map_id: str = "dummy-map",
+    ) -> NavigationSynapse:
+        return NavigationSynapse(
+            request_id=request_id,
+            task_kind="goal-conditioned-navigation",
+            scene_id=scene_id,
+            map_id=map_id,
+            start={"kind": "origin", "coordinates": {"x": 0, "y": 0}},
+            goal={"instruction": goal_instruction},
+            constraints={"preferred_motion_kind": "discrete"},
+        )
 
     def process_responses(
         self, responses: List[Union["bt.Synapse", Any]]
-    ) -> List[int]:
+    ) -> List[Any]:
         outputs = []
         for response in responses:
             if response.dendrite.status_code != 200:
                 continue
-            outputs.append(response.result)
+            outputs.append(response.proposal or response.result)
         return outputs

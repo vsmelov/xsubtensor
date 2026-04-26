@@ -18,27 +18,98 @@
 # DEALINGS IN THE SOFTWARE.
 import typing
 
-import numpy as np
 import bittensor as bt
+import numpy as np
+
+
+def _coerce_float(value: typing.Any) -> typing.Optional[float]:
+    if value is None or isinstance(value, bool):
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _lookup(obj: typing.Any, key: str) -> typing.Any:
+    if obj is None:
+        return None
+    if isinstance(obj, dict):
+        return obj.get(key)
+    return getattr(obj, key, None)
+
+
+def _extract_explicit_score(response: typing.Any) -> typing.Optional[float]:
+    direct = _coerce_float(_lookup(response, "score"))
+    if direct is not None:
+        return direct
+
+    scoring = _lookup(response, "scoring")
+    scoring_score = _coerce_float(_lookup(scoring, "score"))
+    if scoring_score is not None:
+        return scoring_score
+
+    components = _lookup(response, "score_components")
+    total = _coerce_float(_lookup(components, "total"))
+    if total is not None:
+        return total
+
+    return None
+
+
+def _extract_legacy_response_value(response: typing.Any) -> typing.Optional[float]:
+    explicit = _coerce_float(response)
+    if explicit is not None:
+        return explicit
+    return _coerce_float(_lookup(response, "result"))
 
 
 def get_rewards(
     self,
-    expected: float,
-    responses: typing.List[typing.Optional[float]],
+    expected: typing.Optional[float],
+    responses: typing.List[typing.Any],
 ) -> np.ndarray:
     """
-    Winner-take-all (split ties): highest reward to miner(s) with smallest |response - expected|.
+    Reward adapter for the staged math-template -> navigation-template migration.
+
+    Preferred navigation path:
+    - responses carry an explicit `score` or `scoring.score`;
+    - rewards are proportional to the non-negative score mass.
+
+    Current simplified fallback:
+    - responses carry only scalar `result`;
+    - rewards stay winner-take-all by smallest |response - expected|.
     """
     n = len(responses)
-    errs = np.full(n, np.inf, dtype=np.float64)
-    for i, r in enumerate(responses):
-        if r is None:
+
+    explicit_scores = np.full(n, np.nan, dtype=np.float64)
+    has_explicit_scores = False
+    for i, response in enumerate(responses):
+        score = _extract_explicit_score(response)
+        if score is None or not np.isfinite(score):
             continue
-        try:
-            errs[i] = abs(float(r) - float(expected))
-        except (TypeError, ValueError):
-            errs[i] = np.inf
+        explicit_scores[i] = max(0.0, float(score))
+        has_explicit_scores = True
+
+    if has_explicit_scores:
+        total = float(np.nansum(explicit_scores))
+        if total <= 0.0:
+            bt.logging.warning("Navigation scores were present but non-positive.")
+            return np.zeros(n, dtype=np.float32)
+
+        out = np.nan_to_num(explicit_scores / total, nan=0.0).astype(np.float32)
+        return out
+
+    if expected is None:
+        bt.logging.warning("No explicit navigation scores and no legacy expected value.")
+        return np.zeros(n, dtype=np.float32)
+
+    errs = np.full(n, np.inf, dtype=np.float64)
+    for i, response in enumerate(responses):
+        value = _extract_legacy_response_value(response)
+        if value is None:
+            continue
+        errs[i] = abs(float(value) - float(expected))
 
     finite = errs[np.isfinite(errs)]
     if finite.size == 0:

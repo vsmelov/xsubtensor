@@ -29,6 +29,7 @@
 # subnet-math / subnet-vla compose (локальный NETUID / пути)
 .env.subnet-math
 .env.subnet-vla
+.env.subnet-slam
 .env.vla
 
 # Local VLA demo MP4s (see subnet-vla/vla-video-static/WHERE.txt)

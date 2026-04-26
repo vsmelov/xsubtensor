@@ -169,6 +169,20 @@ def add_miner_args(cls, parser):
         help="Wandb entity to log to.",
     )
 
+    parser.add_argument(
+        "--neuron.runtime_base_url",
+        type=str,
+        help="Internal navigation runtime base URL used by chain-facing miner/validator shims.",
+        default=os.environ.get("KONNEX_NAV_RUNTIME_BASE_URL", ""),
+    )
+
+    parser.add_argument(
+        "--neuron.runtime_timeout",
+        type=float,
+        help="Timeout in seconds for internal navigation runtime HTTP calls.",
+        default=float(os.environ.get("KONNEX_NAV_RUNTIME_TIMEOUT", "10")),
+    )
+
 
 def add_validator_args(cls, parser):
     """Add validator specific arguments to the parser."""
@@ -262,6 +276,20 @@ def add_validator_args(cls, parser):
         type=str,
         help="The name of the project where you are sending the new run.",
         default="opentensor-dev",
+    )
+
+    parser.add_argument(
+        "--neuron.runtime_base_url",
+        type=str,
+        help="Internal navigation runtime base URL used by chain-facing miner/validator shims.",
+        default=os.environ.get("KONNEX_NAV_RUNTIME_BASE_URL", ""),
+    )
+
+    parser.add_argument(
+        "--neuron.runtime_timeout",
+        type=float,
+        help="Timeout in seconds for internal navigation runtime HTTP calls.",
+        default=float(os.environ.get("KONNEX_NAV_RUNTIME_TIMEOUT", "10")),
     )
 
 
